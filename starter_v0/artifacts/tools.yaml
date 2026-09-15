@@ -8,7 +8,7 @@
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
-    description: "Gửi một câu hỏi cho người dùng."
+    description: "Gửi một câu hỏi cho người dùng. BẮT BUỘC sử dụng công cụ này khi yêu cầu bị thiếu thông tin hoặc thông tin không rõ ràng."
     parameters:
       type: object
       properties:

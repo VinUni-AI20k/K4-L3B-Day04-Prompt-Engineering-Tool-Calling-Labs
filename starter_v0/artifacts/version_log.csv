@@ -1,2 +1,3 @@
 version,author,changed_artifact,artifact_version,prompt_hash,tools_hash,reason,hypothesis,metric_name,metric_before,metric_after,run_file
 v1,AI,system_prompt.md;tools.yaml,v1+p22e55140b9f4+t7abda78765d2,22e55140b9f4,7abda78765d2,"Fix argument confusion for employee_id and asset_id","Explicit formatting rules will prevent hallucinated args like Sales",passed_cases,N/A,22,runs/v1_B_base_openrouter_20260915T190845865304.json
+v2,AI,system_prompt.md;tools.yaml,v2+p75ff05a016a3+t59e5e44841fd,75ff05a016a3,59e5e44841fd,"Force clarify tool for missing info","Adding explicit missing info rule will resolve missing_info errors",passed_cases,22,21,runs/v2_B_base_openrouter_20260915T191356614351.json
