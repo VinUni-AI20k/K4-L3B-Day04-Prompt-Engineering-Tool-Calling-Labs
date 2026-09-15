@@ -1,14 +1,13 @@
-# starter_v0 — intentionally incomplete first-draft declarations.
-# Students improve routing guidance, argument conventions, missing-information
-# handling, and confirmation boundaries through v1/v2/v3.
+# Hospital AMR Operations Assistant — v0 first-draft declarations.
+# Descriptions are intentionally short. Routing guidance, ID format hints and
+# confirmation boundaries are improved from eval evidence in v1/v2/v3.
 #
-# Keep built-in names and supplied evaluation cases unchanged.
-# Improve descriptions and compatible schemas. Declare team-built bonus tools
-# here and in tools/__init__.py, then test them with team-authored cases.
+# Names, parameters and enums follow docs/AMR_TOOL_CONTRACT.md and must match
+# tools/__init__.py. The original IT Helpdesk declarations are kept in
+# artifacts/reference/tools_it_helpdesk.yaml.
 tools:
-  # ---------------- Core tools ----------------
   - name: clarify
-    description: "Gửi một câu hỏi cho người dùng."
+    description: "Gửi một câu hỏi cho operator."
     parameters:
       type: object
       properties:
@@ -17,91 +16,58 @@ tools:
         options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn"}
       required: [question]
 
-  - name: search_kb
-    description: "Tìm hướng dẫn hỗ trợ kỹ thuật."
+  - name: get_robot_status
+    description: "Xem trạng thái một robot."
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Nội dung cần tìm"}
-        category: {type: string, enum: [all, vpn, email, wifi, printing, account, security, hardware, software, meeting_room], default: "all", description: "Nhóm hướng dẫn"}
-        top_k: {type: integer, default: 3, description: "Số kết quả"}
-      required: [query]
+        robot_id: {type: string, description: "Mã robot"}
+        check: {type: string, enum: [all, location, battery, errors, mission], default: "all", description: "Thông tin cần xem"}
+      required: [robot_id]
 
-  - name: check_service_status
-    description: "Kiểm tra trạng thái một dịch vụ."
+  - name: list_robots
+    description: "Liệt kê robot."
     parameters:
       type: object
       properties:
-        service: {type: string, enum: [vpn, email, sso, wifi, printing], description: "Tên dịch vụ"}
-        environment: {type: string, enum: [production, staging], default: "production", description: "Môi trường"}
-      required: [service]
+        status: {type: string, enum: [all, idle, on_mission, charging, error], default: "all", description: "Trạng thái"}
+        min_battery: {type: integer, default: 0, description: "Pin tối thiểu"}
+      required: []
 
-  - name: inspect_device
-    description: "Kiểm tra thông tin và chẩn đoán thiết bị."
+  - name: get_location_info
+    description: "Xem thông tin một địa điểm trong bệnh viện."
     parameters:
       type: object
       properties:
-        asset_id: {type: string, description: "Mã tài sản"}
-        check: {type: string, enum: [all, network, vpn, security, hardware, software], default: "all", description: "Nhóm kiểm tra"}
-      required: [asset_id]
+        location_id: {type: string, enum: [LAB_B, PHARMACY, ER, WARD_3A, ICU, OR_1, DOCK_1], description: "Mã địa điểm"}
+      required: [location_id]
 
-  - name: lookup_user
-    description: "Tra cứu người dùng trong danh bạ hỗ trợ."
+  - name: get_route_info
+    description: "Xem tuyến đường của robot."
     parameters:
       type: object
       properties:
-        employee_id: {type: string, description: "Mã nhân viên"}
-      required: [employee_id]
+        robot_id: {type: string, description: "Mã robot"}
+        destination_id: {type: string, enum: [LAB_B, PHARMACY, ER, WARD_3A, ICU, OR_1, DOCK_1], description: "Điểm đến"}
+      required: [robot_id, destination_id]
 
-  - name: format_incident_report
-    description: "Trình bày các kết quả đã có thành báo cáo."
+  - name: dispatch_mission
+    description: "Gửi robot thực hiện một mission."
     parameters:
       type: object
       properties:
-        findings:
-          type: array
-          default: []
-          description: "Các kết quả đã thu thập"
-          items:
-            type: object
-            properties:
-              label: {type: string}
-              detail: {type: string}
-              source: {type: string}
-              status: {type: string}
-        template: {type: string, enum: [brief, technical, handoff], default: "brief", description: "Mẫu báo cáo"}
-        incident_title: {type: string, default: "IT incident", description: "Tiêu đề"}
-      required: [findings, template]
+        robot_id: {type: string, description: "Mã robot"}
+        destination_id: {type: string, enum: [LAB_B, PHARMACY, ER, WARD_3A, ICU, OR_1, DOCK_1], description: "Điểm đến"}
+        mission_type: {type: string, enum: [delivery, pickup, return_to_base], default: "delivery", description: "Loại mission"}
+        priority: {type: string, enum: [normal, urgent], default: "normal", description: "Mức ưu tiên"}
+        confirmed: {type: boolean, default: false, description: "Đã được xác nhận"}
+      required: [robot_id, destination_id]
 
-  # ---------------- Optional/advanced tools ----------------
-  - name: search_device_info
-    description: "Tìm thông tin công khai về một model thiết bị trên web. Chỉ truyền hãng, model và loại thông tin; không truyền asset ID, employee ID hoặc dữ liệu nội bộ."
+  - name: cancel_mission
+    description: "Hủy một mission."
     parameters:
       type: object
       properties:
-        manufacturer: {type: string, description: "Hãng sản xuất công khai, ví dụ Lenovo"}
-        model: {type: string, description: "Tên model công khai, ví dụ ThinkPad T14 Gen 4"}
-        query_type: {type: string, enum: [specs, drivers, support, compatibility], default: "support", description: "Loại thông tin cần tìm"}
-        max_results: {type: integer, default: 3, description: "Số kết quả, tối đa 5"}
-      required: [manufacturer, model, query_type]
-
-  - name: policy
-    description: "Tìm trong chính sách IT nội bộ."
-    parameters:
-      type: object
-      properties:
-        query: {type: string, default: "", description: "Nội dung cần tìm"}
-        policy_area: {type: string, enum: [all, access_control, data_privacy, external_tools, incident_response, service_operations, ticketing], default: "all", description: "Nhóm chính sách"}
-        top_k: {type: integer, default: 3, description: "Số mục"}
-      required: [query]
-
-  - name: create_ticket
-    description: "Tạo một ticket hỗ trợ."
-    parameters:
-      type: object
-      properties:
-        summary: {type: string, default: "", description: "Tóm tắt sự cố"}
-        priority: {type: string, enum: [low, medium, high, critical], default: "medium", description: "Mức ưu tiên"}
-        asset_id: {type: string, default: "", description: "Mã tài sản nếu có"}
-        confirmed: {type: boolean, default: false, description: "Đã được người dùng xác nhận"}
-      required: [summary]
+        mission_id: {type: string, description: "Mã mission"}
+        confirmed: {type: boolean, default: false, description: "Đã được xác nhận"}
+      required: [mission_id]

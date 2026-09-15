@@ -1,0 +1,67 @@
+{
+  "snapshot_at": "2026-09-15T18:00:00+07:00",
+  "dispatch_min_battery_pct": 20,
+  "robots": [
+    {
+      "robot_id": "AMR-01",
+      "model": "MedCart M200",
+      "status": "idle",
+      "battery_pct": 82,
+      "location_id": "ER",
+      "floor": "1",
+      "current_mission_id": null,
+      "errors": [],
+      "last_seen": "2026-09-15T17:59:40+07:00"
+    },
+    {
+      "robot_id": "AMR-02",
+      "model": "MedCart M200",
+      "status": "idle",
+      "battery_pct": 64,
+      "location_id": "PHARMACY",
+      "floor": "1",
+      "current_mission_id": null,
+      "errors": [],
+      "last_seen": "2026-09-15T17:59:52+07:00"
+    },
+    {
+      "robot_id": "AMR-03",
+      "model": "MedCart M200",
+      "status": "error",
+      "battery_pct": 71,
+      "location_id": "WARD_3A",
+      "floor": "3",
+      "current_mission_id": null,
+      "errors": [
+        {
+          "code": "E_STOP_ACTIVE",
+          "message": "Nút dừng khẩn cấp đang được nhấn; cần kỹ thuật viên kiểm tra tại chỗ.",
+          "since": "2026-09-15T17:42:00+07:00"
+        }
+      ],
+      "last_seen": "2026-09-15T17:59:31+07:00"
+    },
+    {
+      "robot_id": "AMR-04",
+      "model": "MedCart M300",
+      "status": "on_mission",
+      "battery_pct": 45,
+      "location_id": "LAB_B",
+      "floor": "3",
+      "current_mission_id": "MS-0012",
+      "errors": [],
+      "last_seen": "2026-09-15T17:59:58+07:00"
+    },
+    {
+      "robot_id": "AMR-05",
+      "model": "MedCart M300",
+      "status": "charging",
+      "battery_pct": 15,
+      "location_id": "DOCK_1",
+      "floor": "B1",
+      "current_mission_id": null,
+      "errors": [],
+      "last_seen": "2026-09-15T17:59:45+07:00"
+    }
+  ]
+}
