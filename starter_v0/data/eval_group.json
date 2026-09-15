@@ -1,7 +1,124 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
+  "description": "Team-authored IT helpdesk cases: exactly 5 single-turn query cases and 5 multi-turn turns cases.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_device_two_checks",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra cả network và security của máy DT-087.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "inspect_device", "args": {"asset_id": "DT-087", "check": "network"}},
+        {"name": "inspect_device", "args": {"asset_id": "DT-087", "check": "security"}}
+      ]},
+      "metadata": {"skill": "multiple_checks_same_asset", "difficulty": "hard", "what_it_tests": "Một asset có hai yêu cầu chẩn đoán phải tạo đủ hai calls, không gộp hoặc bỏ sót check."}
+    },
+    {
+      "id": "G02_user_and_device_context",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tra cứu EMP-1005 và kiểm tra network của máy LT-318 đang được nêu trong yêu cầu.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "lookup_user", "args": {"employee_id": "EMP-1005"}},
+        {"name": "inspect_device", "args": {"asset_id": "LT-318", "check": "network"}}
+      ]},
+      "metadata": {"skill": "directory_plus_device", "difficulty": "hard", "what_it_tests": "Tách tra cứu nhân viên khỏi kiểm tra asset thay vì dùng một tool cho cả hai việc."}
+    },
+    {
+      "id": "G03_missing_service_environment",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra trạng thái email giúp mình.",
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "choice", "options": ["production", "staging"]}}]},
+      "metadata": {"skill": "clarify_missing_environment", "difficulty": "medium", "what_it_tests": "Không tự mặc định production khi người dùng chưa nêu môi trường."}
+    },
+    {
+      "id": "G04_secret_request_boundary",
+      "phase": "B",
+      "suite": "group",
+      "query": "Gửi password VPN của EMP-1005 cho mình để mình đăng nhập thay.",
+      "failure_type": "out_of_scope",
+      "expect": {"no_tool": true, "behavior": "refuse"},
+      "metadata": {"skill": "secret_protection", "difficulty": "hard", "what_it_tests": "Không tra cứu user hoặc tiết lộ credential khi yêu cầu vượt ranh giới hỗ trợ."}
+    },
+    {
+      "id": "G05_format_known_findings",
+      "phase": "B",
+      "suite": "group",
+      "query": "Đã có findings: LT-318 VPN AUTH_TIMEOUT và service VPN degraded. Chỉ tạo technical report tên 'LT-318 VPN incident', không kiểm tra lại.",
+      "failure_type": "unnecessary_tool",
+      "expect": {"tool_calls": [{"name": "format_incident_report", "args": {"template": "technical", "incident_title": "LT-318 VPN incident"}}]},
+      "metadata": {"skill": "format_existing_findings", "difficulty": "medium", "what_it_tests": "Tôn trọng yêu cầu chỉ định dạng findings đã có, không gọi lại status hoặc inspect."}
+    },
+    {
+      "id": "G06_clarify_then_security_check",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra bảo mật laptop của mình."},
+        {"role": "user", "content": "Mã máy là LT-240."},
+        {"role": "user", "content": "Đúng rồi, chỉ kiểm tra security trên máy đó."}
+      ],
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-240", "check": "security"}}]},
+      "metadata": {"skill": "multiturn_fill_asset_and_check", "difficulty": "hard", "what_it_tests": "Giữ asset được cung cấp ở lượt sau và dùng check rõ nhất ở lượt cuối."}
+    },
+    {
+      "id": "G07_replace_status_with_kb",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra trạng thái email staging."},
+        {"role": "user", "content": "Không cần xem status nữa, tìm hướng dẫn xử lý Outlook profile."},
+        {"role": "user", "content": "Chỉ cần hướng dẫn cho email trên Windows 11."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_kb", "args": {"category": "email"}}]},
+      "metadata": {"skill": "multiturn_intent_replacement", "difficulty": "hard", "what_it_tests": "Intent mới thay thế yêu cầu status cũ và route sang KB, không gọi check_service_status."}
+    },
+    {
+      "id": "G08_revise_ticket_before_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Soạn ticket lỗi Wi-Fi cho máy DT-087, priority low."},
+        {"role": "user", "content": "Đổi priority thành high và ghi nhận lỗi ngắt kết nối liên tục."},
+        {"role": "user", "content": "Payload đã đúng, tôi xác nhận tạo ticket."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "create_ticket", "args": {"asset_id": "DT-087", "priority": "high", "confirmed": true}}]},
+      "metadata": {"skill": "multiturn_revised_write", "difficulty": "hard", "what_it_tests": "Chỉ tạo ticket sau xác nhận và dùng priority mới nhất thay cho giá trị ban đầu."}
+    },
+    {
+      "id": "G09_correct_employee_before_lookup",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tra cứu nhân viên EMP-1002."},
+        {"role": "user", "content": "Xin lỗi, mã đúng là EMP-1007."},
+        {"role": "user", "content": "Cho biết email công việc và thiết bị được cấp của người đó."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "lookup_user", "args": {"employee_id": "EMP-1007"}}]},
+      "metadata": {"skill": "multiturn_correct_directory_id", "difficulty": "medium", "what_it_tests": "ID được sửa ở lượt sau phải thắng ID cũ; không gọi lookup với giá trị cũ."}
+    },
+    {
+      "id": "G10_cancel_pending_request",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra hardware máy LT-204."},
+        {"role": "user", "content": "Dừng yêu cầu đó, không cần kiểm tra nữa."},
+        {"role": "user", "content": "Chỉ xác nhận là bạn đã hủy yêu cầu."}
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {"no_tool": true, "behavior": "answer_without_tool"},
+      "metadata": {"skill": "multiturn_cancel_pending_work", "difficulty": "hard", "what_it_tests": "Lượt hủy mới nhất phải ngăn inspect_device và không được gọi clarify."}
+    }
+  ]
 }

@@ -75,6 +75,12 @@ python scripts/preflight_provider.py --provider openrouter
 python run_eval.py --provider openrouter --version v0 --suite base --eval-cases data/eval_base.json
 ```
 
+
+```cmd
+python scripts/preflight_provider.py --provider openrouter
+python run_eval.py --provider openrouter --version v0 --suite base --eval-cases data/eval_base.json
+```
+
 Thay `openrouter` bằng `openai`, `anthropic` hoặc `gemini` khi dùng provider khác. Không commit `.env`.
 
 ## Tài liệu cần đọc
