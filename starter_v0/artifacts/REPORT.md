@@ -1,6 +1,6 @@
 # Day 04 Lab v3 Report — Trợ lý AI của nhóm
 
-- Lĩnh vực tự chọn:
+- Lĩnh vực tự chọn:IT helpdesk
 - Nhiệm vụ và luồng cơ bản đã chốt trước v0:
 - Đường dẫn bộ 30 câu cơ bản và 12 câu an toàn; commit chốt bộ trước v0:
 - Chức năng mở rộng ngoài luồng cơ bản (nếu có; tối đa 10 trong tổng 100 điểm):

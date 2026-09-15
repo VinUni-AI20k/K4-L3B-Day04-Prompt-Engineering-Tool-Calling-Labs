@@ -4,8 +4,8 @@
 
 ## Thông tin bài nộp
 
-- Tên nhóm:
-- Người đại diện / MSSV:
+- Tên nhóm:4AE
+- Người đại diện / MSSV:Hồ Thái Hòa / 2A202602915
 - Tên repo: `K4-L3-DAY04-HoVaTen-MSSV-PromptEngineeringToolCalling`
 - URL repo, nhánh nộp, commit chốt:
 - Deadline áp dụng và link thông báo đổi hạn nếu có:
