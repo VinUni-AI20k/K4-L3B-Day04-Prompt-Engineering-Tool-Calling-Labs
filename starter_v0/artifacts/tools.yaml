@@ -23,7 +23,7 @@ tools:
       type: object
       properties:
         query: {type: string, default: "", description: "Nội dung cần tìm"}
-        category: {type: string, enum: [all, vpn, email, wifi, printing, account, security, hardware, software, meeting_room], default: "all", description: "Nhóm hướng dẫn"}
+        category: {type: string, enum: [all, vpn, email, wifi, printing, account, security, hardware, software, meeting_room], default: "all", description: "Nhóm hướng dẫn. Nếu yêu cầu nêu rõ chủ đề cụ thể (vd VPN, Wi-Fi), dùng đúng giá trị đó thay vì all."}
         top_k: {type: integer, default: 3, description: "Số kết quả"}
       required: [query]
 
@@ -37,16 +37,16 @@ tools:
       required: [service]
 
   - name: inspect_device
-    description: "Kiểm tra thông tin và chẩn đoán thiết bị."
+    description: "Kiểm tra thông tin và chẩn đoán thiết bị. asset_id phải là mã tài sản do người dùng nêu rõ trong hội thoại (ví dụ LT-204, DT-031); không tự bịa một mã đúng định dạng, và không dùng employee ID làm asset_id."
     parameters:
       type: object
       properties:
-        asset_id: {type: string, description: "Mã tài sản"}
-        check: {type: string, enum: [all, network, vpn, security, hardware, software], default: "all", description: "Nhóm kiểm tra"}
+        asset_id: {type: string, description: "Mã tài sản do người dùng cung cấp, ví dụ LT-204"}
+        check: {type: string, enum: [all, network, vpn, security, hardware, software], default: "all", description: "Nhóm kiểm tra. Nếu yêu cầu nêu rõ một khu vực cụ thể (vd VPN, Wi-Fi/network, hardware), dùng đúng giá trị đó thay vì all."}
       required: [asset_id]
 
   - name: lookup_user
-    description: "Tra cứu người dùng trong danh bạ hỗ trợ."
+    description: "Tra cứu người dùng trong danh bạ hỗ trợ. Kết quả đã bao gồm assigned_assets (thiết bị được cấp); nếu yêu cầu chỉ hỏi thiết bị được cấp cho nhân viên, không cần gọi thêm inspect_device."
     parameters:
       type: object
       properties:
@@ -96,7 +96,7 @@ tools:
       required: [query]
 
   - name: create_ticket
-    description: "Tạo một ticket hỗ trợ."
+    description: "Tạo một ticket hỗ trợ. Đây là hành động ghi dữ liệu: chỉ gọi tool này SAU KHI người dùng đã xác nhận rõ ràng (qua clarify với response_type=yes_no) nội dung summary và priority cuối cùng. Không gọi tool này chỉ để xem trước hoặc thăm dò kết quả."
     parameters:
       type: object
       properties:
