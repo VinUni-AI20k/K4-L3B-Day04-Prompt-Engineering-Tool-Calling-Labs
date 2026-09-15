@@ -266,7 +266,7 @@ def main() -> None:
     parser.add_argument("--version", required=True)
     parser.add_argument(
         "--provider",
-        choices=["openai", "openrouter", "anthropic", "gemini", "ollama"],
+        choices=["openai", "openrouter", "anthropic", "gemini", "ollama", "local"],
         required=True,
     )
     parser.add_argument("--model", default=None)

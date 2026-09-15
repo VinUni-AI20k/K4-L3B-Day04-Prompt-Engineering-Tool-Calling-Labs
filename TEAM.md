@@ -74,8 +74,8 @@ Mỗi người tự điền phần của mình (không viết thay người khá
 
 ### Nguyễn Hoàng Anh — 2A202602811
 
-- Phần việc và file/commit/PR:
-- Quyết định, khó khăn và cách xử lý:
-- Điều đã học:
-- AI/công cụ đã dùng và cách kiểm tra:
-- Thời điểm đã tự nộp URL repo chung trên VLearn:
+- Phần việc và file/commit/PR:Thực hiện cải tiến v1 cho IT Helpdesk Agent, tập trung vào routing tool và xử lý thông tin còn thiếu. Chỉnh sửa artifacts/system_prompt.md, artifacts/tools.yaml và run_eval.py; bổ sung providers/ollama_provider.py để hỗ trợ hướng chạy model local. Commit: 95a3a71 — Improve v1 routing and clarification behavior.
+- Quyết định, khó khăn và cách xử lý:Dựa trên trace của v0 để xác định các lỗi về chọn tool, tham số và thiếu thông tin. Bổ sung quy tắc phân biệt kiểm tra dịch vụ chung và kiểm tra thiết bị cụ thể, không tự đoán asset_id/employee_id, đồng thời yêu cầu xác nhận trước các thao tác tạo ticket. Khi thử chạy model local, phát hiện môi trường chưa có transformers nên cần bổ sung dependency.
+- Điều đã học:Học cách cải thiện agent dựa trên evidence từ evaluation thay vì sửa toàn bộ hệ thống. Hiểu rõ hơn cách system prompt và tool description ảnh hưởng đến routing, argument và clarification của agent.
+- AI/công cụ đã dùng và cách kiểm tra:Sử dụng ChatGPT để phân tích trace, đề xuất thay đổi prompt/tool schema và hỗ trợ xử lý Git. Sử dụng Python/PowerShell để chạy evaluation và kiểm tra model local; kiểm tra kết quả thông qua log, git status, commit và push lên GitHub.
+- Thời điểm đã tự nộp URL repo chung trên VLearn: 20:04:26 15/9/2026
