@@ -15,6 +15,10 @@
 | Họ và tên | MSSV | GitHub | Vai trò và công việc | File/commit/PR |
 |---|---|---|---|---|
 | | | | | |
+|Lâm Quang Anh Quân |2A202602467 |awun0105 | | |
+| | | | | |
+| | | | | |
+| | | | | |
 
 ## Nhận xét chung
 
@@ -25,7 +29,38 @@
 
 ## INDIVIDUAL
 
-Sao chép mục này cho từng thành viên.
+### Họ và tên — MSSV
+
+- Phần việc và file/commit/PR:
+- Quyết định, khó khăn và cách xử lý:
+- Điều đã học:
+- AI/công cụ đã dùng và cách kiểm tra:
+- Thời điểm đã tự nộp URL repo chung trên VLearn:
+
+### Lâm Quang Anh Quân — 2A202602467
+
+- Phần việc và file/commit/PR:
+-
+- Quyết định, khó khăn và cách xử lý:
+- Điều đã học:
+- AI/công cụ đã dùng và cách kiểm tra:
+- Thời điểm đã tự nộp URL repo chung trên VLearn:
+
+### Họ và tên — MSSV
+
+- Phần việc và file/commit/PR:
+- Quyết định, khó khăn và cách xử lý:
+- Điều đã học:
+- AI/công cụ đã dùng và cách kiểm tra:
+- Thời điểm đã tự nộp URL repo chung trên VLearn:
+
+### Họ và tên — MSSV
+
+- Phần việc và file/commit/PR:
+- Quyết định, khó khăn và cách xử lý:
+- Điều đã học:
+- AI/công cụ đã dùng và cách kiểm tra:
+- Thời điểm đã tự nộp URL repo chung trên VLearn:
 
 ### Họ và tên — MSSV
 
