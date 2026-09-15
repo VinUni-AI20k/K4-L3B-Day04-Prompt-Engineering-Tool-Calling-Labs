@@ -271,7 +271,7 @@ def main() -> None:
     parser.add_argument("--tools", type=Path, default=ARTIFACTS_DIR / "tools.yaml")
     parser.add_argument("--eval-cases", type=Path, default=DATA_DIR / "eval_base.json")
     parser.add_argument("--runs-dir", type=Path, default=ROOT / "runs")
-    parser.add_argument("--batch-size", type=int, default=4, help="Number of cases per batch before pausing")
+    parser.add_argument("--batch-size", type=int, default=2, help="Number of cases per batch before pausing")
     parser.add_argument("--batch-delay", type=int, default=90, help="Pause duration in seconds between batches")
     args = parser.parse_args()
 
