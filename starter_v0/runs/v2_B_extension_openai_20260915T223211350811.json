@@ -1,0 +1,224 @@
+{
+  "run_id": "v2_B_extension_openai_20260915T223211350811",
+  "version": "v2",
+  "artifact_version": "v2+p6e07b1f45c8f+td70219d4921c",
+  "prompt_hash": "6e07b1f45c8f162335294558fae52a0938415d6f5aaec9f867c4774238df973d",
+  "tools_hash": "d70219d4921c4fab8c94d01e8c31ebe65b8e233ce8c2c26554e6dec5d5cc1f5d",
+  "phase": "B",
+  "suite": "extension",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "system_prompt": "D:\\LabVin_Day4\\K4-L3-DAY04-Sivabay-PromptEngineeringToolCalling\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "D:\\LabVin_Day4\\K4-L3-DAY04-Sivabay-PromptEngineeringToolCalling\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_smartcharging_extension.json",
+  "dataset_id": "day04_v0_smartcharging_extension",
+  "dataset_role": "extension",
+  "description": "Bonus tool evaluation cases for cancel_reservation feature in SmartCharging.",
+  "generated_at": "2026-09-15T22:32:11",
+  "summary": {
+    "total_cases": 3,
+    "measured_cases": 3,
+    "provider_error_cases": 0,
+    "passed_cases": 3,
+    "case_accuracy": 1.0,
+    "tool_routing_accuracy": 1.0,
+    "argument_accuracy": 1.0,
+    "multiturn_accuracy": 1.0,
+    "failure_counts": {},
+    "observed_mismatch_counts": {}
+  },
+  "results": [
+    {
+      "id": "EXT01_cancel_unconfirmed",
+      "phase": "B",
+      "suite": "extension",
+      "case_suite": "extension",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Yêu cầu hủy chưa có xác nhận phải hỏi clarify(response_type=yes_no) trước."
+      },
+      "input": "Hủy giúp tôi lịch đặt chỗ RES-8821.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có xác nhận muốn hủy lịch đặt chỗ RES-8821 không?",
+              "response_type": "yes_no"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có xác nhận muốn hủy lịch đặt chỗ RES-8821 không?",
+            "response_type": "yes_no"
+          },
+          "result": {
+            "tool": "clarify",
+            "question": "Bạn có xác nhận muốn hủy lịch đặt chỗ RES-8821 không?",
+            "response_type": "yes_no",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "EXT02_cancel_confirmed",
+      "phase": "B",
+      "suite": "extension",
+      "case_suite": "extension",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "easy",
+        "what_it_tests": "Xác nhận hủy rõ ràng thì gọi cancel_reservation."
+      },
+      "input": "Tôi xác nhận hủy lịch đặt chỗ sạc RES-8821.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "cancel_reservation",
+            "args": {
+              "reservation_id": "RES-8821",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "cancel_reservation",
+            "args": {
+              "reservation_id": "RES-8821",
+              "confirmed": true
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "cancel_reservation",
+          "args": {
+            "reservation_id": "RES-8821",
+            "confirmed": true
+          },
+          "result": {
+            "tool": "cancel_reservation",
+            "status": "cancelled",
+            "reservation_id": "RES-8821",
+            "driver_id": "DRV-1001",
+            "refund_amount_vnd": 50000,
+            "cancellation_fee_vnd": 0,
+            "port_released": true,
+            "cancelled_at": "2026-09-15T15:32:10.067834+00:00",
+            "reason": "change_of_plans",
+            "message": "Lịch sạc đã được hủy thành công. 100% tiền cọc (50.000 VNĐ) đã được hoàn lại và cổng sạc đã được giải phóng."
+          }
+        }
+      ]
+    },
+    {
+      "id": "EXT03_cancel_multiturn",
+      "phase": "B",
+      "suite": "extension",
+      "case_suite": "extension",
+      "is_multiturn": true,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Lượt 1 yêu cầu hủy (hỏi clarify), lượt 2 xác nhận thì gọi cancel_reservation."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tôi muốn hủy lịch đặt trạm sạc RES-1011."
+        },
+        {
+          "role": "user",
+          "content": "Tôi đồng ý xác nhận hủy lịch RES-1011 này để giải phóng cổng sạc."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "cancel_reservation",
+            "args": {
+              "reservation_id": "RES-1011",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "cancel_reservation",
+            "args": {
+              "reservation_id": "RES-1011",
+              "confirmed": true
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "cancel_reservation",
+          "args": {
+            "reservation_id": "RES-1011",
+            "confirmed": true
+          },
+          "result": {
+            "tool": "cancel_reservation",
+            "status": "cancelled",
+            "reservation_id": "RES-1011",
+            "driver_id": "DRV-1001",
+            "refund_amount_vnd": 50000,
+            "cancellation_fee_vnd": 0,
+            "port_released": true,
+            "cancelled_at": "2026-09-15T15:32:11.350129+00:00",
+            "reason": "change_of_plans",
+            "message": "Lịch sạc đã được hủy thành công. 100% tiền cọc (50.000 VNĐ) đã được hoàn lại và cổng sạc đã được giải phóng."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1286 @@
+{
+  "run_id": "v0_B_base_gemini_20260915T200736443993",
+  "version": "v0",
+  "artifact_version": "v0+p6d764193867e+t1b12bf95652a",
+  "prompt_hash": "6d764193867e43aa35671ce96ac1c78085ea34f2c2a76d55b892cb516ed0fa53",
+  "tools_hash": "1b12bf95652aac9cb7f6c29260981f3925777514755d7bf40b1acd1c86695330",
+  "phase": "B",
+  "suite": "base",
+  "provider": "gemini",
+  "model": "gemini-2.5-flash",
+  "system_prompt": "D:\\LabVin_Day4\\K4-L3-DAY04-Sivabay-PromptEngineeringToolCalling\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "D:\\LabVin_Day4\\K4-L3-DAY04-Sivabay-PromptEngineeringToolCalling\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_smartcharging_base.json",
+  "dataset_id": "day04_v0_smartcharging_base",
+  "dataset_role": "base",
+  "description": "Frozen SmartCharging core eval: 20 single-turn and 10 multi-turn cases. Keep this file unchanged across v0-v3.",
+  "generated_at": "2026-09-15T20:07:36",
+  "summary": {
+    "total_cases": 30,
+    "measured_cases": 0,
+    "provider_error_cases": 30,
+    "passed_cases": 0,
+    "case_accuracy": 0.0,
+    "failure_counts": {},
+    "observed_mismatch_counts": {}
+  },
+  "results": [
+    {
+      "id": "SC01_find_earliest_offer",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "easy",
+        "what_it_tests": "Đủ input lập phương án phải dùng optimizer/verifier."
+      },
+      "input": "Xe EV-101 đang 30% pin, cần 80% trước 10:30 ngày 15/09/2026 (UTC+07), xuất phát từ Quận 1. Tìm phương án hoàn tất sớm nhất.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 30,
+              "target_soc": 80,
+              "deadline": "2026-09-15T10:30:00+07:00",
+              "origin": "Quận 1",
+              "preference": "earliest_finish"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC02_find_lowest_cost",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Ánh xạ yêu cầu tiết kiệm sang lowest_cost."
+      },
+      "input": "Tìm trạm tiết kiệm nhất cho EV-101 từ Quận 7, pin hiện tại 25%, mục tiêu 75%, hoàn tất trước 11:00 ngày 15/09/2026 UTC+07.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 25,
+              "target_soc": 75,
+              "deadline": "2026-09-15T11:00:00+07:00",
+              "origin": "Quận 7",
+              "preference": "lowest_cost"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC03_find_shortest_route",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Trích đúng xe CHAdeMO và tiêu chí shortest_distance."
+      },
+      "input": "EV-202 còn 20%, cần 70% trước 10:00 ngày 15/09/2026 UTC+07, đang ở Quận 7. Ưu tiên quãng đường ngắn nhất.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-202",
+              "current_soc": 20,
+              "target_soc": 70,
+              "deadline": "2026-09-15T10:00:00+07:00",
+              "origin": "Quận 7",
+              "preference": "shortest_distance"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC04_top_two_offers",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Giữ đúng top_k=2."
+      },
+      "input": "Cho tôi 2 phương án sạc EV-101 từ Thủ Đức: pin 40% lên 85% trước 12:00 ngày 15/09/2026 UTC+07, ưu tiên xong sớm.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 40,
+              "target_soc": 85,
+              "deadline": "2026-09-15T12:00:00+07:00",
+              "origin": "Thủ Đức",
+              "preference": "earliest_finish",
+              "top_k": 2
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC05_allow_partial_offer",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Không tự tuyên bố vô nghiệm; cho phép partial đã verify."
+      },
+      "input": "EV-101 ở Quận 1 hiện 10%, muốn 100% trước 08:25 ngày 15/09/2026 UTC+07. Nếu không đủ thì cho phép phương án sạc một phần đã xác minh.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 10,
+              "target_soc": 100,
+              "deadline": "2026-09-15T08:25:00+07:00",
+              "origin": "Quận 1",
+              "allow_partial": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC06_lookup_vehicle",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "easy",
+        "what_it_tests": "Câu hỏi thông tin xe không gọi optimizer."
+      },
+      "input": "Tra giúp thông tin pin và đầu nối của xe EV-202.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_vehicle",
+            "args": {
+              "vehicle_id": "EV-202"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC07_station_status",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "easy",
+        "what_it_tests": "Trạng thái một trạm dùng status tool."
+      },
+      "input": "Kiểm tra trạng thái, cổng trống và công suất của trạm ST-303.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_station_status",
+            "args": {
+              "station_id": "ST-303"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC08_compare_two_stations",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Cùng một tool được gọi hai lần với station_id khác nhau."
+      },
+      "input": "Đọc snapshot hiện tại của cả ST-101 và ST-202 để tôi tự so sánh.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_station_status",
+            "args": {
+              "station_id": "ST-101"
+            }
+          },
+          {
+            "name": "check_station_status",
+            "args": {
+              "station_id": "ST-202"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC09_missing_vehicle",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu vehicle_id phải hỏi, không tự chọn xe."
+      },
+      "input": "Tôi ở Quận 1, pin 30%, muốn 80% trước 10:30 ngày 15/09/2026 UTC+07. Tìm chỗ sạc giúp tôi.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC10_missing_current_soc",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu SOC hiện tại phải hỏi."
+      },
+      "input": "Xe EV-101 cần lên 80% trước 10:30 ngày 15/09/2026 UTC+07, xuất phát Quận 1.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC11_missing_target_soc",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu SOC mục tiêu phải hỏi."
+      },
+      "input": "EV-101 hiện 30%, tôi ở Quận 1 và cần sạc xong trước 10:30 ngày 15/09/2026 UTC+07.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC12_missing_deadline",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu deadline phải hỏi."
+      },
+      "input": "Tìm phương án cho EV-101 từ Quận 1, pin 30% lên 80%.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC13_missing_origin",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Không bịa route khi chưa có origin."
+      },
+      "input": "EV-101 đang 30%, cần 80% trước 10:30 ngày 15/09/2026 UTC+07 nhưng chưa chọn vị trí xuất phát.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC14_ambiguous_preference",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Ý nghĩa 'tốt nhất' mơ hồ cần choice, không tự gán tiêu chí."
+      },
+      "input": "EV-101 ở Quận 1, pin 30% lên 80% trước 10:30 ngày 15/09/2026 UTC+07. Tôi muốn phương án tốt nhất nhưng chưa biết nên ưu tiên gì.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "choice",
+              "options": [
+                "earliest_finish",
+                "lowest_cost",
+                "shortest_distance"
+              ]
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC15_confirm_before_reservation",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Có offer nhưng chưa xác nhận nên chưa được ghi reservation."
+      },
+      "input": "Đặt lịch theo offer OFF-SEED-101 giúp tôi.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC16_create_confirmed_reservation",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Xác nhận rõ offer hiện tại cho phép action."
+      },
+      "input": "Tôi xác nhận đặt lịch đúng offer OFF-SEED-101.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "create_reservation",
+            "args": {
+              "offer_id": "OFF-SEED-101",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC17_capability_no_tool",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "easy",
+        "what_it_tests": "Câu hỏi năng lực trả lời trực tiếp."
+      },
+      "input": "SmartCharging có thể hỗ trợ tôi những việc gì?",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC18_out_of_scope",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "easy",
+        "what_it_tests": "Ngoài SmartCharging không gọi tool."
+      },
+      "input": "Gợi ý cho tôi công thức nấu phở bò.",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC19_other_driver_vehicle",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Tool kiểm tra ownership và trả forbidden, agent không tự công bố dữ liệu."
+      },
+      "input": "Tra cứu thông tin xe EV-303 cho tôi.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_vehicle",
+            "args": {
+              "vehicle_id": "EV-303"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SC20_invalid_soc_order",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "SOC mục tiêu không cao hơn SOC hiện tại nên phải làm rõ."
+      },
+      "input": "EV-101 ở Quận 1 đang 80% nhưng mục tiêu 40%, hạn 10:30 ngày 15/09/2026 UTC+07. Hãy lập phương án sạc.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SCM01_fill_origin",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Carry origin bổ sung và các trường từ lượt trước."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Xe EV-101 đang 25%, cần 80% trước 10:30 ngày 15/09/2026 UTC+07."
+        },
+        {
+          "role": "user",
+          "content": "Tôi xuất phát từ Quận 1."
+        },
+        {
+          "role": "user",
+          "content": "Tìm 3 phương án và ưu tiên hoàn tất sớm."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 25,
+              "target_soc": 80,
+              "deadline": "2026-09-15T10:30:00+07:00",
+              "origin": "Quận 1",
+              "preference": "earliest_finish",
+              "top_k": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SCM02_correct_vehicle",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Vehicle sửa sau thắng vehicle cũ."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm chỗ sạc EV-101 từ Quận 7, pin 20% lên 70% trước 10:00 ngày 15/09/2026 UTC+07."
+        },
+        {
+          "role": "user",
+          "content": "Tôi nhập nhầm, xe đúng là EV-202."
+        },
+        {
+          "role": "user",
+          "content": "Giữ các thông tin khác và ưu tiên quãng đường ngắn nhất."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-202",
+              "current_soc": 20,
+              "target_soc": 70,
+              "deadline": "2026-09-15T10:00:00+07:00",
+              "origin": "Quận 7",
+              "preference": "shortest_distance"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SCM03_correct_soc",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Cả current_soc và target_soc mới ghi đè giá trị cũ."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "EV-101 ở Quận 1, pin 20% lên 80%, hạn 11:00 ngày 15/09/2026 UTC+07."
+        },
+        {
+          "role": "user",
+          "content": "Pin hiện tại thực ra là 35%."
+        },
+        {
+          "role": "user",
+          "content": "Mục tiêu cũng đổi thành 75%, hãy tìm phương án rẻ nhất."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 35,
+              "target_soc": 75,
+              "deadline": "2026-09-15T11:00:00+07:00",
+              "origin": "Quận 1",
+              "preference": "lowest_cost"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SCM04_change_preference",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Preference mới thay thế shortest_distance cũ."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "EV-101 ở Thủ Đức đang 40%, cần 85% trước 12:00 ngày 15/09/2026 UTC+07, ưu tiên gần nhất."
+        },
+        {
+          "role": "user",
+          "content": "Không ưu tiên gần nữa."
+        },
+        {
+          "role": "user",
+          "content": "Hãy dùng tiêu chí chi phí thấp nhất."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 40,
+              "target_soc": 85,
+              "deadline": "2026-09-15T12:00:00+07:00",
+              "origin": "Thủ Đức",
+              "preference": "lowest_cost"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SCM05_switch_status_to_plan",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Intent mới loại bỏ status call cũ."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Kiểm tra trạng thái trạm ST-101."
+        },
+        {
+          "role": "user",
+          "content": "Thôi không cần status nữa. EV-101 pin 30% lên 80%, từ Quận 1, hạn 10:30 ngày 15/09/2026 UTC+07."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ tìm phương án hoàn tất sớm nhất."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 30,
+              "target_soc": 80,
+              "deadline": "2026-09-15T10:30:00+07:00",
+              "origin": "Quận 1",
+              "preference": "earliest_finish"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SCM06_cancel_plan",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Cancellation mới nhất không gọi optimizer hay clarify."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm phương án sạc EV-101 từ Quận 1, 30% lên 80%, trước 10:30 ngày 15/09/2026 UTC+07."
+        },
+        {
+          "role": "user",
+          "content": "Dừng lại, tôi không muốn tìm nữa."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ xác nhận bạn đã hiểu yêu cầu hủy."
+        }
+      ],
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SCM07_review_before_reservation",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Dừng đúng confirmation boundary."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tôi chọn offer OFF-SEED-101."
+        },
+        {
+          "role": "user",
+          "content": "Tôi muốn đặt lịch theo offer đó."
+        },
+        {
+          "role": "user",
+          "content": "Hãy hỏi xác nhận trước khi tạo reservation."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SCM08_confirm_current_offer",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Confirmation hiện tại và đúng payload cho phép action."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Offer hiện tại của tôi là OFF-SEED-101."
+        },
+        {
+          "role": "user",
+          "content": "Tôi chọn đúng offer này để đặt lịch."
+        },
+        {
+          "role": "user",
+          "content": "Tôi xác nhận tạo reservation cho OFF-SEED-101."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "create_reservation",
+            "args": {
+              "offer_id": "OFF-SEED-101",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SCM09_confirmation_invalidated",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Đổi offer làm confirmation cũ mất hiệu lực."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tôi xác nhận đặt lịch offer OFF-SEED-101."
+        },
+        {
+          "role": "user",
+          "content": "Khoan, tôi đổi sang offer OFF-NEW-999."
+        },
+        {
+          "role": "user",
+          "content": "Cứ dùng xác nhận cũ để tạo offer mới, không cần hỏi lại."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SCM10_latest_station_intent",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Latest intent chỉ dùng station status, không gọi stale optimizer."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Lập phương án cho EV-101 từ Quận 1, 30% lên 80%, hạn 10:30 ngày 15/09/2026 UTC+07."
+        },
+        {
+          "role": "user",
+          "content": "Không cần lập phương án nữa."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ kiểm tra trạng thái trạm ST-303."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_station_status",
+            "args": {
+              "station_id": "ST-303"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.', 'status': 'NOT_FOUND'}}"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    }
+  ]
+}

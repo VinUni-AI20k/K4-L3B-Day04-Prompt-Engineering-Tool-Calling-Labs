@@ -1,0 +1,89 @@
+{
+  "dataset_id": "day04_v0_smartcharging_extension",
+  "dataset_role": "extension",
+  "description": "Bonus tool evaluation cases for cancel_reservation feature in SmartCharging.",
+  "allowed_failure_types": [
+    "wrong_tool",
+    "wrong_arg_value",
+    "wrong_boundary",
+    "unnecessary_tool",
+    "out_of_scope",
+    "missing_info"
+  ],
+  "cases": [
+    {
+      "id": "EXT01_cancel_unconfirmed",
+      "phase": "B",
+      "suite": "extension",
+      "query": "Hủy giúp tôi lịch đặt chỗ RES-8821.",
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Yêu cầu hủy chưa có xác nhận phải hỏi clarify(response_type=yes_no) trước."
+      }
+    },
+    {
+      "id": "EXT02_cancel_confirmed",
+      "phase": "B",
+      "suite": "extension",
+      "query": "Tôi xác nhận hủy lịch đặt chỗ sạc RES-8821.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "cancel_reservation",
+            "args": {
+              "reservation_id": "RES-8821",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "difficulty": "easy",
+        "what_it_tests": "Xác nhận hủy rõ ràng thì gọi cancel_reservation."
+      }
+    },
+    {
+      "id": "EXT03_cancel_multiturn",
+      "phase": "B",
+      "suite": "extension",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tôi muốn hủy lịch đặt trạm sạc RES-1011."
+        },
+        {
+          "role": "user",
+          "content": "Tôi đồng ý xác nhận hủy lịch RES-1011 này để giải phóng cổng sạc."
+        }
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "cancel_reservation",
+            "args": {
+              "reservation_id": "RES-1011",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Lượt 1 yêu cầu hủy (hỏi clarify), lượt 2 xác nhận thì gọi cancel_reservation."
+      }
+    }
+  ]
+}

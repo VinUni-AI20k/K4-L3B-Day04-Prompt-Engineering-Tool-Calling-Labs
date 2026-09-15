@@ -1,0 +1,1002 @@
+{
+  "run_id": "v2_B_group_openai_20260915T215854129188",
+  "version": "v2",
+  "artifact_version": "v2+p796108980f18+t1b12bf95652a",
+  "prompt_hash": "796108980f180bb7ac5c2772d076ca353f691493c8887ee6bce5637d1fb08c81",
+  "tools_hash": "1b12bf95652aac9cb7f6c29260981f3925777514755d7bf40b1acd1c86695330",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "system_prompt": "D:\\LabVin_Day4\\K4-L3-DAY04-Sivabay-PromptEngineeringToolCalling\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "D:\\LabVin_Day4\\K4-L3-DAY04-Sivabay-PromptEngineeringToolCalling\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day04_v0_smartcharging_group",
+  "dataset_role": "group",
+  "description": "10 original SmartCharging test cases authored by team Si và Bảy: 5 single-turn cases and 5 multi-turn cases.",
+  "generated_at": "2026-09-15T21:58:54",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 9,
+    "case_accuracy": 0.9,
+    "tool_routing_accuracy": 0.9,
+    "argument_accuracy": 0.9,
+    "multiturn_accuracy": 0.8,
+    "failure_counts": {
+      "wrong_arg_value": 1
+    },
+    "observed_mismatch_counts": {
+      "missing_tool_call": 1
+    }
+  },
+  "results": [
+    {
+      "id": "GRP01_lowest_cost_rush_hour",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "easy",
+        "what_it_tests": "Tìm phương án sạc với tiêu chí chi phí thấp nhất (lowest_cost)."
+      },
+      "input": "Xe EV-101 đang 20% pin, muốn sạc lên 75% trước 18:00 ngày 15/09/2026 UTC+07, xuất phát từ Quận 1. Tìm phương án tiết kiệm nhất.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 20,
+              "target_soc": 75,
+              "deadline": "2026-09-15T18:00:00+07:00",
+              "origin": "Quận 1",
+              "preference": "lowest_cost"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 20,
+              "target_soc": 75,
+              "deadline": "2026-09-15T18:00:00+07:00",
+              "origin": "Quận 1",
+              "preference": "lowest_cost"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "find_charging_offers",
+          "args": {
+            "vehicle_id": "EV-101",
+            "current_soc": 20,
+            "target_soc": 75,
+            "deadline": "2026-09-15T18:00:00+07:00",
+            "origin": "Quận 1",
+            "preference": "lowest_cost"
+          },
+          "result": {
+            "tool": "find_charging_offers",
+            "status": "verified_offers",
+            "request": {
+              "vehicle_id": "EV-101",
+              "current_soc": 20.0,
+              "target_soc": 75.0,
+              "deadline": "2026-09-15T18:00:00+07:00",
+              "origin": "Quận 1",
+              "preference": "lowest_cost",
+              "allow_partial": true
+            },
+            "offers": [
+              {
+                "offer_id": "OFF-47B3FAB0B2A2",
+                "driver_id": "DRV-1001",
+                "vehicle_id": "EV-101",
+                "station_id": "ST-303",
+                "station_name": "Tan Thuan GreenCharge",
+                "distance_km": 7.2,
+                "travel_minutes": 24,
+                "start_time": "2026-09-15T08:30:00+07:00",
+                "finish_time": "2026-09-15T09:24:00+07:00",
+                "power_kw": 60.0,
+                "expected_soc": 75.0,
+                "estimated_cost_vnd": 257253,
+                "verified": true,
+                "verdict": "verified_feasible",
+                "route_evidence_id": "ROUTE-Q1-ST303",
+                "verification": {
+                  "solver": "deterministic_lab_optimizer_v0",
+                  "snapshot_at": "2026-09-15T08:00:00+07:00",
+                  "checks": [
+                    "ownership",
+                    "connector",
+                    "route",
+                    "port_window",
+                    "site_power",
+                    "deadline"
+                  ]
+                }
+              },
+              {
+                "offer_id": "OFF-FBB9D1063727",
+                "driver_id": "DRV-1001",
+                "vehicle_id": "EV-101",
+                "station_id": "ST-101",
+                "station_name": "Ben Thanh EV Hub",
+                "distance_km": 2.4,
+                "travel_minutes": 10,
+                "start_time": "2026-09-15T08:10:00+07:00",
+                "finish_time": "2026-09-15T08:37:00+07:00",
+                "power_kw": 120.0,
+                "expected_soc": 75.0,
+                "estimated_cost_vnd": 332286,
+                "verified": true,
+                "verdict": "verified_feasible",
+                "route_evidence_id": "ROUTE-Q1-ST101",
+                "verification": {
+                  "solver": "deterministic_lab_optimizer_v0",
+                  "snapshot_at": "2026-09-15T08:00:00+07:00",
+                  "checks": [
+                    "ownership",
+                    "connector",
+                    "route",
+                    "port_window",
+                    "site_power",
+                    "deadline"
+                  ]
+                }
+              },
+              {
+                "offer_id": "OFF-A05AC559E103",
+                "driver_id": "DRV-1001",
+                "vehicle_id": "EV-101",
+                "station_id": "ST-202",
+                "station_name": "Thu Thiem FastCharge",
+                "distance_km": 5.8,
+                "travel_minutes": 18,
+                "start_time": "2026-09-15T08:18:00+07:00",
+                "finish_time": "2026-09-15T08:40:00+07:00",
+                "power_kw": 150.0,
+                "expected_soc": 75.0,
+                "estimated_cost_vnd": 385880,
+                "verified": true,
+                "verdict": "verified_feasible",
+                "route_evidence_id": "ROUTE-Q1-ST202",
+                "verification": {
+                  "solver": "deterministic_lab_optimizer_v0",
+                  "snapshot_at": "2026-09-15T08:00:00+07:00",
+                  "checks": [
+                    "ownership",
+                    "connector",
+                    "route",
+                    "port_window",
+                    "site_power",
+                    "deadline"
+                  ]
+                }
+              }
+            ],
+            "excluded_candidates": [
+              {
+                "station_id": "ST-404",
+                "reason": "station_maintenance"
+              }
+            ],
+            "snapshot_at": "2026-09-15T08:00:00+07:00",
+            "decision_boundary": "A verified offer is a proposal, not a reservation."
+          }
+        }
+      ]
+    },
+    {
+      "id": "GRP02_lookup_vehicle_specs",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "easy",
+        "what_it_tests": "Tra cứu thông tin pin và chuẩn sạc của xe EV-202."
+      },
+      "input": "Cho tôi xem thông số kỹ thuật, chuẩn sạc và công suất tối đa của xe EV-202.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_vehicle",
+            "args": {
+              "vehicle_id": "EV-202"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup_vehicle",
+            "args": {
+              "vehicle_id": "EV-202"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup_vehicle",
+          "args": {
+            "vehicle_id": "EV-202"
+          },
+          "result": {
+            "tool": "lookup_vehicle",
+            "vehicle": {
+              "vehicle_id": "EV-202",
+              "manufacturer": "Nissan",
+              "model": "Leaf",
+              "battery_capacity_kwh": 40.0,
+              "connector_type": "chademo",
+              "max_dc_power_kw": 50
+            },
+            "snapshot_at": "2026-09-15T08:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "GRP03_station_status_inquiry",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "easy",
+        "what_it_tests": "Kiểm tra cổng trống và đơn giá sạc của một trạm cụ thể."
+      },
+      "input": "Kiểm tra xem trạm ST-303 hiện tại còn cổng sạc nào trống và giá điện bao nhiêu.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_station_status",
+            "args": {
+              "station_id": "ST-303"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "check_station_status",
+            "args": {
+              "station_id": "ST-303"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "check_station_status",
+          "args": {
+            "station_id": "ST-303"
+          },
+          "result": {
+            "tool": "check_station_status",
+            "station": {
+              "station_id": "ST-303",
+              "name": "Tan Thuan GreenCharge",
+              "area": "Quận 7",
+              "status": "operational",
+              "site_available_power_kw": 90,
+              "price_vnd_per_kwh": 4800,
+              "connectors": [
+                {
+                  "type": "ccs2",
+                  "available_ports": 0,
+                  "max_power_kw": 60,
+                  "next_available_at": "2026-09-15T08:30:00+07:00"
+                },
+                {
+                  "type": "chademo",
+                  "available_ports": 1,
+                  "max_power_kw": 50,
+                  "next_available_at": "2026-09-15T08:00:00+07:00"
+                }
+              ]
+            },
+            "snapshot_at": "2026-09-15T08:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "GRP04_missing_deadline",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu thời hạn deadline bắt buộc phải gọi clarify với response_type=text."
+      },
+      "input": "EV-101 đang 30% pin, tôi muốn sạc lên 80% từ Quận 1.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có thể cho tôi biết thời gian hoàn thành dự kiến cho việc sạc không?",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có thể cho tôi biết thời gian hoàn thành dự kiến cho việc sạc không?",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "clarify",
+            "question": "Bạn có thể cho tôi biết thời gian hoàn thành dự kiến cho việc sạc không?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "GRP05_direct_confirmed_reservation",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Xác nhận rõ ràng thì được phép gọi create_reservation."
+      },
+      "input": "Tôi xác nhận chốt đặt lịch cho offer OFF-SEED-101.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "create_reservation",
+            "args": {
+              "offer_id": "OFF-SEED-101",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "create_reservation",
+            "args": {
+              "offer_id": "OFF-SEED-101",
+              "confirmed": true
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "create_reservation",
+          "args": {
+            "offer_id": "OFF-SEED-101",
+            "confirmed": true
+          },
+          "result": {
+            "tool": "create_reservation",
+            "status": "created",
+            "reservation_id": "RES-BB53237B34",
+            "offer_id": "OFF-SEED-101",
+            "reverified": true,
+            "path": "D:\\LabVin_Day4\\K4-L3-DAY04-Sivabay-PromptEngineeringToolCalling\\starter_v0\\reservations\\RES-BB53237B34.json"
+          }
+        }
+      ]
+    },
+    {
+      "id": "GRPM01_fill_deadline_multiturn",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Bổ sung deadline ở lượt 2 và tổng hợp đủ thông tin để gọi find_charging_offers."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm phương án sạc cho xe EV-101 từ Quận 1, pin từ 30% lên 80%."
+        },
+        {
+          "role": "user",
+          "content": "Hạn hoàn tất trước 12:00 ngày 15/09/2026 UTC+07, ưu tiên xong sớm."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 30,
+              "target_soc": 80,
+              "deadline": "2026-09-15T12:00:00+07:00",
+              "origin": "Quận 1",
+              "preference": "earliest_finish"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 30,
+              "target_soc": 80,
+              "deadline": "2026-09-15T12:00:00+07:00",
+              "origin": "Quận 1",
+              "preference": "earliest_finish"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "find_charging_offers",
+          "args": {
+            "vehicle_id": "EV-101",
+            "current_soc": 30,
+            "target_soc": 80,
+            "deadline": "2026-09-15T12:00:00+07:00",
+            "origin": "Quận 1",
+            "preference": "earliest_finish"
+          },
+          "result": {
+            "tool": "find_charging_offers",
+            "status": "verified_offers",
+            "request": {
+              "vehicle_id": "EV-101",
+              "current_soc": 30.0,
+              "target_soc": 80.0,
+              "deadline": "2026-09-15T12:00:00+07:00",
+              "origin": "Quận 1",
+              "preference": "earliest_finish",
+              "allow_partial": true
+            },
+            "offers": [
+              {
+                "offer_id": "OFF-42240D6B688A",
+                "driver_id": "DRV-1001",
+                "vehicle_id": "EV-101",
+                "station_id": "ST-101",
+                "station_name": "Ben Thanh EV Hub",
+                "distance_km": 2.4,
+                "travel_minutes": 10,
+                "start_time": "2026-09-15T08:10:00+07:00",
+                "finish_time": "2026-09-15T08:35:00+07:00",
+                "power_kw": 120.0,
+                "expected_soc": 80.0,
+                "estimated_cost_vnd": 302078,
+                "verified": true,
+                "verdict": "verified_feasible",
+                "route_evidence_id": "ROUTE-Q1-ST101",
+                "verification": {
+                  "solver": "deterministic_lab_optimizer_v0",
+                  "snapshot_at": "2026-09-15T08:00:00+07:00",
+                  "checks": [
+                    "ownership",
+                    "connector",
+                    "route",
+                    "port_window",
+                    "site_power",
+                    "deadline"
+                  ]
+                }
+              },
+              {
+                "offer_id": "OFF-B02826C983FD",
+                "driver_id": "DRV-1001",
+                "vehicle_id": "EV-101",
+                "station_id": "ST-202",
+                "station_name": "Thu Thiem FastCharge",
+                "distance_km": 5.8,
+                "travel_minutes": 18,
+                "start_time": "2026-09-15T08:18:00+07:00",
+                "finish_time": "2026-09-15T08:38:00+07:00",
+                "power_kw": 150.0,
+                "expected_soc": 80.0,
+                "estimated_cost_vnd": 350800,
+                "verified": true,
+                "verdict": "verified_feasible",
+                "route_evidence_id": "ROUTE-Q1-ST202",
+                "verification": {
+                  "solver": "deterministic_lab_optimizer_v0",
+                  "snapshot_at": "2026-09-15T08:00:00+07:00",
+                  "checks": [
+                    "ownership",
+                    "connector",
+                    "route",
+                    "port_window",
+                    "site_power",
+                    "deadline"
+                  ]
+                }
+              },
+              {
+                "offer_id": "OFF-60625F402F22",
+                "driver_id": "DRV-1001",
+                "vehicle_id": "EV-101",
+                "station_id": "ST-303",
+                "station_name": "Tan Thuan GreenCharge",
+                "distance_km": 7.2,
+                "travel_minutes": 24,
+                "start_time": "2026-09-15T08:30:00+07:00",
+                "finish_time": "2026-09-15T09:19:00+07:00",
+                "power_kw": 60.0,
+                "expected_soc": 80.0,
+                "estimated_cost_vnd": 233867,
+                "verified": true,
+                "verdict": "verified_feasible",
+                "route_evidence_id": "ROUTE-Q1-ST303",
+                "verification": {
+                  "solver": "deterministic_lab_optimizer_v0",
+                  "snapshot_at": "2026-09-15T08:00:00+07:00",
+                  "checks": [
+                    "ownership",
+                    "connector",
+                    "route",
+                    "port_window",
+                    "site_power",
+                    "deadline"
+                  ]
+                }
+              }
+            ],
+            "excluded_candidates": [
+              {
+                "station_id": "ST-404",
+                "reason": "station_maintenance"
+              }
+            ],
+            "snapshot_at": "2026-09-15T08:00:00+07:00",
+            "decision_boundary": "A verified offer is a proposal, not a reservation."
+          }
+        }
+      ]
+    },
+    {
+      "id": "GRPM02_change_preference_multiturn",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Cập nhật preference mới thay thế preference cũ ở lượt sau."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Xe EV-101 đang 40%, cần 85% trước 15:30 ngày 15/09/2026 UTC+07, từ Quận 1. Tìm phương án rẻ nhất."
+        },
+        {
+          "role": "user",
+          "content": "Tôi đổi ý rồi, cần phương án quãng đường ngắn nhất."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 40,
+              "target_soc": 85,
+              "deadline": "2026-09-15T15:30:00+07:00",
+              "origin": "Quận 1",
+              "preference": "shortest_distance"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có muốn tôi tìm phương án quãng đường ngắn nhất cho cùng một yêu cầu không?",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "wrong_arg_value",
+        "failures": [
+          "missing tool call find_charging_offers",
+          "extra tool call clarify"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có muốn tôi tìm phương án quãng đường ngắn nhất cho cùng một yêu cầu không?",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "clarify",
+            "question": "Bạn có muốn tôi tìm phương án quãng đường ngắn nhất cho cùng một yêu cầu không?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "GRPM03_station_check_then_plan",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Chuyển từ hỏi thông tin trạm sang yêu cầu lập kế hoạch sạc."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Trạm ST-101 hiện còn hoạt động không?"
+        },
+        {
+          "role": "user",
+          "content": "Vậy lập phương án sạc cho EV-101 từ Quận 1, pin 35% lên 80% trước 11:30 ngày 15/09/2026 UTC+07, hoàn tất sớm."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 35,
+              "target_soc": 80,
+              "deadline": "2026-09-15T11:30:00+07:00",
+              "origin": "Quận 1",
+              "preference": "earliest_finish"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 35,
+              "target_soc": 80,
+              "deadline": "2026-09-15T11:30:00+07:00",
+              "origin": "Quận 1",
+              "preference": "earliest_finish"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "find_charging_offers",
+          "args": {
+            "vehicle_id": "EV-101",
+            "current_soc": 35,
+            "target_soc": 80,
+            "deadline": "2026-09-15T11:30:00+07:00",
+            "origin": "Quận 1",
+            "preference": "earliest_finish"
+          },
+          "result": {
+            "tool": "find_charging_offers",
+            "status": "verified_offers",
+            "request": {
+              "vehicle_id": "EV-101",
+              "current_soc": 35.0,
+              "target_soc": 80.0,
+              "deadline": "2026-09-15T11:30:00+07:00",
+              "origin": "Quận 1",
+              "preference": "earliest_finish",
+              "allow_partial": true
+            },
+            "offers": [
+              {
+                "offer_id": "OFF-ADC86C4FE125",
+                "driver_id": "DRV-1001",
+                "vehicle_id": "EV-101",
+                "station_id": "ST-101",
+                "station_name": "Ben Thanh EV Hub",
+                "distance_km": 2.4,
+                "travel_minutes": 10,
+                "start_time": "2026-09-15T08:10:00+07:00",
+                "finish_time": "2026-09-15T08:32:00+07:00",
+                "power_kw": 120.0,
+                "expected_soc": 80.0,
+                "estimated_cost_vnd": 271870,
+                "verified": true,
+                "verdict": "verified_feasible",
+                "route_evidence_id": "ROUTE-Q1-ST101",
+                "verification": {
+                  "solver": "deterministic_lab_optimizer_v0",
+                  "snapshot_at": "2026-09-15T08:00:00+07:00",
+                  "checks": [
+                    "ownership",
+                    "connector",
+                    "route",
+                    "port_window",
+                    "site_power",
+                    "deadline"
+                  ]
+                }
+              },
+              {
+                "offer_id": "OFF-FC710DC4519D",
+                "driver_id": "DRV-1001",
+                "vehicle_id": "EV-101",
+                "station_id": "ST-202",
+                "station_name": "Thu Thiem FastCharge",
+                "distance_km": 5.8,
+                "travel_minutes": 18,
+                "start_time": "2026-09-15T08:18:00+07:00",
+                "finish_time": "2026-09-15T08:36:00+07:00",
+                "power_kw": 150.0,
+                "expected_soc": 80.0,
+                "estimated_cost_vnd": 315720,
+                "verified": true,
+                "verdict": "verified_feasible",
+                "route_evidence_id": "ROUTE-Q1-ST202",
+                "verification": {
+                  "solver": "deterministic_lab_optimizer_v0",
+                  "snapshot_at": "2026-09-15T08:00:00+07:00",
+                  "checks": [
+                    "ownership",
+                    "connector",
+                    "route",
+                    "port_window",
+                    "site_power",
+                    "deadline"
+                  ]
+                }
+              },
+              {
+                "offer_id": "OFF-9F2BA8D34475",
+                "driver_id": "DRV-1001",
+                "vehicle_id": "EV-101",
+                "station_id": "ST-303",
+                "station_name": "Tan Thuan GreenCharge",
+                "distance_km": 7.2,
+                "travel_minutes": 24,
+                "start_time": "2026-09-15T08:30:00+07:00",
+                "finish_time": "2026-09-15T09:14:00+07:00",
+                "power_kw": 60.0,
+                "expected_soc": 80.0,
+                "estimated_cost_vnd": 210480,
+                "verified": true,
+                "verdict": "verified_feasible",
+                "route_evidence_id": "ROUTE-Q1-ST303",
+                "verification": {
+                  "solver": "deterministic_lab_optimizer_v0",
+                  "snapshot_at": "2026-09-15T08:00:00+07:00",
+                  "checks": [
+                    "ownership",
+                    "connector",
+                    "route",
+                    "port_window",
+                    "site_power",
+                    "deadline"
+                  ]
+                }
+              }
+            ],
+            "excluded_candidates": [
+              {
+                "station_id": "ST-404",
+                "reason": "station_maintenance"
+              }
+            ],
+            "snapshot_at": "2026-09-15T08:00:00+07:00",
+            "decision_boundary": "A verified offer is a proposal, not a reservation."
+          }
+        }
+      ]
+    },
+    {
+      "id": "GRPM04_reservation_unconfirmed_then_confirmed",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Chỉ tạo reservation khi có xác nhận rõ ràng ở lượt mới nhất."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Giữ chỗ cho tôi offer OFF-SEED-101."
+        },
+        {
+          "role": "user",
+          "content": "Tôi xác nhận đặt giữ chỗ offer OFF-SEED-101 này."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "create_reservation",
+            "args": {
+              "offer_id": "OFF-SEED-101",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "create_reservation",
+            "args": {
+              "offer_id": "OFF-SEED-101",
+              "confirmed": true
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "create_reservation",
+          "args": {
+            "offer_id": "OFF-SEED-101",
+            "confirmed": true
+          },
+          "result": {
+            "tool": "create_reservation",
+            "status": "created",
+            "reservation_id": "RES-69EA831D2D",
+            "offer_id": "OFF-SEED-101",
+            "reverified": true,
+            "path": "D:\\LabVin_Day4\\K4-L3-DAY04-Sivabay-PromptEngineeringToolCalling\\starter_v0\\reservations\\RES-69EA831D2D.json"
+          }
+        }
+      ]
+    },
+    {
+      "id": "GRPM05_cancel_plan",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Hủy yêu cầu ở lượt sau không được gọi tool nào."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "EV-101 đang 20%, tìm phương án sạc lên 70% trước 17:00 ngày 15/09/2026 UTC+07, xuất phát Quận 1."
+        },
+        {
+          "role": "user",
+          "content": "Thôi tôi có việc bận, hủy yêu cầu tìm sạc nhé."
+        }
+      ],
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "{\n  \"intent\": \"cancel_request\",\n  \"action\": \"cancel\",\n  \"reply\": \"Yêu cầu tìm sạc đã được hủy.\",\n  \"evidence_ids\": []\n}",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    }
+  ]
+}
