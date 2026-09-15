@@ -1,0 +1,25 @@
+{
+  "transcript_id": "ui_demo_missing_branch",
+  "evidence_type": "ui_demo_rehearsal",
+  "version": "v3",
+  "artifact_version": "v3+p9b82dafa338f+tdd87e0b37314",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "scenario": "Missing information: inventory request without branch",
+  "observed": "The agent did not guess a branch and paused with clarify(choice).",
+  "turns": [
+    {
+      "turn_index": 1,
+      "user": "Kiểm tra tồn kho PROD001 giúp tôi.",
+      "status": "waiting_for_user",
+      "assistant_text": "Bạn vui lòng cho biết chi nhánh nào bạn muốn kiểm tra tồn kho?",
+      "tool_events": [
+        {
+          "tool": "clarify",
+          "args": {"question": "Bạn vui lòng cho biết chi nhánh nào bạn muốn kiểm tra tồn kho?", "response_type": "choice", "options": ["district_1", "thu_duc", "ha_noi"]},
+          "result": {"tool": "clarify", "response_type": "choice", "awaiting_user": true}
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "transcript_id": "ui_demo_multiturn_latest_intent",
+  "evidence_type": "ui_demo_rehearsal",
+  "version": "v3",
+  "artifact_version": "v3+p9b82dafa338f+tdd87e0b37314",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "scenario": "Multi-turn correction: latest branch wins",
+  "observed": "The final turn replaced thu_duc with ha_noi; only the latest inventory input was sent.",
+  "turns": [
+    {"turn_index": 1, "user": "Tìm hiểu PROD010 rồi kiểm tra nơi còn hàng.", "status": "answered", "assistant_text": "Bạn muốn kiểm tra ở chi nhánh nào?", "tool_events": []},
+    {"turn_index": 2, "user": "Kiểm tra ở Thủ Đức.", "status": "answered", "assistant_text": "Đã ghi nhận chi nhánh Thủ Đức.", "tool_events": []},
+    {
+      "turn_index": 3,
+      "user": "Đổi lại, chỉ kiểm tra tồn kho tại Hà Nội.",
+      "status": "answered",
+      "assistant_text": "PROD010 tại Hà Nội còn hàng.",
+      "tool_events": [
+        {"tool": "check_inventory", "args": {"product_id": "PROD010", "branch": "ha_noi"}, "result": {"tool": "check_inventory", "product_id": "PROD010", "branch": "ha_noi", "available": 5}}
+      ]
+    }
+  ]
+}

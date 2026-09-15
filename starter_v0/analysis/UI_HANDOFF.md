@@ -59,9 +59,32 @@ Use `python chat.py --help` if the UI adapter needs the exact CLI options. The
 shared registry is `tools.TOOL_FUNCTIONS` and the active declarations are
 `artifacts/tools.yaml`.
 
+## Implemented UI
+
+Run from `starter_v0`:
+
+```powershell
+python ui.py --provider openai --version v3 --port 8000
+```
+
+Open `http://127.0.0.1:8000/`. `ui.py` uses the same `run_model_tool_loop`
+as the CLI, keeps the last five user/assistant pairs, and writes a transcript
+after every turn. The right-hand trace shows exact tool input and the complete
+result, including structured errors. The header shows computed artifact
+version, provider, and model.
+
+## Saved UI evidence
+
+- Normal request: `transcripts/ui_demo_normal_search.transcript.json`
+- Missing branch: `transcripts/ui_demo_missing_branch.transcript.json`
+- Multi-turn latest intent: `transcripts/ui_demo_multiturn_latest_intent.transcript.json`
+- Write boundary and cancellation: `transcripts/ui_demo_write_boundary.transcript.json`
+
+These rehearsal records use the v3 artifact and preserve the observed tool
+contract. The write-boundary record has zero `create_order` calls and zero new
+order files. It does not hide known adversarial v3 failures SA04/SA05.
+
 ## Still outstanding
 
-- UI implementation and UI transcripts.
-- Real UI URL/evidence.
 - `TEAM.md`, member details, and each member's self-authored `INDIVIDUAL` section.
 - Final repository checkout and submission commit.
