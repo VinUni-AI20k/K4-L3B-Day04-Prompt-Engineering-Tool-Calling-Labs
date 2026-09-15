@@ -1,0 +1,107 @@
+{
+  "transcript_id": "webui_2fc2ac21-df8b-47a6-a514-a353f634e1a1",
+  "created_at": "2026-09-15T20:50:20",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-09-15T20:50:20",
+      "version_key": "v0",
+      "artifact_version": "v0+p7942217159d6+t2e67e1e469f8",
+      "provider": "openai",
+      "model": "gpt-5.5",
+      "user": "Cho tao thông tin về du lịch Hà Nội rẻ nhất có thể mà ngon nhất",
+      "status": "answered",
+      "assistant_text": "{\n  \"intent\": \"general_travel_info\",\n  \"action\": \"answer_with_uncertainty\",\n  \"reply\": \"Mình chưa tra cứu được thông tin cập nhật vì công cụ tìm kiếm du lịch đang lỗi cấu hình API. Nếu muốn đi Hà Nội rẻ mà vẫn ngon, bước an toàn nhất là: ở khu phố cổ/Hoàn Kiếm để tiết kiệm di chuyển, ăn món bình dân như phở, bún chả, bánh mì, xôi, bún đậu; đi bộ quanh Hồ Gươm, phố cổ, chợ Đồng Xuân; dùng bus/xe công nghệ thay vì taxi. Bạn nên kiểm tra lại giá phòng, giờ mở cửa và review mới nhất trên Google Maps/OTA trước khi đặt.\",\n  \"evidence_ids\": [\n    \"search_travel_info:missing_api_key:general\",\n    \"search_travel_info:missing_api_key:food\"\n  ]\n}",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "search_travel_info",
+              "args": {
+                "query": "Hanoi budget travel cheap food attractions public transport 2026",
+                "destination": "Hà Nội",
+                "category": "general",
+                "max_results": 3
+              }
+            },
+            {
+              "name": "search_travel_info",
+              "args": {
+                "query": "best cheap eats Hanoi Old Quarter street food prices",
+                "destination": "Hà Nội",
+                "category": "food",
+                "max_results": 3
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "search_travel_info",
+              "args": {
+                "query": "Hanoi budget travel cheap food attractions public transport 2026",
+                "destination": "Hà Nội",
+                "category": "general",
+                "max_results": 3
+              },
+              "result": {
+                "error": "missing_api_key",
+                "message": "TAVILY_API_KEY is not configured."
+              }
+            },
+            {
+              "tool": "search_travel_info",
+              "args": {
+                "query": "best cheap eats Hanoi Old Quarter street food prices",
+                "destination": "Hà Nội",
+                "category": "food",
+                "max_results": 3
+              },
+              "result": {
+                "error": "missing_api_key",
+                "message": "TAVILY_API_KEY is not configured."
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "{\n  \"intent\": \"general_travel_info\",\n  \"action\": \"answer_with_uncertainty\",\n  \"reply\": \"Mình chưa tra cứu được thông tin cập nhật vì công cụ tìm kiếm du lịch đang lỗi cấu hình API. Nếu muốn đi Hà Nội rẻ mà vẫn ngon, bước an toàn nhất là: ở khu phố cổ/Hoàn Kiếm để tiết kiệm di chuyển, ăn món bình dân như phở, bún chả, bánh mì, xôi, bún đậu; đi bộ quanh Hồ Gươm, phố cổ, chợ Đồng Xuân; dùng bus/xe công nghệ thay vì taxi. Bạn nên kiểm tra lại giá phòng, giờ mở cửa và review mới nhất trên Google Maps/OTA trước khi đặt.\",\n  \"evidence_ids\": [\n    \"search_travel_info:missing_api_key:general\",\n    \"search_travel_info:missing_api_key:food\"\n  ]\n}",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "search_travel_info",
+          "args": {
+            "query": "Hanoi budget travel cheap food attractions public transport 2026",
+            "destination": "Hà Nội",
+            "category": "general",
+            "max_results": 3
+          },
+          "result": {
+            "error": "missing_api_key",
+            "message": "TAVILY_API_KEY is not configured."
+          }
+        },
+        {
+          "tool": "search_travel_info",
+          "args": {
+            "query": "best cheap eats Hanoi Old Quarter street food prices",
+            "destination": "Hà Nội",
+            "category": "food",
+            "max_results": 3
+          },
+          "result": {
+            "error": "missing_api_key",
+            "message": "TAVILY_API_KEY is not configured."
+          }
+        }
+      ],
+      "ended_at": "2026-09-15T20:50:20"
+    }
+  ],
+  "updated_at": "2026-09-15T20:50:20"
+}

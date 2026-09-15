@@ -1,0 +1,72 @@
+{
+  "transcript_id": "webui_ab80f997-b13d-4d06-8592-ca0f1635c1b9",
+  "created_at": "2026-09-15T20:45:58",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-09-15T20:45:58",
+      "version_key": "v0",
+      "artifact_version": "v0+p7942217159d6+t2e67e1e469f8",
+      "provider": "openai",
+      "model": "gpt-5.5",
+      "user": "cho tao thông tin về chuyến đi Thái Lẻn rẻ nhất",
+      "status": "answered",
+      "assistant_text": "{\n  \"intent\": \"general_travel_info\",\n  \"action\": \"answer_with_uncertainty\",\n  \"reply\": \"Mình chưa tra được giá mới nhất vì công cụ tìm kiếm đang lỗi cấu hình, nên chưa thể xác nhận chuyến Thái Lan rẻ nhất hiện tại. Cách an toàn nhất để săn rẻ: chọn Bangkok hoặc Pattaya, bay giữa tuần, tránh lễ/Tết, đi 3–4 ngày, ở khách sạn 2–3 sao gần BTS/MRT, chỉ mang hành lý xách tay nếu được. Thường combo tiết kiệm sẽ là TP.HCM/Hà Nội → Bangkok, 3N2Đ hoặc 4N3Đ. Bạn cho mình biết điểm khởi hành, ngày đi dự kiến, số người và ngân sách tối đa, mình sẽ tư vấn phương án rẻ nhất phù hợp.\",\n  \"evidence_ids\": [\n    \"search_travel_info:missing_api_key\"\n  ]\n}",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "search_travel_info",
+              "args": {
+                "category": "general",
+                "destination": "Thailand",
+                "max_results": 3,
+                "query": "cheap Thailand travel from Vietnam budget tips flights hotels packages 2026"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "search_travel_info",
+              "args": {
+                "category": "general",
+                "destination": "Thailand",
+                "max_results": 3,
+                "query": "cheap Thailand travel from Vietnam budget tips flights hotels packages 2026"
+              },
+              "result": {
+                "error": "missing_api_key",
+                "message": "TAVILY_API_KEY is not configured."
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "{\n  \"intent\": \"general_travel_info\",\n  \"action\": \"answer_with_uncertainty\",\n  \"reply\": \"Mình chưa tra được giá mới nhất vì công cụ tìm kiếm đang lỗi cấu hình, nên chưa thể xác nhận chuyến Thái Lan rẻ nhất hiện tại. Cách an toàn nhất để săn rẻ: chọn Bangkok hoặc Pattaya, bay giữa tuần, tránh lễ/Tết, đi 3–4 ngày, ở khách sạn 2–3 sao gần BTS/MRT, chỉ mang hành lý xách tay nếu được. Thường combo tiết kiệm sẽ là TP.HCM/Hà Nội → Bangkok, 3N2Đ hoặc 4N3Đ. Bạn cho mình biết điểm khởi hành, ngày đi dự kiến, số người và ngân sách tối đa, mình sẽ tư vấn phương án rẻ nhất phù hợp.\",\n  \"evidence_ids\": [\n    \"search_travel_info:missing_api_key\"\n  ]\n}",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "search_travel_info",
+          "args": {
+            "category": "general",
+            "destination": "Thailand",
+            "max_results": 3,
+            "query": "cheap Thailand travel from Vietnam budget tips flights hotels packages 2026"
+          },
+          "result": {
+            "error": "missing_api_key",
+            "message": "TAVILY_API_KEY is not configured."
+          }
+        }
+      ],
+      "ended_at": "2026-09-15T20:45:58"
+    }
+  ],
+  "updated_at": "2026-09-15T20:45:58"
+}
