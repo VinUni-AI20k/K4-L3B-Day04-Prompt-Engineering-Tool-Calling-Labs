@@ -8,17 +8,17 @@
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
-    description: "Gửi một câu hỏi cho người dùng."
+    description: "Ask for missing information or explicit confirmation. State exactly what is needed."
     parameters:
       type: object
       properties:
-        question: {type: string, default: "", description: "Câu hỏi"}
-        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Kiểu trả lời"}
-        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn"}
+        question: {type: string, default: "", description: "Ask for missing information or explicit confirmation. State exactly what is needed."}
+        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Use yes_no before a write action; use choice when selecting an environment or enum value."}
+        options: {type: array, default: [], items: {type: string}, description: "Choices for response_type=choice, such as production and staging."}
       required: [question]
 
   - name: search_kb
-    description: "Tìm hướng dẫn hỗ trợ kỹ thuật."
+    description: "Search internal troubleshooting instructions and how-to articles. Use this for documentation, not live service status or a specific device check."
     parameters:
       type: object
       properties:
@@ -28,7 +28,7 @@ tools:
       required: [query]
 
   - name: check_service_status
-    description: "Kiểm tra trạng thái một dịch vụ."
+    description: "Check the current status of one shared service in exactly one environment. Use for production or staging availability; do not use for troubleshooting instructions. If the environment is ambiguous, call clarify first."
     parameters:
       type: object
       properties:
@@ -37,7 +37,7 @@ tools:
       required: [service]
 
   - name: inspect_device
-    description: "Kiểm tra thông tin và chẩn đoán thiết bị."
+    description: "Inspect one specific device identified by the user. Require the exact asset_id; never invent or infer it. Set check to the requested category instead of defaulting to all when a category is named."
     parameters:
       type: object
       properties:
@@ -46,7 +46,7 @@ tools:
       required: [asset_id]
 
   - name: lookup_user
-    description: "Tra cứu người dùng trong danh bạ hỗ trợ."
+    description: "Look up one employee using the exact employee_id. If the ID is missing or ambiguous, call clarify first; never guess an employee ID."
     parameters:
       type: object
       properties:
@@ -54,7 +54,7 @@ tools:
       required: [employee_id]
 
   - name: format_incident_report
-    description: "Trình bày các kết quả đã có thành báo cáo."
+    description: "Format findings already provided or already collected into a report. Do not call diagnostic or lookup tools again when the user asks only for formatting."
     parameters:
       type: object
       properties:
@@ -96,7 +96,7 @@ tools:
       required: [query]
 
   - name: create_ticket
-    description: "Tạo một ticket hỗ trợ."
+    description: "Create a local support ticket only after explicit confirmation of the current summary, priority, and asset_id. If any detail changes, previous confirmation is invalid and clarify must be called again. Respect cancellation and never set confirmed=true without current confirmation."
     parameters:
       type: object
       properties:
