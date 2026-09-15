@@ -14,6 +14,9 @@ def load_dotenv(path: Path, *, override: bool = True) -> None:
         key, value = line.split("=", 1)
         key = key.strip()
         value = value.strip().strip("\"'")
+        repeated_prefix = f"{key}="
+        if value.startswith(repeated_prefix):
+            value = value[len(repeated_prefix):].strip().strip("\"'")
         if key and (override or key not in os.environ):
             os.environ[key] = value
 
@@ -23,4 +26,7 @@ def load_lab_env(root: Path) -> None:
     if external_path:
         load_dotenv(Path(external_path).expanduser())
         return
-    load_dotenv(root / ".env")
+    for candidate in (root / ".env", root.parent / ".env"):
+        if candidate.exists():
+            load_dotenv(candidate)
+            return

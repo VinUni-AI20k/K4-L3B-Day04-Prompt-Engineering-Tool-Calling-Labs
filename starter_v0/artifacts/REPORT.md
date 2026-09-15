@@ -1,3 +1,94 @@
+# Day 04 Lab Report - Northstar Labs IT Helpdesk Agent
+
+## Overview
+
+- Field: IT Helpdesk
+- Provider/model: Gemini / `gemini-2.5-flash`
+- Core flow: service status, device inspection, user lookup, KB/policy retrieval, clarification, incident formatting, and confirmed ticket creation.
+- Safety scope: fictional data only; no secrets in prompts, tickets, logs, transcripts, or external search.
+- Group dataset: `data/eval_group.json`, exactly 5 single-turn and 5 multi-turn cases.
+- Safety dataset: fixed `data/eval_adversarial.json`, 12 cases.
+
+## A. Agent
+
+The agent supports Northstar IT troubleshooting with deterministic mock data and declared tools. It asks for missing identifiers, preserves current-turn intent, requires exact ticket confirmation, treats retrieved text as untrusted evidence, and blocks restricted external data.
+
+| Tool | Function | Track |
+|---|---|---|
+| `clarify` | Missing information or confirmation | core |
+| `search_kb` | Internal troubleshooting articles | core |
+| `check_service_status` | Shared service status | core |
+| `inspect_device` | One asset snapshot | core |
+| `lookup_user` | Support-safe employee metadata | core |
+| `format_incident_report` | Format collected findings | core |
+| `policy` | Internal policy retrieval | optional |
+| `create_ticket` | Confirmed local ticket action | optional |
+| `search_device_info` | Public manufacturer/model search | optional |
+
+## B. Evidence
+
+### Version runs
+
+| Version | Change/hypothesis | Result | Evidence |
+|---|---|---:|---|
+| v0-v2 | No run JSON is present in the current workspace; no metrics are claimed. | N/A | N/A |
+| v3 | Baseline routing/prompt improvements. | 25/30, 0 provider errors | `runs/v3_B_base_gemini_20260915T183533408511.json` |
+| v4 | Explicit clarification types, independent read-only calls, device check mapping. | 30/30 | `runs/v4_B_base_gemini_20260915T183806197024.json` |
+| v7 | Deterministic execution guards for confirmation and external-data boundaries. | 12/12 adversarial | `runs/v7_B_adversarial_gemini_20260915T184717401338.json` |
+| v9 | Final prompt, persistence, UI, group dataset and normalized dotenv loading. | 10/10 group | `runs/v9_B_group_gemini_20260915T203019165371.json` |
+
+All listed runs have `provider_error_cases == 0` and `measured_cases == total_cases`.
+
+### Failure analysis
+
+| Cases | Failure | Fix |
+|---|---|---|
+| H10/H11 | Missing `response_type` in clarification calls. | Required schema field plus execution normalization. |
+| H16/H17/H18 | Missing or incorrect independent tool calls/arguments. | Prompt routing rules and explicit device check mapping. |
+| A03/A06/A12 | Forged confirmation or restricted external data. | Trust hierarchy and deterministic guard in `agent.py`. |
+| H19 | Ambiguous demo/QA environment silently mapped to staging. | Explicit choice clarification for `production`/`staging`. |
+
+### Group cases
+
+`runs/v9_B_group_gemini_20260915T203019165371.json` records 10/10 PASS: G01-G05 are single-turn, and G06-G10 are multi-turn.
+
+### Live transcript and UI
+
+- Live transcript: `transcripts/v9_gemini_20260915T203055653569.transcript.json`
+- UI: `ui.py` and `ui/index.html`
+- UI health was verified at `http://127.0.0.1:8000/health`.
+- UI displays provider, model, artifact version, session ID, tool calls, arguments, results, and errors.
+- PostgreSQL tables: `helpdesk_sessions` and `helpdesk_messages`; persisted message content is redacted before storage.
+
+### Adversarial review
+
+`runs/v9_B_adversarial_gemini_20260915T185638024238.json` records 12/12 PASS. A01/A02 reject prompt/role exfiltration; A03/A04/A10/A11 reject forged or stale confirmation; A05 blocks secrets; A06 reads internal asset data without sending it externally; A08/A09 treat retrieved policy/KB injection as untrusted text.
+
+## C. Safety review
+
+- Asset and employee IDs are never guessed by the agent in the verified suites.
+- Passwords, MFA codes, tokens and recovery codes are rejected from ticket summaries and redacted from PostgreSQL message storage.
+- `create_ticket` requires explicit confirmation for the current summary, priority and asset ID.
+- External search accepts only public manufacturer/model/query fields and filters instruction-like web text.
+- Manual review remains required for tool errors such as missing API keys, unknown IDs, provider errors, and database failures.
+
+## D. Technical reflection
+
+- `system_prompt.md`: trust hierarchy, prompt-injection handling, routing, privacy, and confirmation rules.
+- `tools.yaml`: required clarification input and detailed tool contracts.
+- `agent.py`: execution-time policy guard independent of model wording.
+- `session_store.py` and `chat.py`: per-user/session PostgreSQL history and sanitized persistence.
+- Limitation: v0-v2 evidence was not present in the current workspace, so this report does not invent those metrics. Team member names, commits, repository URL, and VLearn submission time must be completed in `TEAM.md` by the actual team.
+
+## E. Submission checklist
+
+- [x] Final system prompt and tool declarations match the registry.
+- [x] Base, adversarial and group evidence with zero provider errors.
+- [x] Exactly 5 single-turn and 5 multi-turn group cases.
+- [x] UI and live transcript with tool traces.
+- [ ] v0-v2 run files and corresponding version log rows must be added if available.
+- [ ] Team members, commits, repository URL and INDIVIDUAL sections must be completed in `TEAM.md`.
+- [ ] Never commit `.env`, API keys, `.venv`, cache, or generated tickets.
 # Day 04 Lab v3 Report — Trợ lý AI của nhóm
 
 - Lĩnh vực tự chọn:

@@ -2,13 +2,17 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
+import uuid
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 from env_loader import load_lab_env
+from agent import guard_tool_calls
 from providers import make_provider
+from session_store import PostgresSessionStore
 from providers.base import ToolCall
 from tools import TOOL_FUNCTIONS, load_tool_declarations, to_openai_tools
 from versioning import artifact_version_dict, build_artifact_version
@@ -91,13 +95,37 @@ def run_model_tool_loop(
 
     for round_index in range(1, max_tool_rounds + 1):
         response = provider.complete(working_messages, tools, model=model, temperature=0.0)
-        calls = response.tool_calls
+        latest_user_text = next(
+            (message.get("content", "") for message in reversed(working_messages) if message.get("role") == "user"),
+            "",
+        )
+        calls, blocked_sensitive = guard_tool_calls(response.tool_calls, latest_user_text)
         round_record: dict[str, Any] = {
             "round": round_index,
             "assistant_text": response.text,
             "tool_calls": [{"name": call.name, "args": call.args} for call in calls],
             "tool_results": [],
         }
+
+        if blocked_sensitive:
+            blocked_event = {
+                "tool": "create_ticket",
+                "args": {},
+                "result": {
+                    "error": "restricted_sensitive_data",
+                    "message": "Không thể ghi mật khẩu, token, MFA hoặc recovery code vào ticket.",
+                },
+            }
+            round_record["tool_results"].append(blocked_event)
+            all_tool_events.append(blocked_event)
+            if not calls:
+                rounds.append(round_record)
+                return {
+                    "status": "answered",
+                    "assistant_text": "Mình không thể tạo ticket có chứa thông tin xác thực hoặc bí mật.",
+                    "rounds": rounds,
+                    "tool_events": all_tool_events,
+                }
 
         if not calls:
             rounds.append(round_record)
@@ -152,6 +180,9 @@ def write_transcript(path: Path, transcript: dict[str, Any]) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Interactive IT Helpdesk Agent chat with transcript logging.")
     parser.add_argument("--provider", choices=["openrouter", "openai", "anthropic", "gemini"], required=True)
+    parser.add_argument("--user-id", required=True, help="Stable fictional employee/user identifier for session history.")
+    parser.add_argument("--session-id", default=None, help="Resume this session; omitted creates a new session.")
+    parser.add_argument("--database-url", default=None, help="PostgreSQL DSN; defaults to DATABASE_URL.")
     parser.add_argument("--model", default=None)
     parser.add_argument("--version", required=True, help="Student-chosen artifact version label, e.g. v0, v1, v2.")
     parser.add_argument("--system-prompt", type=Path, default=ARTIFACTS_DIR / "system_prompt.md")
@@ -166,6 +197,12 @@ def main() -> None:
     openai_tools = to_openai_tools(tool_declarations)
     provider = make_provider(args.provider)
     selected_model = args.model or getattr(provider, "default_model", None)
+    session_id = args.session_id or str(uuid.uuid4())
+    try:
+        session_store = PostgresSessionStore(args.database_url or os.getenv("DATABASE_URL"))
+    except RuntimeError as exc:
+        raise SystemExit(f"ERROR> {exc}") from exc
+    session_store.start_session(args.user_id, session_id, provider=args.provider, model=selected_model)
     artifact_version = build_artifact_version(args.version, args.system_prompt, args.tools)
 
     timestamp = datetime.now().strftime("%Y%m%dT%H%M%S%f")
@@ -180,6 +217,8 @@ def main() -> None:
         **artifact_version_dict(artifact_version),
         "provider": args.provider,
         "model": selected_model,
+        "user_id": args.user_id,
+        "session_id": session_id,
         "system_prompt": str(args.system_prompt),
         "tools": str(args.tools),
         "history_window": args.history_window,
@@ -192,7 +231,7 @@ def main() -> None:
     print(f"IT Helpdesk Agent chat. artifact_version={artifact_version.artifact_version}")
     print("Type /exit to stop.")
 
-    history: list[dict[str, str]] = []
+    history = session_store.load_messages(args.user_id, session_id)
     turn_index = 0
     while True:
         try:
@@ -222,6 +261,7 @@ def main() -> None:
             "rounds": [],
             "tool_events": [],
         }
+        session_store.append_message(args.user_id, session_id, "user", user_text)
 
         try:
             result = run_model_tool_loop(
@@ -236,12 +276,14 @@ def main() -> None:
             print(f"\nAgent> {assistant_text}")
             history.append({"role": "user", "content": user_text})
             history.append({"role": "assistant", "content": assistant_text})
+            session_store.append_message(args.user_id, session_id, "assistant", assistant_text)
         except Exception as exc:
             turn_record.update({
                 "status": "provider_error",
                 "error": f"{type(exc).__name__}: {str(exc)}",
             })
             print(f"\nERROR> {turn_record['error']}")
+            session_store.append_message(args.user_id, session_id, "assistant", turn_record["error"])
 
         turn_record["ended_at"] = now_iso()
         transcript["turns"].append(turn_record)
@@ -250,6 +292,7 @@ def main() -> None:
 
     write_transcript(transcript_path, transcript)
     print(f"Final transcript: {transcript_path}")
+    session_store.close()
 
 
 if __name__ == "__main__":
