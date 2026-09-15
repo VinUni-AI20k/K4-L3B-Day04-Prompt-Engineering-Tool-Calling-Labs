@@ -4,6 +4,7 @@ __pycache__/
 *.egg-info/
 .pytest_cache/
 .venv/
+venv/
 
 # Secrets — never commit real keys
 .env
@@ -21,7 +22,6 @@ COACH-MATERIALS.md
 
 # Local action output. Commit reviewed runs and transcripts as submission evidence.
 /starter_v0/tickets/
-/starter_v0/runs/
 node_modules/
 dist/
 
