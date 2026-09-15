@@ -7,8 +7,8 @@
 - Tên nhóm: Si và Bảy
 - Người đại diện / MSSV: Trần Quốc Sáng / 2A202602712
 - Tên repo: `K4-L3-DAY04-SivaBay-PromptEngineeringToolCalling`
-- URL repo, nhánh nộp, commit chốt: https://github.com/foxxiee04/K4-L3-DAY04-SivaBay-PromptEngineeringToolCalling, nhánh `tamle25`
-- Deadline áp dụng và link thông báo đổi hạn nếu có: 23:59 ngày 15/09/2026 (Asia/Ho_Chi_Minh)
+- URL repo, nhánh nộp, commit chốt: https://github.com/foxxiee04/K4-L3-DAY04-SivaBay-PromptEngineeringToolCalling
+- Deadline áp dụng và link thông báo đổi hạn nếu có:
 
 ## Thành viên
 
