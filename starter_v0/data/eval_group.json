@@ -1,7 +1,286 @@
 {
-  "dataset_id": "day04_v3_helpdesk_group",
+  "dataset_id": "day04_v0_smartcharging_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
-  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "description": "10 original SmartCharging test cases authored by team Si và Bảy: 5 single-turn cases and 5 multi-turn cases.",
+  "allowed_failure_types": [
+    "wrong_tool",
+    "wrong_arg_value",
+    "wrong_boundary",
+    "unnecessary_tool",
+    "out_of_scope",
+    "missing_info"
+  ],
+  "cases": [
+    {
+      "id": "GRP01_lowest_cost_rush_hour",
+      "phase": "B",
+      "suite": "group",
+      "query": "Xe EV-101 đang 20% pin, muốn sạc lên 75% trước 18:00 ngày 15/09/2026 UTC+07, xuất phát từ Quận 1. Tìm phương án tiết kiệm nhất.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 20,
+              "target_soc": 75,
+              "deadline": "2026-09-15T18:00:00+07:00",
+              "origin": "Quận 1",
+              "preference": "lowest_cost"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "difficulty": "easy",
+        "what_it_tests": "Tìm phương án sạc với tiêu chí chi phí thấp nhất (lowest_cost)."
+      }
+    },
+    {
+      "id": "GRP02_lookup_vehicle_specs",
+      "phase": "B",
+      "suite": "group",
+      "query": "Cho tôi xem thông số kỹ thuật, chuẩn sạc và công suất tối đa của xe EV-202.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_vehicle",
+            "args": {
+              "vehicle_id": "EV-202"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "difficulty": "easy",
+        "what_it_tests": "Tra cứu thông tin pin và chuẩn sạc của xe EV-202."
+      }
+    },
+    {
+      "id": "GRP03_station_status_inquiry",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra xem trạm ST-303 hiện tại còn cổng sạc nào trống và giá điện bao nhiêu.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_station_status",
+            "args": {
+              "station_id": "ST-303"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "difficulty": "easy",
+        "what_it_tests": "Kiểm tra cổng trống và đơn giá sạc của một trạm cụ thể."
+      }
+    },
+    {
+      "id": "GRP04_missing_deadline",
+      "phase": "B",
+      "suite": "group",
+      "query": "EV-101 đang 30% pin, tôi muốn sạc lên 80% từ Quận 1.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu thời hạn deadline bắt buộc phải gọi clarify với response_type=text."
+      }
+    },
+    {
+      "id": "GRP05_direct_confirmed_reservation",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tôi xác nhận chốt đặt lịch cho offer OFF-SEED-101.",
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "create_reservation",
+            "args": {
+              "offer_id": "OFF-SEED-101",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Xác nhận rõ ràng thì được phép gọi create_reservation."
+      }
+    },
+    {
+      "id": "GRPM01_fill_deadline_multiturn",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tìm phương án sạc cho xe EV-101 từ Quận 1, pin từ 30% lên 80%."
+        },
+        {
+          "role": "user",
+          "content": "Hạn hoàn tất trước 12:00 ngày 15/09/2026 UTC+07, ưu tiên xong sớm."
+        }
+      ],
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 30,
+              "target_soc": 80,
+              "deadline": "2026-09-15T12:00:00+07:00",
+              "origin": "Quận 1",
+              "preference": "earliest_finish"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Bổ sung deadline ở lượt 2 và tổng hợp đủ thông tin để gọi find_charging_offers."
+      }
+    },
+    {
+      "id": "GRPM02_change_preference_multiturn",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Xe EV-101 đang 40%, cần 85% trước 15:30 ngày 15/09/2026 UTC+07, từ Quận 1. Tìm phương án rẻ nhất."
+        },
+        {
+          "role": "user",
+          "content": "Hãy đổi sang tiêu chí quãng đường ngắn nhất và tìm phương án cho tôi."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 40,
+              "target_soc": 85,
+              "deadline": "2026-09-15T15:30:00+07:00",
+              "origin": "Quận 1",
+              "preference": "shortest_distance"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Cập nhật preference mới thay thế preference cũ ở lượt sau."
+      }
+    },
+    {
+      "id": "GRPM03_station_check_then_plan",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Trạm ST-101 hiện còn hoạt động không?"
+        },
+        {
+          "role": "user",
+          "content": "Vậy lập phương án sạc cho EV-101 từ Quận 1, pin 35% lên 80% trước 11:30 ngày 15/09/2026 UTC+07, hoàn tất sớm."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "find_charging_offers",
+            "args": {
+              "vehicle_id": "EV-101",
+              "current_soc": 35,
+              "target_soc": 80,
+              "deadline": "2026-09-15T11:30:00+07:00",
+              "origin": "Quận 1",
+              "preference": "earliest_finish"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Chuyển từ hỏi thông tin trạm sang yêu cầu lập kế hoạch sạc."
+      }
+    },
+    {
+      "id": "GRPM04_reservation_unconfirmed_then_confirmed",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Giữ chỗ cho tôi offer OFF-SEED-101."
+        },
+        {
+          "role": "user",
+          "content": "Tôi xác nhận đặt giữ chỗ offer OFF-SEED-101 này."
+        }
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "create_reservation",
+            "args": {
+              "offer_id": "OFF-SEED-101",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "difficulty": "hard",
+        "what_it_tests": "Chỉ tạo reservation khi có xác nhận rõ ràng ở lượt mới nhất."
+      }
+    },
+    {
+      "id": "GRPM05_cancel_plan",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "EV-101 đang 20%, tìm phương án sạc lên 70% trước 17:00 ngày 15/09/2026 UTC+07, xuất phát Quận 1."
+        },
+        {
+          "role": "user",
+          "content": "Thôi tôi có việc bận, hủy yêu cầu tìm sạc nhé."
+        }
+      ],
+      "failure_type": "out_of_scope",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "metadata": {
+        "difficulty": "medium",
+        "what_it_tests": "Hủy yêu cầu ở lượt sau không được gọi tool nào."
+      }
+    }
+  ]
 }
