@@ -8,24 +8,26 @@
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
-    description: "Gửi một câu hỏi cho người dùng."
+    description: "Gửi câu hỏi làm rõ khi thiếu thông tin hoặc xin xác nhận từ người dùng. Luôn luôn truyền tham số response_type."
     parameters:
       type: object
       properties:
-        question: {type: string, default: "", description: "Câu hỏi"}
-        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Kiểu trả lời"}
-        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn"}
-      required: [question]
+        question: {type: string, default: "", description: "Câu hỏi làm rõ"}
+        response_type: {type: string, enum: [text, yes_no, choice], description: "BẮT BUỘC TRUYỀN: 'text' khi hỏi thông tin mở (mã tài sản, mã nhân viên); 'yes_no' khi xin xác nhận; 'choice' khi chọn từ danh sách"}
+        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn khi response_type là choice"}
+      required: [question, response_type]
+
 
   - name: search_kb
-    description: "Tìm hướng dẫn hỗ trợ kỹ thuật."
+    description: "Tìm hướng dẫn hỗ trợ kỹ thuật trong cơ sở tri thức."
     parameters:
       type: object
       properties:
         query: {type: string, default: "", description: "Nội dung cần tìm"}
-        category: {type: string, enum: [all, vpn, email, wifi, printing, account, security, hardware, software, meeting_room], default: "all", description: "Nhóm hướng dẫn"}
+        category: {type: string, enum: [all, vpn, email, wifi, printing, account, security, hardware, software, meeting_room], description: "Nhóm hướng dẫn cụ thể theo chủ đề: 'email' (cho Outlook/mail), 'wifi', 'vpn', 'printing', 'account', v.v."}
         top_k: {type: integer, default: 3, description: "Số kết quả"}
-      required: [query]
+      required: [query, category]
+
 
   - name: check_service_status
     description: "Kiểm tra trạng thái một dịch vụ."
