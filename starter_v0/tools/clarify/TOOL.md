@@ -3,11 +3,10 @@ name: clarify
 track: core
 kind: control
 requires_env: []
-inputs: [question, response_type, options]
-outputs: [question, response_type, options, awaiting_user]
+inputs: [question, response_type, missing_fields]
+outputs: [question, response_type, missing_fields, awaiting_user]
 side_effect: false
 ---
 # clarify
 
-Returns a question to the user and pauses until the next user turn.
-`response_type` is free text, yes/no, or a choice from `options`.
+Hỏi lại khi thiếu dữ liệu hoặc cần xác nhận. Không ghi dữ liệu.

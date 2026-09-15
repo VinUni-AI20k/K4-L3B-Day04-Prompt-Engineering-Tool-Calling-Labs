@@ -13,13 +13,17 @@ class OpenAIProvider:
     def __init__(
         self,
         *,
-        api_key_env: str = "OPENAI_API_KEY",
+        api_key_env: str | None = "OPENAI_API_KEY",
         base_url: str | None = None,
         default_model: str = "gpt-4o-mini",
+        default_headers: dict[str, str] | None = None,
+        max_tokens: int | None = None,
     ) -> None:
         self.api_key_env = api_key_env
         self.base_url = base_url
         self.default_model = default_model
+        self.default_headers = default_headers
+        self.max_tokens = max_tokens
 
     def complete(
         self,
@@ -35,16 +39,23 @@ class OpenAIProvider:
         except ImportError as exc:
             raise RuntimeError("Install live provider dependency first: pip install openai") from exc
 
-        api_key = os.getenv(self.api_key_env)
+        api_key = os.getenv(self.api_key_env) if self.api_key_env else "not-needed"
         if not api_key:
             raise RuntimeError(f"Missing API key env var: {self.api_key_env}")
 
-        client = OpenAI(api_key=api_key, base_url=self.base_url)
+        client = OpenAI(
+            api_key=api_key,
+            base_url=self.base_url,
+            default_headers=self.default_headers,
+            timeout=120,
+        )
         kwargs: dict[str, Any] = {
             "model": model or self.default_model,
             "messages": messages,
             "temperature": temperature,
         }
+        if self.max_tokens:
+            kwargs["max_tokens"] = self.max_tokens
         if tools:
             kwargs["tools"] = tools
         if tool_choice is not None:

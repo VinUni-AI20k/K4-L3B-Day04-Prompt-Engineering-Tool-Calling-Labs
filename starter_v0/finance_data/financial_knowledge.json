@@ -1,0 +1,26 @@
+[
+  {
+    "id": "advice_50_30_20",
+    "topic": "50_30_20",
+    "title": "Quy tắc quản lý tài chính 50/30/20",
+    "content": "Quy tắc 50/30/20 chia thu nhập sau thuế thành 3 phần: 50% cho nhu cầu thiết yếu (nhà ở, ăn uống, điện nước, đi lại), 30% cho mong muốn cá nhân (mua sắm, giải trí, du lịch), và 20% cho tiết kiệm, quỹ dự phòng hoặc đầu tư trả nợ. Đây là phương pháp đơn giản và hiệu quả nhất cho người mới bắt đầu lập ngân sách."
+  },
+  {
+    "id": "advice_emergency_fund",
+    "topic": "emergency_fund",
+    "title": "Quỹ dự phòng khẩn cấp",
+    "content": "Quỹ khẩn cấp nên duy trì từ 3 đến 6 tháng chi phí sinh hoạt tối thiểu. Quỹ này chỉ dùng cho các sự cố bất khả kháng như mất việc, ốm đau, sửa chữa nhà cửa/xe cộ cấp bách. Cần gửi tại nơi thanh khoản cao như tài khoản tiết kiệm ngân hàng có kỳ hạn ngắn hoặc tài khoản thanh toán riêng biệt."
+  },
+  {
+    "id": "advice_credit_card_safety",
+    "topic": "credit_card",
+    "title": "Nguyên tắc sử dụng thẻ tín dụng thông minh",
+    "content": "Chỉ dùng thẻ tín dụng khi chắc chắn có đủ tiền trả toàn bộ dư nợ trong kỳ sao kê để hưởng 0% lãi suất. Tuyệt đối không rút tiền mặt từ thẻ tín dụng vì lãi suất và phí phát sinh ngay lập tức. Tỷ lệ sử dụng hạn mức tín dụng (credit utilization) nên duy trì dưới 30% tổng hạn mức được cấp."
+  },
+  {
+    "id": "advice_debt_snowball",
+    "topic": "debt_payoff",
+    "title": "Chiến lược trả nợ Quả cầu tuyết (Debt Snowball)",
+    "content": "Liệt kê tất cả các khoản nợ từ nhỏ nhất đến lớn nhất (bỏ qua lãi suất). Trả mức tối thiểu cho tất cả các khoản nợ, và dồn tối đa số tiền còn lại để thanh toán dứt điểm khoản nợ nhỏ nhất. Khi khoản nợ nhỏ nhất hết, chuyển toàn bộ số tiền đó sang trả khoản tiếp theo, tạo động lực tâm lý mạnh mẽ."
+  }
+]

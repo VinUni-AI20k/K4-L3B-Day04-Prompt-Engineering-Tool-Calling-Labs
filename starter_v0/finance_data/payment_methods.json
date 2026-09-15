@@ -1,0 +1,27 @@
+[
+  {
+    "id": "cash",
+    "name": "Tiền mặt",
+    "description": "Tiền mặt trong ví chi tiêu hàng ngày"
+  },
+  {
+    "id": "bank_transfer",
+    "name": "Chuyển khoản ngân hàng",
+    "description": "Tài khoản thanh toán ngân hàng"
+  },
+  {
+    "id": "e-wallet",
+    "name": "Ví điện tử",
+    "description": "MoMo, ZaloPay, ShopeePay, Viettel Money"
+  },
+  {
+    "id": "credit_card",
+    "name": "Thẻ tín dụng",
+    "description": "Thẻ Visa / Mastercard tín dụng"
+  },
+  {
+    "id": "other",
+    "name": "Khác",
+    "description": "Phương thức thanh toán khác"
+  }
+]

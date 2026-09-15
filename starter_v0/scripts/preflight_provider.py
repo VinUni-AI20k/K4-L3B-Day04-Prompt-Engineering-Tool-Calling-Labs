@@ -18,7 +18,7 @@ load_lab_env(ROOT)
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Smoke-test live structured tool calling.")
-    parser.add_argument("--provider", choices=["openrouter", "openai", "anthropic", "gemini"], required=True)
+    parser.add_argument("--provider", choices=["colab", "openrouter", "openai", "anthropic", "gemini"], required=True)
     parser.add_argument("--model", default=None, help="Optional model override. Omit to use provider default from code.")
     parser.add_argument("--tools", type=Path, default=ARTIFACTS_DIR / "tools.yaml")
     args = parser.parse_args()
@@ -27,7 +27,7 @@ def main() -> None:
     tools = to_openai_tools(load_tool_declarations(args.tools))
     messages = [
         {"role": "system", "content": "You are a tool-routing smoke test. Use tools when appropriate."},
-        {"role": "user", "content": "Kiểm tra trạng thái dịch vụ VPN production giúp mình."},
+        {"role": "user", "content": "Cho tôi tổng thu chi tháng này."},
     ]
     response = provider.complete(messages, tools, model=args.model, temperature=0.0)
     if not response.tool_calls:

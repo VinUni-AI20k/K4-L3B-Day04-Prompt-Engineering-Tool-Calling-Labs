@@ -1,0 +1,50 @@
+[
+  {
+    "id": "food",
+    "name": "Ăn uống",
+    "type": "expense",
+    "description": "Ăn sáng, trưa, tối, cafe, ăn ngoài, đồ ăn vặt"
+  },
+  {
+    "id": "transport",
+    "name": "Đi lại",
+    "type": "expense",
+    "description": "Xăng xe, gửi xe, Grab, taxi, bảo dưỡng xe"
+  },
+  {
+    "id": "housing",
+    "name": "Nhà ở & Tiện ích",
+    "type": "expense",
+    "description": "Tiền thuê nhà, điện, nước, internet, phí dịch vụ"
+  },
+  {
+    "id": "shopping",
+    "name": "Mua sắm",
+    "type": "expense",
+    "description": "Quần áo, đồ dùng gia đình, thiết bị cá nhân"
+  },
+  {
+    "id": "entertainment",
+    "name": "Giải trí",
+    "type": "expense",
+    "description": "Xem phim, game, du lịch, sách báo, tụ tập bạn bè"
+  },
+  {
+    "id": "other",
+    "name": "Chi tiêu khác",
+    "type": "expense",
+    "description": "Các khoản chi phát sinh không thuộc các mục trên"
+  },
+  {
+    "id": "salary",
+    "name": "Lương",
+    "type": "income",
+    "description": "Thu nhập cố định hàng tháng"
+  },
+  {
+    "id": "other_income",
+    "name": "Thu nhập khác",
+    "type": "income",
+    "description": "Thưởng, làm thêm ngoài, lãi tiết kiệm, quà tặng"
+  }
+]

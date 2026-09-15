@@ -1,0 +1,37 @@
+{
+  "month": "2026-09",
+  "currency": "VND",
+  "total_budget_limit": 14000000,
+  "category_budgets": {
+    "food": {
+      "name": "Ăn uống",
+      "limit": 4000000,
+      "alert_threshold_percent": 80
+    },
+    "transport": {
+      "name": "Đi lại",
+      "limit": 1200000,
+      "alert_threshold_percent": 80
+    },
+    "housing": {
+      "name": "Nhà ở & Tiện ích",
+      "limit": 4500000,
+      "alert_threshold_percent": 90
+    },
+    "shopping": {
+      "name": "Mua sắm",
+      "limit": 2000000,
+      "alert_threshold_percent": 75
+    },
+    "entertainment": {
+      "name": "Giải trí",
+      "limit": 1500000,
+      "alert_threshold_percent": 80
+    },
+    "other": {
+      "name": "Chi tiêu khác",
+      "limit": 800000,
+      "alert_threshold_percent": 80
+    }
+  }
+}
