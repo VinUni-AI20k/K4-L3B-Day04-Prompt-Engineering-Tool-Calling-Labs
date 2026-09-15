@@ -20,6 +20,15 @@
 | Đặng Quang Hưng | 2A202602719 | hungdq1306 | Baseline & Eval infra (v0): chạy preflight, chạy v0 gốc, đọc lỗi/trace, phân loại failure (sai tool/sai input/thiếu info/nhiều lượt/an toàn). Giao sản phẩm: log v0 + danh sách giả thuyết cho cả nhóm dùng | |
 | Nguyễn Hoàng Anh | 2A202602811 | hoanganhIT04 | Prompt & tool declaration (v1): dựa trên giả thuyết của v0, sửa system_prompt.md + tools.yaml, chạy v1, so sánh với v0, ghi vào version_log.csv | |
 
+## Quy trình v0–v3 và bàn giao
+
+- **Chốt bài toán (trước v0, cả nhóm + Tuấn chốt):** Tuấn (teamlead) chủ trì chốt lĩnh vực, người dùng, nhiệm vụ chính và luồng cơ bản, ghi vào `starter_v0/artifacts/REPORT.md`. Nếu đổi lĩnh vực khỏi Helpdesk, Hưng cần hoàn thiện công cụ/dữ liệu và bộ 30 case cơ bản (20 một lượt + 10 nhiều lượt) *trước khi* chạy v0; nếu giữ Helpdesk thì dùng `data/eval_base.json` có sẵn, bỏ qua bước này.
+- **Bàn giao giữa các version:** Hưng chạy v0 → phân loại lỗi, chọn 1 lỗi cụ thể, viết giả thuyết → bàn giao cho Hoàng Anh. Hoàng Anh sửa **một phần chính** của `system_prompt.md`/`tools.yaml` theo giả thuyết, chạy v1, kiểm tra lại toàn bộ case (kể cả case cũ từng đúng) để phát hiện regression, ghi kết quả vào `version_log.csv`, rồi bàn giao giả thuyết/kết quả cho Thành. Thành lặp lại đúng quy trình đó cho v2 rồi v3 (đặt giả thuyết mới → sửa 1 phần chính → chạy → kiểm tra regression → ghi log) trước khi bàn giao toàn bộ 4 run cho Tuấn tổng hợp report.
+- **Không chạy 4 lệnh liên tiếp cùng file rồi coi là 4 cải tiến** — giữa mỗi lần chạy phải có bước phân tích và sửa thật, thể hiện qua các commit riêng biệt trên Git.
+- **version_log.csv và bảng so sánh trong REPORT.md:** người đang giữ version tại thời điểm chạy (Hưng cho v0, Hoàng Anh cho v1, Thành cho v2/v3) tự ghi ngay dòng của version mình (giả thuyết, thay đổi, chỉ số, đường dẫn run); Tuấn chỉ tổng hợp lại thành bảng so sánh cuối cùng, không tự viết thay nội dung kỹ thuật.
+- **Điều kiện run hợp lệ:** mỗi run dùng làm bằng chứng phải có `provider_error_cases == 0` và `measured_cases == total_cases`; nếu lỗi kết nối, người phụ trách version đó phải chạy lại, không tách case lỗi ra để tính điểm phần còn lại.
+- **Timebox:** CP1 (18:00–18:20) — Hưng hoàn thành v0 + danh sách giả thuyết. CP2 (18:20–19:05) — Hoàng Anh hoàn thành v1, Thành hoàn thành v2 và v3, cả hai kèm version_log cập nhật.
+
 ## Nhận xét chung
 
 - Kết quả và bằng chứng:
