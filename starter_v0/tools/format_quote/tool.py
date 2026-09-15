@@ -2,56 +2,72 @@ from __future__ import annotations
 
 from typing import Any
 
-
-def _line(item: dict[str, Any]) -> str:
-    label = str(item.get("label") or item.get("sku") or item.get("source") or "Item").strip()
-    detail = str(item.get("detail") or item.get("summary") or item.get("status") or "").strip()
-    price = item.get("price")
-    if price is not None and detail:
-        return f"- **{label}:** {detail} ({price} USD)"
-    if price is not None:
-        return f"- **{label}:** {price} USD"
-    return f"- **{label}:** {detail}"
-
-
-def _total(findings: list[dict[str, Any]]) -> float | None:
-    values = [float(item["price"]) for item in findings if isinstance(item.get("price"), (int, float))]
-    return round(sum(values), 2) if values else None
+from tools._shared import err
 
 
 def format_quote(
-    findings: list[dict[str, Any]] | None = None,
     template: str = "brief",
-    quote_title: str = "PC quote",
+    quote_title: str = "Báo giá cấu hình PC",
+    items: list[dict[str, Any]] | list[str] | None = None,
+    total_price: float | int | None = None,
 ) -> dict[str, Any]:
-    findings = findings or []
-    lines = [_line(item) for item in findings]
-    total = _total(findings)
-    total_line = f"- **Total:** {total} USD" if total is not None else None
+    try:
+        norm_template = (template or "brief").strip().lower()
+        title = (quote_title or "Báo giá cấu hình PC").strip()
 
-    if template == "detailed":
-        body = [f"# Quote: {quote_title}", "", "## Items", *lines]
-        if total_line:
-            body += ["", "## Summary", total_line]
-        body += ["", "## Notes", "- Prices are valid at the moment of checkout.", "- Assembly and shipping quoted separately."]
-        markdown = "\n".join(body)
-    elif template == "invoice":
-        body = [f"# Invoice preview: {quote_title}", "", *lines]
-        if total_line:
-            body += ["", total_line]
-        body += ["", "- Payment due on order confirmation."]
-        markdown = "\n".join(body)
-    else:
-        body = [f"**{quote_title}**", *lines]
-        if total_line:
-            body.append(total_line)
-        markdown = "\n".join(body)
+        item_lines: list[str] = []
+        calc_total = 0
 
-    return {
-        "tool": "format_quote",
-        "template": template,
-        "quote_title": quote_title,
-        "finding_count": len(findings),
-        "total": total,
-        "markdown": markdown,
-    }
+        raw_items = items or []
+        for idx, item in enumerate(raw_items, 1):
+            if isinstance(item, dict):
+                name = item.get("name") or item.get("sku") or f"Linh kiện {idx}"
+                price = item.get("price", 0)
+                qty = item.get("quantity") or item.get("qty") or 1
+                specs = item.get("description") or item.get("specs") or ""
+                try:
+                    price_val = float(price)
+                    calc_total += price_val * int(qty)
+                    price_str = f"{int(price_val):,} VND".replace(",", ".")
+                except (ValueError, TypeError):
+                    price_str = str(price)
+
+                if norm_template == "detailed":
+                    line = f"| {idx} | **{name}** | {qty} | {price_str} | {specs} |"
+                else:
+                    line = f"- **{name}** (x{qty}): {price_str}"
+            else:
+                line = f"- {str(item)}"
+            item_lines.append(line)
+
+        final_total = total_price if total_price is not None else calc_total
+        final_total_str = f"{int(final_total):,} VND".replace(",", ".") if final_total else "Lien he"
+
+        if norm_template == "detailed":
+            table_header = [
+                f"# 📋 {title}",
+                "",
+                "| STT | Tên Linh Kiện / Thiết Bị | SL | Đơn Giá | Ghi Chú / Bảo Hành |",
+                "|:---:|---|:---:|---:|---|",
+            ]
+            footer = [
+                "",
+                f"**💰 TỔNG CỘNG:** `{final_total_str}`",
+                "",
+                "> *Báo giá có giá trị trong vòng 07 ngày. Miễn phí công lắp ráp và cài đặt.*",
+            ]
+            markdown = "\n".join([*table_header, *item_lines, *footer])
+        else:
+            header = [f"### 📋 {title}", ""]
+            footer = ["", f"**Tổng tiền dự kiến:** `{final_total_str}`"]
+            markdown = "\n".join([*header, *item_lines, *footer])
+
+        return {
+            "tool": "format_quote",
+            "template": norm_template,
+            "quote_title": title,
+            "item_count": len(item_lines),
+            "markdown": markdown,
+        }
+    except Exception as exc:
+        return err("format_quote", exc)

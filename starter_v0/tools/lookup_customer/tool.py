@@ -6,27 +6,38 @@ from typing import Any
 from tools._shared import ROOT, err
 
 
-CUSTOMER_FILE = ROOT / "pc_seller_data" / "customers.json"
+CUSTOMERS_FILE = ROOT / "pc_data" / "customers.json"
 
 
 def lookup_customer(customer_id: str = "") -> dict[str, Any]:
     try:
-        data = json.loads(CUSTOMER_FILE.read_text(encoding="utf-8"))
+        if not CUSTOMERS_FILE.exists():
+            return {"tool": "lookup_customer", "error": "customers_file_not_found"}
+
+        data = json.loads(CUSTOMERS_FILE.read_text(encoding="utf-8"))
+        customers = data.get("customers", [])
+
         wanted_id = (customer_id or "").strip().upper()
-        customer = next(
-            (entry for entry in data["customers"] if entry["customer_id"].upper() == wanted_id),
-            None,
-        )
-        if customer is None:
-            return {"tool": "lookup_customer", "customer_id": wanted_id, "error": "customer_not_found"}
-        orders = [order for order in data.get("orders", []) if order.get("customer_id") == customer["customer_id"]]
+        if not wanted_id:
+            return {"tool": "lookup_customer", "error": "missing_customer_id"}
+
+        cust = next((c for c in customers if c.get("customer_id", "").upper() == wanted_id), None)
+        if cust is None:
+            # Fallback check phone or name
+            cust = next((c for c in customers if wanted_id in c.get("phone", "") or wanted_id in c.get("name", "").upper()), None)
+
+        if cust is None:
+            return {"tool": "lookup_customer", "customer_id": customer_id, "error": "customer_not_found"}
+
         return {
             "tool": "lookup_customer",
-            "customer": customer,
-            "orders": orders,
-            "snapshot_at": data.get("snapshot_at"),
-            "privacy_note": data.get("privacy_note"),
-            "trust_boundary": "Customer PII and order history are internal-only. Never forward them to any external or web tool.",
+            "customer_id": cust.get("customer_id"),
+            "name": cust.get("name"),
+            "tier": cust.get("tier"),
+            "phone": cust.get("phone"),
+            "orders": cust.get("orders", []),
+            "shipping_address": cust.get("shipping_address"),
+            "status": "found",
         }
     except Exception as exc:
         return err("lookup_customer", exc)

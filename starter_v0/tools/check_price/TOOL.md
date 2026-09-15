@@ -2,14 +2,11 @@
 name: check_price
 track: core
 kind: local_status
-provider: pc_seller_data/catalog.json
 requires_env: []
 inputs: [sku, include_stock]
-outputs: [sku, name, price, currency, stock, in_stock, snapshot_at]
+outputs: [sku, name, price, stock, in_stock]
 side_effect: false
 ---
 # check_price
 
-Returns the current listed price for one SKU and, when `include_stock` is true,
-the stock level and an `in_stock` flag. Unknown SKUs return
-`error: sku_not_found`.
+Tra cứu giá niêm yết chính xác của một mã linh kiện hoặc máy tính theo mã SKU. Khi `include_stock: true`, trả về thêm số lượng tồn kho và tình trạng sẵn hàng.

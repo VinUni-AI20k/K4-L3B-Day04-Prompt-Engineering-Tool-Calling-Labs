@@ -6,12 +6,14 @@ from typing import Any
 from tools._shared import ROOT, err
 
 
-CATALOG_FILE = ROOT / "pc_seller_data" / "catalog.json"
+CATALOG_FILE = ROOT / "pc_data" / "catalog.json"
 
 
-def _load_items() -> dict[str, dict[str, Any]]:
-    data = json.loads(CATALOG_FILE.read_text(encoding="utf-8"))
-    return {str(item["sku"]).upper(): item for item in data["items"]}
+def _get_product(sku: str, products: list[dict[str, Any]]) -> dict[str, Any] | None:
+    if not sku:
+        return None
+    wanted = sku.strip().upper()
+    return next((p for p in products if p.get("sku", "").upper() == wanted or wanted in p.get("sku", "").upper()), None)
 
 
 def check_compatibility(
@@ -22,81 +24,105 @@ def check_compatibility(
     psu_sku: str = "",
     case_sku: str = "",
     cooler_sku: str = "",
-    use_case: str = "all",
+    use_case: str = "",
 ) -> dict[str, Any]:
     try:
-        items = _load_items()
-        requested = {
-            "cpu_sku": (cpu_sku or "").strip().upper(),
-            "mainboard_sku": (mainboard_sku or "").strip().upper(),
-            "ram_sku": (ram_sku or "").strip().upper(),
-            "gpu_sku": (gpu_sku or "").strip().upper(),
-            "psu_sku": (psu_sku or "").strip().upper(),
-            "case_sku": (case_sku or "").strip().upper(),
-            "cooler_sku": (cooler_sku or "").strip().upper(),
-        }
-        resolved = {key: items.get(value) for key, value in requested.items() if value}
-        missing = sorted({value for key, value in requested.items() if value and items.get(value) is None})
-        if missing:
-            return {
-                "tool": "check_compatibility",
-                "requested": requested,
-                "error": "sku_not_found",
-                "unknown_skus": missing,
-            }
+        if not CATALOG_FILE.exists():
+            return {"tool": "check_compatibility", "error": "catalog_not_found"}
 
-        def spec(key: str, section: str) -> Any:
-            item = resolved.get(key)
-            if not item:
-                return None
-            return (item.get("specs") or {}).get(section)
+        data = json.loads(CATALOG_FILE.read_text(encoding="utf-8"))
+        products = data.get("products", [])
 
-        checks: list[dict[str, Any]] = []
+        issues: list[str] = []
+        warnings: list[str] = []
+        details: dict[str, Any] = {}
 
-        def add(name: str, status: str, detail: str) -> None:
-            checks.append({"check": name, "status": status, "detail": detail})
+        cpu = _get_product(cpu_sku, products)
+        mb = _get_product(mainboard_sku, products)
+        ram = _get_product(ram_sku, products)
+        gpu = _get_product(gpu_sku, products)
+        psu = _get_product(psu_sku, products)
+        cooler = _get_product(cooler_sku, products)
 
-        if resolved.get("cpu_sku") and resolved.get("mainboard_sku"):
-            cpu_socket = spec("cpu_sku", "socket")
-            board_socket = spec("mainboard_sku", "socket")
-            ok = cpu_socket == board_socket
-            add("cpu_mainboard_socket", "ok" if ok else "fail", f"CPU socket {cpu_socket} vs mainboard socket {board_socket}")
+        if not cpu and cpu_sku:
+            warnings.append(f"Không tìm thấy thông tin CPU với mã {cpu_sku}")
+        if not mb and mainboard_sku:
+            warnings.append(f"Không tìm thấy thông tin Mainboard với mã {mainboard_sku}")
 
-        if resolved.get("mainboard_sku") and resolved.get("ram_sku"):
-            board_ram = spec("mainboard_sku", "ram_type")
-            ram_type = spec("ram_sku", "ram_type")
-            ok = board_ram == ram_type
-            add("mainboard_ram_type", "ok" if ok else "fail", f"Mainboard memory {board_ram} vs memory kit {ram_type}")
+        # 1. Socket check (CPU vs Mainboard)
+        if cpu and mb:
+            cpu_socket = str(cpu.get("socket", "")).strip().upper()
+            mb_socket = str(mb.get("socket", "")).strip().upper()
+            details["cpu_socket"] = cpu_socket
+            details["mainboard_socket"] = mb_socket
+            if cpu_socket and mb_socket and cpu_socket != mb_socket:
+                issues.append(
+                    f"Không tương thích Socket: CPU {cpu.get('name')} dùng socket {cpu_socket}, "
+                    f"trong khi Mainboard {mb.get('name')} dùng socket {mb_socket}."
+                )
 
-        if resolved.get("gpu_sku") and resolved.get("case_sku"):
-            gpu_len = spec("gpu_sku", "length_mm")
-            case_max = spec("case_sku", "max_gpu_length_mm")
-            ok = gpu_len is not None and case_max is not None and gpu_len <= case_max
-            add("gpu_case_clearance", "ok" if ok else "fail", f"GPU length {gpu_len} mm vs case clearance {case_max} mm")
+        # 2. RAM standard check (RAM vs Mainboard)
+        if ram and mb:
+            ram_type = str(ram.get("ram_type", "")).strip().upper()
+            mb_ram_types = mb.get("ram_type", [])
+            if isinstance(mb_ram_types, str):
+                mb_ram_types = [mb_ram_types]
+            mb_ram_types_upper = [str(r).strip().upper() for r in mb_ram_types]
+            details["ram_type"] = ram_type
+            details["mainboard_supported_ram"] = mb_ram_types_upper
+            if ram_type and mb_ram_types_upper and ram_type not in mb_ram_types_upper:
+                issues.append(
+                    f"Không tương thích RAM: RAM {ram.get('name')} là chuẩn {ram_type}, "
+                    f"nhưng Mainboard {mb.get('name')} chỉ hỗ trợ chuẩn {', '.join(mb_ram_types_upper)}."
+                )
 
-        if resolved.get("gpu_sku") and resolved.get("psu_sku"):
-            recommended = spec("gpu_sku", "recommended_psu_w")
-            wattage = spec("psu_sku", "wattage")
-            ok = recommended is not None and wattage is not None and wattage >= recommended
-            add("psu_wattage", "ok" if ok else "fail", f"PSU {wattage} W vs recommended {recommended} W")
+        # 3. Cooler socket check
+        if cooler and cpu:
+            cooler_sockets = cooler.get("socket", [])
+            if isinstance(cooler_sockets, str):
+                cooler_sockets = [cooler_sockets]
+            cooler_sockets_upper = [str(s).strip().upper() for s in cooler_sockets]
+            cpu_socket = str(cpu.get("socket", "")).strip().upper()
+            if cpu_socket and cooler_sockets_upper and cpu_socket not in cooler_sockets_upper:
+                issues.append(
+                    f"Tản nhiệt {cooler.get('name')} không hỗ trợ gông cắm cho socket {cpu_socket} của CPU {cpu.get('name')}."
+                )
 
-        if resolved.get("cpu_sku") and resolved.get("cooler_sku"):
-            cpu_socket = spec("cpu_sku", "socket")
-            sockets = spec("cooler_sku", "sockets") or []
-            ok = cpu_socket in [str(value).upper() for value in sockets] or cpu_socket in sockets
-            add("cpu_cooler_socket", "ok" if ok else "fail", f"CPU socket {cpu_socket} vs cooler sockets {sockets}")
+        # 4. Wattage vs PSU check
+        est_wattage = 80  # Base motherboard, SSD, fans
+        if cpu:
+            est_wattage += cpu.get("wattage", 65)
+        if gpu:
+            est_wattage += gpu.get("wattage", 150)
+        if ram:
+            est_wattage += ram.get("wattage", 15)
+        if cooler:
+            est_wattage += cooler.get("wattage", 10)
 
-        if not checks:
-            add("coverage", "skipped", "Provide at least two compatible component keys to run a compatibility check.")
+        details["estimated_wattage"] = est_wattage
+        if psu:
+            psu_capacity = psu.get("wattage_capacity", 500)
+            details["psu_capacity"] = psu_capacity
+            if est_wattage > psu_capacity:
+                issues.append(
+                    f"Công suất nguồn không đủ: Tổng tiêu thụ ước tính {est_wattage}W vượt quá công suất định mức {psu_capacity}W của nguồn {psu.get('name')}."
+                )
+            elif est_wattage > psu_capacity * 0.85:
+                warnings.append(
+                    f"Công suất nguồn sát tải: Tổng tiêu thụ {est_wattage}W chiếm hơn 85% công suất {psu_capacity}W của nguồn {psu.get('name')}."
+                )
+        else:
+            recommended_psu = int(((est_wattage + 150) // 50 + 1) * 50)
+            details["recommended_psu_wattage"] = f"{recommended_psu}W"
 
-        failed = [check for check in checks if check["status"] == "fail"]
+        is_compatible = len(issues) == 0
         return {
             "tool": "check_compatibility",
-            "requested": {key: value for key, value in requested.items() if value},
-            "use_case": (use_case or "all").strip().lower(),
-            "compatible": not failed and not any(check["status"] == "skipped" for check in checks),
-            "checks": checks,
-            "failed_checks": [check["check"] for check in failed],
+            "compatible": is_compatible,
+            "issues": issues,
+            "warnings": warnings,
+            "details": details,
+            "status": "COMPATIBLE" if is_compatible else "INCOMPATIBLE",
         }
     except Exception as exc:
         return err("check_compatibility", exc)

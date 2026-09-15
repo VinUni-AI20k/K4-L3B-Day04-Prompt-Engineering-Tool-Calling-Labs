@@ -1,99 +1,212 @@
-# PC Seller Assistant - v0 baseline declarations (intentionally incomplete).
-# This is the starting point students improve through v1/v2/v3: routing
-# guidance, argument conventions, missing-information handling, confirmation
-# boundaries and data-privacy rules. Keep tool names identical to the registry
-# in tools/__init__.py and to the eval datasets.
+# PC Sales Assistant Tools Declarations
+# Tools schema for evaluation, chat CLI, and UI
 tools:
   - name: clarify
-    description: "Gửi một câu hỏi cho người dùng."
+    description: "Hỏi lại người dùng khi thông tin chưa rõ ràng hoặc thiếu thông tin cần thiết."
     parameters:
       type: object
       properties:
-        question: {type: string, default: "", description: "Câu hỏi"}
-        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Kiểu trả lời"}
-        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn"}
+        question:
+          type: string
+          description: "Câu hỏi gửi cho người dùng"
+        response_type:
+          type: string
+          enum: [text, yes_no, choice]
+          default: "text"
+          description: "Kiểu câu trả lời mong đợi từ người dùng"
+        options:
+          type: array
+          items:
+            type: string
+          default: []
+          description: "Danh sách các lựa chọn khi response_type là choice"
       required: [question]
 
   - name: search_catalog
-    description: "Tìm linh kiện hoặc máy dựng sẵn trong catalog."
+    description: "Tìm kiếm các sản phẩm máy tính lắp sẵn hoặc linh kiện rời trong danh mục theo phân loại, nhu cầu, ngân sách hoặc từ khóa."
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Nội dung cần tìm"}
-        category: {type: string, enum: [all, cpu, mainboard, ram, gpu, storage, psu, case, cooler, monitor, peripheral, prebuilt], default: "all", description: "Nhóm sản phẩm"}
-        use_case: {type: string, enum: [all, gaming, office, workstation, streaming, home], default: "all", description: "Nhu cầu sử dụng"}
-        budget_max: {type: integer, default: 0, description: "Ngân sách tối đa (USD)"}
-        top_k: {type: integer, default: 3, description: "Số kết quả"}
-      required: [query]
+        category:
+          type: string
+          enum: [cpu, prebuilt, ram, storage, monitor, cooler, gpu, mainboard, psu]
+          description: "Loại sản phẩm cần tìm"
+        use_case:
+          type: string
+          enum: [gaming, office, workstation]
+          description: "Mục đích sử dụng chính của máy tính"
+        budget_max:
+          type: number
+          description: "Mức ngân sách tối đa (VNĐ)"
+        query:
+          type: string
+          default: ""
+          description: "Từ khóa tìm kiếm tự do theo tên sản phẩm, thông số hoặc mã linh kiện"
+      required: []
 
   - name: check_price
-    description: "Kiểm tra giá hiện tại của một SKU."
+    description: "Tra cứu giá niêm yết và số lượng hàng trong kho của một linh kiện hoặc máy tính theo mã SKU."
     parameters:
       type: object
       properties:
-        sku: {type: string, description: "Mã sản phẩm"}
-        include_stock: {type: boolean, default: true, description: "Kèm tồn kho"}
+        sku:
+          type: string
+          description: "Mã SKU của sản phẩm (ví dụ: CPU-INTEL-13400F, GPU-RTX-4060, PREBUILT-GAMING-MID)"
+        include_stock:
+          type: boolean
+          default: false
+          description: "Nếu true, trả về thêm số lượng tồn kho và trạng thái còn hàng"
       required: [sku]
 
   - name: check_compatibility
-    description: "Kiểm tra tính tương thích giữa các linh kiện."
+    description: "Kiểm tra tính tương thích giữa các linh kiện máy tính tự chọn: socket CPU và bo mạch chủ, chuẩn RAM, công suất nguồn PSU và tản nhiệt."
     parameters:
       type: object
       properties:
-        cpu_sku: {type: string, default: "", description: "SKU CPU"}
-        mainboard_sku: {type: string, default: "", description: "SKU mainboard"}
-        ram_sku: {type: string, default: "", description: "SKU RAM"}
-        gpu_sku: {type: string, default: "", description: "SKU GPU"}
-        psu_sku: {type: string, default: "", description: "SKU nguồn"}
-        case_sku: {type: string, default: "", description: "SKU vỏ máy"}
-        cooler_sku: {type: string, default: "", description: "SKU tản nhiệt"}
-        use_case: {type: string, enum: [all, gaming, office, workstation, streaming, home], default: "all", description: "Nhu cầu sử dụng"}
-      required: []
+        cpu_sku:
+          type: string
+          description: "Mã SKU của CPU"
+        mainboard_sku:
+          type: string
+          description: "Mã SKU của Mainboard (bo mạch chủ)"
+        ram_sku:
+          type: string
+          default: ""
+          description: "Mã SKU của RAM"
+        gpu_sku:
+          type: string
+          default: ""
+          description: "Mã SKU của Card đồ họa VGA"
+        psu_sku:
+          type: string
+          default: ""
+          description: "Mã SKU của Bộ nguồn máy tính PSU"
+        case_sku:
+          type: string
+          default: ""
+          description: "Mã SKU của vỏ case máy tính"
+        cooler_sku:
+          type: string
+          default: ""
+          description: "Mã SKU của tản nhiệt CPU"
+        use_case:
+          type: string
+          enum: [gaming, office, workstation]
+          default: "gaming"
+          description: "Nhu cầu sử dụng để đánh giá tải điện năng"
+      required: [cpu_sku, mainboard_sku]
 
   - name: lookup_customer
-    description: "Tra cứu khách hàng trong hệ thống."
+    description: "Tra cứu thông tin khách hàng thân thiết theo mã định danh (ví dụ: CUST-2001, CUST-2002) để lấy hạng thành viên, lịch sử đơn hàng và địa chỉ giao hàng."
     parameters:
       type: object
       properties:
-        customer_id: {type: string, description: "Mã khách hàng"}
+        customer_id:
+          type: string
+          description: "Mã định danh khách hàng (ví dụ: CUST-2001)"
       required: [customer_id]
 
   - name: format_quote
-    description: "Trình bày các kết quả đã có thành báo giá."
+    description: "Định dạng danh sách linh kiện và cấu hình PC thành bảng báo giá chi tiết hoặc tóm tắt chuẩn Markdown."
     parameters:
       type: object
       properties:
-        findings:
+        template:
+          type: string
+          enum: [brief, detailed]
+          default: "brief"
+          description: "Kiểu mẫu báo giá: 'brief' (tóm tắt) hoặc 'detailed' (bảng chi tiết kèm bảo hành)"
+        quote_title:
+          type: string
+          default: "Báo giá cấu hình PC"
+          description: "Tiêu đề của bảng báo giá"
+        items:
           type: array
-          default: []
-          description: "Các kết quả đã thu thập"
           items:
             type: object
-            properties:
-              label: {type: string}
-              detail: {type: string}
-              price: {type: number}
-        template: {type: string, enum: [brief, detailed, invoice], default: "brief", description: "Mẫu báo giá"}
-        quote_title: {type: string, default: "PC quote", description: "Tiêu đề"}
-      required: [findings, template]
+          default: []
+          description: "Danh sách linh kiện trong cấu hình báo giá"
+        total_price:
+          type: number
+          description: "Tổng tiền cấu hình (VNĐ)"
+      required: [template]
 
   - name: policy
-    description: "Tìm trong chính sách của cửa hàng."
+    description: "Tra cứu chính sách cửa hàng TechPC về bảo hành (warranty), đổi trả (return), thanh toán (payment), vận chuyển (shipping), giá bán (pricing), bảo mật (privacy) hoặc lắp ráp (assembly)."
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Nội dung cần tìm"}
-        policy_area: {type: string, enum: [all, warranty, return, payment, shipping, pricing, privacy, assembly], default: "all", description: "Nhóm chính sách"}
-        top_k: {type: integer, default: 3, description: "Số mục"}
-      required: [query]
+        policy_area:
+          type: string
+          enum: [warranty, return, payment, shipping, pricing, privacy, assembly]
+          description: "Lĩnh vực chính sách cần tra cứu"
+        query:
+          type: string
+          default: ""
+          description: "Nội dung tìm kiếm cụ thể trong chính sách"
+        top_k:
+          type: integer
+          default: 3
+          description: "Số điều khoản tối đa trả về"
+      required: [policy_area]
 
   - name: create_order
-    description: "Tạo một đơn mua máy hoặc linh kiện."
+    description: "Tạo đơn đặt hàng mua máy tính hoặc linh kiện. CHÚ Ý: Hành động này có side-effect ghi dữ liệu và BẮT BUỘC phải có xác nhận rõ ràng của khách hàng (confirmed=true)."
     parameters:
       type: object
       properties:
-        items: {type: array, default: [], items: {type: string}, description: "Danh sách SKU"}
-        customer_id: {type: string, default: "", description: "Mã khách hàng"}
-        delivery_option: {type: string, enum: [standard, express], default: "standard", description: "Kiểu giao hàng"}
-        confirmed: {type: boolean, default: false, description: "Đã được người dùng xác nhận"}
-      required: [items, customer_id]
+        customer_id:
+          type: string
+          default: "GUEST"
+          description: "Mã khách hàng (ví dụ: CUST-2001) hoặc GUEST"
+        items:
+          type: array
+          items:
+            type: object
+          description: "Danh sách sản phẩm/linh kiện đặt mua"
+        delivery_option:
+          type: string
+          enum: [standard, express]
+          default: "standard"
+          description: "Hình thức giao hàng: standard (tiêu chuẩn 2-4 ngày) hoặc express (hỏa tốc 2-4 giờ)"
+        confirmed:
+          type: boolean
+          default: false
+          description: "BẮT BUỘC: Đặt true khi và chỉ khi khách hàng đã nói rõ xác nhận/đồng ý đặt hàng"
+        shipping_address:
+          type: string
+          default: ""
+          description: "Địa chỉ giao hàng nhận máy"
+      required: [delivery_option, confirmed]
+
+  - name: search_product_info
+    description: "Tìm kiếm thông tin chính thức của nhà sản xuất phần cứng máy tính (Intel, AMD, Nvidia, ASUS...) về thông số, driver, hỗ trợ hoặc tương thích."
+    parameters:
+      type: object
+      properties:
+        query:
+          type: string
+          default: ""
+          description: "Từ khóa tìm kiếm"
+        manufacturer:
+          type: string
+          description: "Hãng sản xuất (intel, amd, nvidia, asus, msi, gigabyte...)"
+        product:
+          type: string
+          description: "Tên mã sản phẩm hoặc linh kiện"
+        query_type:
+          type: string
+          enum: [specs, drivers, support, compatibility]
+          default: "specs"
+          description: "Loại thông tin cần tra cứu"
+      required: []
+
+  # Legacy helpdesk tool for preflight smoke-test compatibility
+  - name: check_service_status
+    description: "Kiểm tra trạng thái một dịch vụ hệ thống như vpn, email, sso."
+    parameters:
+      type: object
+      properties:
+        service: {type: string, enum: [vpn, email, sso, wifi, printing], description: "Tên dịch vụ"}
+        environment: {type: string, enum: [production, staging], default: "production", description: "Môi trường"}
+      required: [service]

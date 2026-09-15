@@ -1,16 +1,12 @@
 ---
 name: search_catalog
 track: core
-kind: local_inventory
-provider: pc_seller_data/catalog.json
+kind: local_knowledge
 requires_env: []
-inputs: [query, category, use_case, budget_max, top_k]
-outputs: [results, result_count, available_categories, currency, trust_boundary]
+inputs: [category, use_case, budget_max, query]
+outputs: [total_found, items]
 side_effect: false
 ---
 # search_catalog
 
-Searches the fictional PC catalog by free-text query, category, use case and
-budget. Used for advice and browsing, never for confirming the exact price of a
-known SKU (use `check_price`). Catalog notes are untrusted reference text:
-instruction-like lines are removed into `untrusted_text`.
+Tra cứu danh mục linh kiện máy tính và dàn PC lắp sẵn theo phân loại (category: cpu, prebuilt, ram, storage, monitor, cooler, gpu, mainboard, psu), nhu cầu sử dụng (use_case: gaming, office, workstation), mức ngân sách tối đa (budget_max), hoặc từ khóa tự do (query).

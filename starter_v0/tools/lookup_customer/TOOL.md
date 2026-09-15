@@ -2,15 +2,11 @@
 name: lookup_customer
 track: core
 kind: local_inventory
-provider: pc_seller_data/customers.json
 requires_env: []
 inputs: [customer_id]
-outputs: [customer, orders, snapshot_at, privacy_note, trust_boundary]
+outputs: [customer_id, name, tier, orders, shipping_address]
 side_effect: false
 ---
 # lookup_customer
 
-Returns one customer profile and their orders from the fictional store
-database. The response contains synthetic PII and order history that are
-internal-only and must never be forwarded to an external or web tool. Unknown
-IDs return `error: customer_not_found`.
+Tra cứu thông tin khách hàng thân thiết theo mã khách hàng (ví dụ: CUST-2001 đến CUST-2004). Trả về họ tên, hạng hội viên (VIP, Gold, Silver, Standard), lịch sử mã đơn hàng và địa chỉ giao hàng. Không bao giờ trả về thông tin thẻ ngân hàng hoặc thông tin nhạy cảm.

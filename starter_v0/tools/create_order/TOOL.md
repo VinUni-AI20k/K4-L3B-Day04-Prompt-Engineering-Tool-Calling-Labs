@@ -2,17 +2,14 @@
 name: create_order
 track: core
 kind: action
-provider: local_order_store
 requires_env: []
-inputs: [items, customer_id, delivery_option, confirmed]
-outputs: [status, order_id, items, customer_id, delivery_option, total, path]
+inputs: [customer_id, items, delivery_option, confirmed, shipping_address]
+outputs: [order_id, status, total_price, path]
 side_effect: local_file_write
 requires_confirmation: true
 ---
 # create_order
 
-Creates a local mock order under `orders/` for a prebuilt PC or individual
-component SKUs. It returns `needs_confirmation` and writes nothing unless
-`confirmed` is explicitly true. It rejects unknown SKUs, unknown customers,
-invalid delivery options, and item payloads containing payment credentials,
-card numbers, tokens, or MFA values.
+Tạo đơn đặt hàng mua máy tính hoặc linh kiện PC vào hệ thống.
+CHÚ Ý AN TOÀN: Đây là công cụ có side-effect ghi dữ liệu. Tool này BẮT BUỘC có sự xác nhận rõ ràng (`confirmed: true`) từ khách hàng trước khi gọi. Nếu `confirmed: false`, tool sẽ từ chối và trả về yêu cầu xác nhận.
+Các phương thức giao hàng hỗ trợ (delivery_option): `standard` (tiêu chuẩn), `express` (hỏa tốc).

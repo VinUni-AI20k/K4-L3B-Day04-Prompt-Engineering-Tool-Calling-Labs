@@ -2,15 +2,12 @@
 name: check_compatibility
 track: core
 kind: local_knowledge
-provider: pc_seller_data/catalog.json
 requires_env: []
 inputs: [cpu_sku, mainboard_sku, ram_sku, gpu_sku, psu_sku, case_sku, cooler_sku, use_case]
-outputs: [compatible, checks, failed_checks, requested]
+outputs: [compatible, issues, warnings, details]
 side_effect: false
 ---
 # check_compatibility
 
-Checks a build against catalog specs: CPU socket vs mainboard socket, mainboard
-memory type vs memory kit, GPU length vs case clearance, PSU wattage vs GPU
-recommendation, and CPU socket vs cooler support. Unknown SKUs return
-`error: sku_not_found`.
+Kiểm tra độ tương thích phần cứng giữa CPU, Bo mạch chủ (Mainboard), RAM, Card đồ họa (GPU), Nguồn (PSU) và Tản nhiệt (Cooler).
+Xác thực tương thích socket (LGA1700, AM5), chuẩn RAM (DDR4/DDR5) và tổng công suất nguồn điện yêu cầu.
