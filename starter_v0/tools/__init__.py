@@ -14,13 +14,22 @@ from .lookup_user.tool import lookup_user
 from .policy.tool import search_company_policy
 from .search_kb.tool import search_kb
 from .search_device_info.tool import search_device_info
+from .search_products.tool import search_products
+from .get_product_details.tool import get_product_details
+from .check_inventory.tool import check_inventory
+from .compare_products.tool import compare_products
+from .check_promotion.tool import check_promotion
+from .search_policy.tool import search_policy
+from .lookup_customer.tool import lookup_customer
+from .get_order_status.tool import get_order_status
+from .create_order.tool import create_order
 
 
 # These names are part of the fixed evaluation contract. Keep built-in names
 # unchanged in tools.yaml, this registry and the supplied datasets. Improve
 # descriptions and compatible schemas. Register any team-built bonus tool in
 # this registry and tools.yaml, then test it with team-authored cases.
-TOOL_FUNCTIONS = {
+HELPDESK_TOOL_FUNCTIONS = {
     "clarify": ask_user,
     "search_kb": search_kb,
     "search_device_info": search_device_info,
@@ -31,6 +40,16 @@ TOOL_FUNCTIONS = {
     "policy": search_company_policy,
     "create_ticket": create_ticket,
 }
+
+# Sales is the active baseline; the IT registry above is retained unchanged.
+SALES_TOOL_FUNCTIONS = {
+    "search_products": search_products, "get_product_details": get_product_details,
+    "check_inventory": check_inventory, "compare_products": compare_products,
+    "check_promotion": check_promotion, "search_policy": search_policy,
+    "lookup_customer": lookup_customer, "get_order_status": get_order_status,
+    "create_order": create_order,
+}
+TOOL_FUNCTIONS = SALES_TOOL_FUNCTIONS
 
 
 def load_tool_declarations(path: Path) -> list[dict[str, Any]]:
