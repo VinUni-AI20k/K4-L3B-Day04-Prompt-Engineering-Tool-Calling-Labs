@@ -180,6 +180,7 @@ def main() -> None:
         **artifact_version_dict(artifact_version),
         "provider": args.provider,
         "model": selected_model,
+        "requests_per_minute": getattr(provider, "requests_per_minute", None),
         "system_prompt": str(args.system_prompt),
         "tools": str(args.tools),
         "history_window": args.history_window,

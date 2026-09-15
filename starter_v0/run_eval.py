@@ -342,6 +342,7 @@ def main() -> None:
         "suite": args.suite,
         "provider": args.provider,
         "model": selected_model,
+        "requests_per_minute": getattr(provider, "requests_per_minute", None),
         "system_prompt": str(args.system_prompt),
         "tools": str(args.tools),
         "eval_cases": str(args.eval_cases),

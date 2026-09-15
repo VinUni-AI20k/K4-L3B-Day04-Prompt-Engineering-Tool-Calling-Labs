@@ -34,7 +34,8 @@ def main() -> None:
         raise SystemExit("Provider did not return structured tool_calls.")
     first = response.tool_calls[0]
     selected_model = args.model or getattr(provider, "default_model", None)
-    print(f"OK provider={args.provider} model={selected_model}")
+    requests_per_minute = getattr(provider, "requests_per_minute", None)
+    print(f"OK provider={args.provider} model={selected_model} requests_per_minute={requests_per_minute:g}")
     print(f"tool={first.name}")
     print(f"args={first.args}")
 
