@@ -1,5 +1,5 @@
 # search_travel_info
-Searches the public web for current travel information using the Tavily Search API.
+Searches the public web for current travel information using OpenAI's built-in web search tool (Responses API).
 
 ## Use cases
 Use this tool for up-to-date public travel information such as:
@@ -17,6 +17,9 @@ Use this tool for up-to-date public travel information such as:
 - `category`: `general`, `attraction`, `food`, `hotel`, `transport`, or `event`.
 - `max_results`: Number of results to return (1-10).
 
+## Requires
+- `OPENAI_API_KEY` (same key used for the LLM provider; no separate key needed).
+
 ## Safety
 This tool sends the search query to an external web search service.
 
@@ -31,8 +34,6 @@ Never include:
 ## Output
 Returns structured web search evidence including:
 
-- Title
-- URL
-- Content snippet
-- Relevance score
+- A synthesized answer grounded in the search
+- A list of cited sources (title + URL)
 - Search metadata

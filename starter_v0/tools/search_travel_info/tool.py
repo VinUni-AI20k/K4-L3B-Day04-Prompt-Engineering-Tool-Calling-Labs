@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import os
+import re
 from typing import Any
 
-import requests
 
+MARKDOWN_LINK_PATTERN = re.compile(r"\[([^\]]+)\]\((https?://[^\s)]+)\)")
 
-TAVILY_SEARCH_URL = "https://api.tavily.com/search"
 
 ALLOWED_CATEGORIES = {
     "general",
@@ -25,7 +25,7 @@ def search_travel_info(
     max_results: int = 5,
 ) -> dict[str, Any]:
     """
-    Search current travel information using Tavily.
+    Search current travel information using OpenAI's web search tool.
 
     Args:
         query: What the user wants to know.
@@ -58,14 +58,14 @@ def search_travel_info(
 
     max_results = max(1, min(int(max_results), 10))
 
-    api_key = os.getenv("TAVILY_API_KEY")
+    api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         return {
             "error": "missing_api_key",
-            "message": "TAVILY_API_KEY is not configured.",
+            "message": "OPENAI_API_KEY is not configured.",
         }
 
-    # Add travel context so Tavily searches specifically for travel information.
+    # Add travel context so the web search looks specifically for travel information.
     search_parts = [query]
 
     if destination:
@@ -73,53 +73,67 @@ def search_travel_info(
 
     search_query = " ".join(search_parts)
 
-    payload = {
-        "query": search_query,
-        "search_depth": "basic",
-        "max_results": max_results,
-        "include_usage": True,
-    }
+    try:
+        from openai import OpenAI
+    except ImportError as exc:
+        return {
+            "error": "missing_dependency",
+            "message": f"Install the openai package first: {exc}",
+        }
+
+    base_url = os.getenv("BASE_API_URL") or None
+    model = os.getenv("OPENAI_DEFAULT_MODEL", "gpt-4o-mini")
 
     try:
-        response = requests.post(
-            TAVILY_SEARCH_URL,
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json",
-            },
-            json=payload,
-            timeout=20,
+        client = OpenAI(api_key=api_key, base_url=base_url)
+        response = client.responses.create(
+            model=model,
+            input=search_query,
+            tools=[{"type": "web_search"}],
         )
-
-        response.raise_for_status()
-        data = response.json()
-
-    except requests.RequestException as exc:
+    except Exception as exc:
         return {
-            "error": "tavily_request_failed",
+            "error": "openai_web_search_failed",
             "message": str(exc),
         }
 
-    results = []
+    results: list[dict[str, Any]] = []
+    seen_urls: set[str] = set()
+    for item in getattr(response, "output", None) or []:
+        if getattr(item, "type", None) != "message":
+            continue
+        for content in getattr(item, "content", None) or []:
+            for annotation in getattr(content, "annotations", None) or []:
+                if getattr(annotation, "type", None) != "url_citation":
+                    continue
+                url = getattr(annotation, "url", None)
+                if not url or url in seen_urls:
+                    continue
+                seen_urls.add(url)
+                results.append({"title": getattr(annotation, "title", None), "url": url})
+                if len(results) >= max_results:
+                    break
 
-    for item in data.get("results", []):
-        results.append(
-            {
-                "title": item.get("title"),
-                "url": item.get("url"),
-                "content": item.get("content"),
-                "score": item.get("score"),
-            }
-        )
+    answer = getattr(response, "output_text", None)
+
+    # Some gateways/models cite sources as inline markdown links instead of
+    # structured annotations. Fall back to parsing those so `results` is
+    # still populated with real sources from this response.
+    if not results and answer:
+        for title, url in MARKDOWN_LINK_PATTERN.findall(answer):
+            if url in seen_urls:
+                continue
+            seen_urls.add(url)
+            results.append({"title": title, "url": url})
+            if len(results) >= max_results:
+                break
 
     return {
         "query": query,
         "search_query": search_query,
         "destination": destination or None,
         "category": category,
-        "answer": data.get("answer"),
+        "answer": answer,
         "results": results,
         "result_count": len(results),
-        "response_time": data.get("response_time"),
-        "usage": data.get("usage"),
     }
