@@ -1,0 +1,66 @@
+{
+  "transcript_id": "webui_6bf41bdd-2e20-4e34-941f-1405e29fbd65",
+  "created_at": "2026-09-15T23:49:31",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-09-15T23:49:31",
+      "version_key": "v3",
+      "artifact_version": "v3+p6cfe83834706+t2b007eb943c5",
+      "provider": "openai",
+      "model": "gpt-5.5",
+      "user": "Tôi muốn xem trạng thái booking số 1001.",
+      "status": "waiting_for_user",
+      "assistant_text": "Bạn vui lòng xác nhận mã booking đầy đủ theo định dạng BK-XXXX (ví dụ: BK-1001). Số bạn cung cấp là “1001”; bạn muốn kiểm tra mã nào?",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "clarify",
+              "args": {
+                "question": "Bạn vui lòng xác nhận mã booking đầy đủ theo định dạng BK-XXXX (ví dụ: BK-1001). Số bạn cung cấp là “1001”; bạn muốn kiểm tra mã nào?",
+                "response_type": "text"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "clarify",
+              "args": {
+                "question": "Bạn vui lòng xác nhận mã booking đầy đủ theo định dạng BK-XXXX (ví dụ: BK-1001). Số bạn cung cấp là “1001”; bạn muốn kiểm tra mã nào?",
+                "response_type": "text"
+              },
+              "result": {
+                "tool": "clarify",
+                "question": "Bạn vui lòng xác nhận mã booking đầy đủ theo định dạng BK-XXXX (ví dụ: BK-1001). Số bạn cung cấp là “1001”; bạn muốn kiểm tra mã nào?",
+                "response_type": "text",
+                "options": [],
+                "awaiting_user": true
+              }
+            }
+          ]
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn vui lòng xác nhận mã booking đầy đủ theo định dạng BK-XXXX (ví dụ: BK-1001). Số bạn cung cấp là “1001”; bạn muốn kiểm tra mã nào?",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "clarify",
+            "question": "Bạn vui lòng xác nhận mã booking đầy đủ theo định dạng BK-XXXX (ví dụ: BK-1001). Số bạn cung cấp là “1001”; bạn muốn kiểm tra mã nào?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ],
+      "ended_at": "2026-09-15T23:49:31"
+    }
+  ],
+  "updated_at": "2026-09-15T23:49:31"
+}

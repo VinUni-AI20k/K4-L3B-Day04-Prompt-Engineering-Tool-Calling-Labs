@@ -1,0 +1,84 @@
+{
+  "transcript_id": "webui_a55b1d2a-a714-402f-8c5f-267ae6fcf828",
+  "created_at": "2026-09-15T23:12:07",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-09-15T23:12:07",
+      "version_key": "final",
+      "artifact_version": "final+p6cfe83834706+t2b007eb943c5",
+      "provider": "openai",
+      "model": "gpt-5.5",
+      "user": "Tạo ticket cho lỗi hủy phòng BK-1005.",
+      "status": "waiting_for_user",
+      "assistant_text": "Bạn có xác nhận muốn tạo ticket hỗ trợ cho booking BK-1005 với nội dung: “Lỗi hủy phòng” và mức ưu tiên medium không?",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "clarify",
+              "args": {
+                "question": "Bạn có xác nhận muốn tạo ticket hỗ trợ cho booking BK-1005 với nội dung: “Lỗi hủy phòng” và mức ưu tiên medium không?",
+                "response_type": "yes_no",
+                "options": [
+                  "Có",
+                  "Không"
+                ]
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "clarify",
+              "args": {
+                "question": "Bạn có xác nhận muốn tạo ticket hỗ trợ cho booking BK-1005 với nội dung: “Lỗi hủy phòng” và mức ưu tiên medium không?",
+                "response_type": "yes_no",
+                "options": [
+                  "Có",
+                  "Không"
+                ]
+              },
+              "result": {
+                "tool": "clarify",
+                "question": "Bạn có xác nhận muốn tạo ticket hỗ trợ cho booking BK-1005 với nội dung: “Lỗi hủy phòng” và mức ưu tiên medium không?",
+                "response_type": "yes_no",
+                "options": [
+                  "Có",
+                  "Không"
+                ],
+                "awaiting_user": true
+              }
+            }
+          ]
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có xác nhận muốn tạo ticket hỗ trợ cho booking BK-1005 với nội dung: “Lỗi hủy phòng” và mức ưu tiên medium không?",
+            "response_type": "yes_no",
+            "options": [
+              "Có",
+              "Không"
+            ]
+          },
+          "result": {
+            "tool": "clarify",
+            "question": "Bạn có xác nhận muốn tạo ticket hỗ trợ cho booking BK-1005 với nội dung: “Lỗi hủy phòng” và mức ưu tiên medium không?",
+            "response_type": "yes_no",
+            "options": [
+              "Có",
+              "Không"
+            ],
+            "awaiting_user": true
+          }
+        }
+      ],
+      "ended_at": "2026-09-15T23:12:07"
+    }
+  ],
+  "updated_at": "2026-09-15T23:12:07"
+}

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import argparse
+import csv
+import difflib
 import json
 import uuid
 from datetime import datetime
@@ -22,18 +24,66 @@ WEB_DIR = ROOT / "web"
 load_lab_env(ROOT)
 
 TOOLS_PATH = ARTIFACTS_DIR / "tools.yaml"
+VERSION_LOG_PATH = ARTIFACTS_DIR / "version_log.csv"
 
-# Every version selectable in the UI. "v3" and "final" both point at the
-# same content today (artifacts/system_prompt.md was set to the v3 text),
-# kept as separate entries so the dropdown always has a "current" pointer
-# even if the team keeps iterating past v3 without renaming files.
+# Every version selectable in the UI. Only real hypothesis-driven steps that
+# have a row in artifacts/version_log.csv — "final" was dropped because it
+# was just an alias pointing at v3's file with no diff/reason of its own.
 VERSION_FILES: dict[str, Path] = {
     "v0": ARTIFACTS_DIR / "system_prompt_v0.md",
     "v1": ARTIFACTS_DIR / "system_prompt_v1.md",
     "v2": ARTIFACTS_DIR / "system_prompt_v2.md",
     "v3": ARTIFACTS_DIR / "system_prompt_v3.md",
-    "final": ARTIFACTS_DIR / "system_prompt.md",
 }
+
+# What each version is diffed against when the UI explains "what changed here".
+PREV_OF: dict[str, str | None] = {"v0": None, "v1": "v0", "v2": "v1", "v3": "v2"}
+
+
+def load_version_log() -> dict[str, dict[str, str]]:
+    if not VERSION_LOG_PATH.exists():
+        return {}
+    with VERSION_LOG_PATH.open(encoding="utf-8") as fh:
+        rows = [row for row in csv.DictReader(fh) if row.get("version")]
+    return {row["version"].strip(): row for row in rows}
+
+
+def changed_files(prev_row: dict[str, str] | None, row: dict[str, str]) -> list[str]:
+    """Which artifact(s) actually changed vs. the previous version, per the
+    prompt_hash/tools_hash columns *recorded at the time that version's eval
+    ran* — the ground truth of the experiment, independent of whatever the
+    files on disk look like today."""
+    if not row:
+        return []
+    if prev_row is None:
+        return ["baseline"]
+    out = []
+    if row.get("prompt_hash") != prev_row.get("prompt_hash"):
+        out.append("system_prompt.md")
+    if row.get("tools_hash") != prev_row.get("tools_hash"):
+        out.append("tools.yaml")
+    return out
+
+
+def prompt_diff(prev_key: str | None, key: str) -> list[dict[str, str]]:
+    """Line-level diff between the previous version's system prompt and this one's."""
+    prev_path = VERSION_FILES.get(prev_key) if prev_key else None
+    cur_path = VERSION_FILES.get(key)
+    if prev_path is None or cur_path is None or not prev_path.exists() or not cur_path.exists():
+        return []
+    prev_lines = prev_path.read_text(encoding="utf-8").splitlines()
+    cur_lines = cur_path.read_text(encoding="utf-8").splitlines()
+    out: list[dict[str, str]] = []
+    for line in difflib.unified_diff(prev_lines, cur_lines, lineterm=""):
+        if line.startswith(("+++", "---", "@@")):
+            continue
+        if line.startswith("+"):
+            out.append({"type": "add", "text": line[1:]})
+        elif line.startswith("-"):
+            out.append({"type": "del", "text": line[1:]})
+        elif line.startswith(" "):
+            out.append({"type": "ctx", "text": line[1:]})
+    return out
 
 
 class AppState:
@@ -49,14 +99,39 @@ class AppState:
 STATE: AppState | None = None
 
 
-def available_versions() -> list[dict[str, Any]]:
+def available_versions() -> dict[str, Any]:
+    log = load_version_log()
     out = []
     for key, path in VERSION_FILES.items():
         if not path.exists():
             continue
         av = build_artifact_version(key, path, TOOLS_PATH)
-        out.append({"key": key, "artifact_version": av.artifact_version})
-    return out
+        row = log.get(key, {})
+        prev_key = PREV_OF.get(key)
+        prev_row = log.get(prev_key) if prev_key else None
+        out.append({
+            "key": key,
+            "artifact_version": av.artifact_version,
+            "prev_key": prev_key,
+            "has_log_row": key in log,
+            "changed_files": changed_files(prev_row, row),
+            "changed_artifact": row.get("changed_artifact"),
+            "reason": row.get("reason"),
+            "hypothesis": row.get("hypothesis"),
+            "metric_name": row.get("metric_name"),
+            "metric_before": row.get("metric_before"),
+            "metric_after": row.get("metric_after"),
+            "diff": prompt_diff(prev_key, key),
+        })
+    # Sanity check: does the tools.yaml this server actually loads right now
+    # still match what was in effect when the recorded v0-v3 runs happened?
+    # (Recorded tools_hash is identical for every v0-v3 row, so any row's
+    # value works as the reference.)
+    recorded_tools_hash = next((r.get("tools_hash") for r in log.values() if r.get("tools_hash")), None)
+    any_prompt_path = next(iter(VERSION_FILES.values()))
+    live_tools_hash = STATE.tools_hash if STATE else build_artifact_version("_", any_prompt_path, TOOLS_PATH).tools_hash
+    tools_drifted = bool(recorded_tools_hash) and recorded_tools_hash != live_tools_hash
+    return {"versions": out, "tools_drifted": tools_drifted}
 
 
 def run_turn(version_key: str, history: list[dict[str, str]], user_text: str) -> dict[str, Any]:
@@ -129,10 +204,14 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def _send_file(self, path: Path, content_type: str) -> None:
+        # This is a local dev server whose HTML/JS changes constantly while
+        # iterating; without this the browser can keep serving a stale
+        # cached copy after a restart and silently show old behavior.
         body = path.read_bytes()
         self.send_response(200)
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
         self.end_headers()
         self.wfile.write(body)
 
@@ -144,7 +223,7 @@ class Handler(BaseHTTPRequestHandler):
             self._send_file(WEB_DIR / "app.js", "application/javascript; charset=utf-8")
             return
         if self.path == "/api/versions":
-            self._send_json({"versions": available_versions()})
+            self._send_json(available_versions())
             return
         self.send_error(404, "Not found")
 

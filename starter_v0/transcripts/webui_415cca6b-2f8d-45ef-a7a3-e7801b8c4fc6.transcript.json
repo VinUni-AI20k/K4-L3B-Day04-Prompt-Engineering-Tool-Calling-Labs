@@ -1,0 +1,84 @@
+{
+  "transcript_id": "webui_415cca6b-2f8d-45ef-a7a3-e7801b8c4fc6",
+  "created_at": "2026-09-15T23:38:47",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-09-15T23:38:47",
+      "version_key": "v1",
+      "artifact_version": "v1+p9f348fa04bff+t2b007eb943c5",
+      "provider": "openai",
+      "model": "gpt-5.5",
+      "user": "Tạo ticket cho lỗi hủy phòng BK-1005.",
+      "status": "waiting_for_user",
+      "assistant_text": "Bạn xác nhận muốn tạo ticket hỗ trợ cho lỗi hủy phòng liên quan đến booking BK-1005 không?",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "clarify",
+              "args": {
+                "question": "Bạn xác nhận muốn tạo ticket hỗ trợ cho lỗi hủy phòng liên quan đến booking BK-1005 không?",
+                "response_type": "yes_no",
+                "options": [
+                  "Có",
+                  "Không"
+                ]
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "clarify",
+              "args": {
+                "question": "Bạn xác nhận muốn tạo ticket hỗ trợ cho lỗi hủy phòng liên quan đến booking BK-1005 không?",
+                "response_type": "yes_no",
+                "options": [
+                  "Có",
+                  "Không"
+                ]
+              },
+              "result": {
+                "tool": "clarify",
+                "question": "Bạn xác nhận muốn tạo ticket hỗ trợ cho lỗi hủy phòng liên quan đến booking BK-1005 không?",
+                "response_type": "yes_no",
+                "options": [
+                  "Có",
+                  "Không"
+                ],
+                "awaiting_user": true
+              }
+            }
+          ]
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn xác nhận muốn tạo ticket hỗ trợ cho lỗi hủy phòng liên quan đến booking BK-1005 không?",
+            "response_type": "yes_no",
+            "options": [
+              "Có",
+              "Không"
+            ]
+          },
+          "result": {
+            "tool": "clarify",
+            "question": "Bạn xác nhận muốn tạo ticket hỗ trợ cho lỗi hủy phòng liên quan đến booking BK-1005 không?",
+            "response_type": "yes_no",
+            "options": [
+              "Có",
+              "Không"
+            ],
+            "awaiting_user": true
+          }
+        }
+      ],
+      "ended_at": "2026-09-15T23:38:47"
+    }
+  ],
+  "updated_at": "2026-09-15T23:38:47"
+}
