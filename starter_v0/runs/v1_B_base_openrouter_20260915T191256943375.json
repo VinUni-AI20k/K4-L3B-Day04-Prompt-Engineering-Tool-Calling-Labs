@@ -1,8 +1,8 @@
 {
-  "run_id": "v1_B_base_openrouter_20260915T185518425086",
+  "run_id": "v1_B_base_openrouter_20260915T191256943375",
   "version": "v1",
-  "artifact_version": "v1+p1596cff0f950+td4848549884e",
-  "prompt_hash": "1596cff0f95003a6021319ca9208499eeeadff58e2c8b82e4694e27f67060b16",
+  "artifact_version": "v1+p7ed88fc5f0a0+td4848549884e",
+  "prompt_hash": "7ed88fc5f0a0b87378d3e07e3efc5f0dd717ecd4872c892ace470755063561c4",
   "tools_hash": "d4848549884eb9613313a2a8dec5faca4e8299842790ac2d42a04195b4da3198",
   "phase": "B",
   "suite": "base",
@@ -14,24 +14,23 @@
   "dataset_id": "day04_v3_helpdesk_base",
   "dataset_role": "base",
   "description": "Fixed core eval for the IT Helpdesk Agent. Keep built-in tool names and all supplied cases unchanged, including prompts, expected behavior, and arguments. Test team-built bonus tools with team-authored cases.",
-  "generated_at": "2026-09-15T18:55:18",
+  "generated_at": "2026-09-15T19:12:56",
   "summary": {
     "total_cases": 30,
     "measured_cases": 30,
     "provider_error_cases": 0,
-    "passed_cases": 24,
-    "case_accuracy": 0.8,
+    "passed_cases": 26,
+    "case_accuracy": 0.8667,
     "tool_routing_accuracy": 0.8667,
-    "argument_accuracy": 0.8,
+    "argument_accuracy": 0.8667,
     "multiturn_accuracy": 1.0,
     "failure_counts": {
-      "wrong_tool": 3,
+      "wrong_tool": 1,
       "missing_info": 3
     },
     "observed_mismatch_counts": {
       "extra_tool_call": 1,
-      "missing_tool_call": 3,
-      "wrong_arg_value": 2
+      "missing_tool_call": 3
     }
   },
   "results": [
@@ -285,7 +284,8 @@
           {
             "name": "inspect_device",
             "args": {
-              "asset_id": "EMP-1003"
+              "asset_id": "EMP-1003",
+              "check": "all"
             }
           }
         ],
@@ -322,7 +322,8 @@
         {
           "tool": "inspect_device",
           "args": {
-            "asset_id": "EMP-1003"
+            "asset_id": "EMP-1003",
+            "check": "all"
           },
           "result": {
             "tool": "inspect_device",
@@ -578,7 +579,7 @@
         "routing_correct": true,
         "args_correct": true,
         "actual_tool_calls": [],
-        "actual_text": "Tôi không thể giúp bạn với yêu cầu này. Tuy nhiên, tôi có thể hỗ trợ bạn với các vấn đề liên quan đến IT, như kiểm tra vé hỗ trợ, tài sản, bài viết kiến thức hoặc chính sách công ty. Bạn cần giúp gì trong lĩnh vực đó?",
+        "actual_text": "Tôi chỉ có thể hỗ trợ bạn với các vấn đề liên quan đến IT và dịch vụ hỗ trợ kỹ thuật. Nếu bạn cần giúp đỡ về phở bò, tôi khuyên bạn nên tìm kiếm công thức trên các trang web nấu ăn hoặc diễn đàn ẩm thực. Nếu bạn có câu hỏi nào khác liên quan đến công nghệ hoặc dịch vụ của công ty, hãy cho tôi biết!",
         "case_failure_type": "out_of_scope",
         "observed_mismatch": null,
         "failure_type": null,
@@ -607,7 +608,7 @@
         "routing_correct": true,
         "args_correct": true,
         "actual_tool_calls": [],
-        "actual_text": "Tôi là trợ lý cho bộ phận IT của công ty Northstar Labs. Tôi có thể hỗ trợ bạn trong các vấn đề liên quan đến:\n\n- Kiểm tra và quản lý vé hỗ trợ (tickets)\n- Kiểm tra và quản lý tài sản (assets)\n- Tìm kiếm và cung cấp thông tin từ các bài viết hướng dẫn (knowledge articles)\n- Tìm kiếm và cung cấp thông tin về chính sách công ty\n\nNếu bạn có câu hỏi cụ thể hoặc cần hỗ trợ về một vấn đề nào đó, hãy cho tôi biết!",
+        "actual_text": "{\n  \"intent\": \"information\",\n  \"action\": \"explain_capabilities\",\n  \"reply\": \"Tôi là trợ lý cho bộ phận IT của công ty Northstar Labs. Tôi có thể giúp bạn kiểm tra vé hỗ trợ, tài sản, bài viết kiến thức và chính sách công ty.\",\n  \"evidence_ids\": []\n}",
         "case_failure_type": "unnecessary_tool",
         "observed_mismatch": null,
         "failure_type": null,
@@ -761,7 +762,7 @@
           {
             "name": "clarify",
             "args": {
-              "question": "Bạn có xác nhận tạo ticket với tóm tắt là 'Lỗi VPN trên LT-204' và mức ưu tiên là 'high' không?",
+              "question": "Bạn có xác nhận muốn tạo ticket với tóm tắt là 'Lỗi VPN trên LT-204' và mức ưu tiên là 'high' không?",
               "response_type": "yes_no"
             }
           }
@@ -776,12 +777,12 @@
         {
           "tool": "clarify",
           "args": {
-            "question": "Bạn có xác nhận tạo ticket với tóm tắt là 'Lỗi VPN trên LT-204' và mức ưu tiên là 'high' không?",
+            "question": "Bạn có xác nhận muốn tạo ticket với tóm tắt là 'Lỗi VPN trên LT-204' và mức ưu tiên là 'high' không?",
             "response_type": "yes_no"
           },
           "result": {
             "tool": "clarify",
-            "question": "Bạn có xác nhận tạo ticket với tóm tắt là 'Lỗi VPN trên LT-204' và mức ưu tiên là 'high' không?",
+            "question": "Bạn có xác nhận muốn tạo ticket với tóm tắt là 'Lỗi VPN trên LT-204' và mức ưu tiên là 'high' không?",
             "response_type": "yes_no",
             "options": [],
             "awaiting_user": true
@@ -820,9 +821,9 @@
         ]
       },
       "result": {
-        "passed": false,
+        "passed": true,
         "routing_correct": true,
-        "args_correct": false,
+        "args_correct": true,
         "actual_tool_calls": [
           {
             "name": "check_service_status",
@@ -834,17 +835,16 @@
           {
             "name": "inspect_device",
             "args": {
-              "asset_id": "LT-204"
+              "asset_id": "LT-204",
+              "check": "vpn"
             }
           }
         ],
         "actual_text": null,
         "case_failure_type": "wrong_tool",
-        "observed_mismatch": "wrong_arg_value",
-        "failure_type": "wrong_tool",
-        "failures": [
-          "check: expected 'vpn', got None"
-        ]
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
       },
       "tool_results": [
         {
@@ -873,12 +873,13 @@
         {
           "tool": "inspect_device",
           "args": {
-            "asset_id": "LT-204"
+            "asset_id": "LT-204",
+            "check": "vpn"
           },
           "result": {
             "tool": "inspect_device",
             "asset_id": "LT-204",
-            "check": "all",
+            "check": "vpn",
             "device": {
               "asset_id": "LT-204",
               "manufacturer": "Lenovo",
@@ -891,11 +892,7 @@
               "warranty_until": "2027-02-11"
             },
             "diagnostics": {
-              "network": "online; latency 24 ms; DNS healthy",
-              "vpn": "client 5.2.1; last connection failed with AUTH_TIMEOUT",
-              "security": "disk encrypted; endpoint agent healthy; patches current",
-              "hardware": "battery health 86%; disk SMART healthy",
-              "software": "Outlook and VPN client installed; pending browser update"
+              "vpn": "client 5.2.1; last connection failed with AUTH_TIMEOUT"
             },
             "snapshot_at": "2026-09-14T09:00:00+07:00"
           }
@@ -923,7 +920,7 @@
         "routing_correct": true,
         "args_correct": true,
         "actual_tool_calls": [],
-        "actual_text": "Tôi không thể giúp bạn với yêu cầu đó. Tuy nhiên, tôi có thể hỗ trợ bạn với các vấn đề liên quan đến IT, như kiểm tra vé hỗ trợ, tài sản, bài viết kiến thức hoặc chính sách công ty. Nếu bạn cần trợ giúp trong những lĩnh vực đó, hãy cho tôi biết!",
+        "actual_text": "Tôi không thể giúp bạn với yêu cầu này vì nó nằm ngoài phạm vi hỗ trợ của tôi. Tuy nhiên, tôi có thể hỗ trợ bạn với các vấn đề liên quan đến IT, như kiểm tra vé, tài sản, bài viết kiến thức và chính sách công ty. Nếu bạn có câu hỏi nào trong những lĩnh vực đó, hãy cho tôi biết!",
         "case_failure_type": "out_of_scope",
         "observed_mismatch": null,
         "failure_type": null,
@@ -1665,15 +1662,15 @@
         ]
       },
       "result": {
-        "passed": false,
+        "passed": true,
         "routing_correct": true,
-        "args_correct": false,
+        "args_correct": true,
         "actual_tool_calls": [
           {
             "name": "inspect_device",
             "args": {
               "asset_id": "LT-318",
-              "check": "all"
+              "check": "vpn"
             }
           },
           {
@@ -1693,23 +1690,21 @@
         ],
         "actual_text": null,
         "case_failure_type": "wrong_tool",
-        "observed_mismatch": "wrong_arg_value",
-        "failure_type": "wrong_tool",
-        "failures": [
-          "check: expected 'vpn', got 'all'"
-        ]
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
       },
       "tool_results": [
         {
           "tool": "inspect_device",
           "args": {
             "asset_id": "LT-318",
-            "check": "all"
+            "check": "vpn"
           },
           "result": {
             "tool": "inspect_device",
             "asset_id": "LT-318",
-            "check": "all",
+            "check": "vpn",
             "device": {
               "asset_id": "LT-318",
               "manufacturer": "Apple",
@@ -1722,11 +1717,7 @@
               "warranty_until": "2027-01-17"
             },
             "diagnostics": {
-              "network": "online; latency 38 ms; DNS healthy",
-              "vpn": "client 5.1.8; certificate expires in 5 days",
-              "security": "FileVault enabled; endpoint agent healthy; OS update pending",
-              "hardware": "battery health 94%; storage healthy",
-              "software": "approved productivity suite installed; VPN client one release behind"
+              "vpn": "client 5.1.8; certificate expires in 5 days"
             },
             "snapshot_at": "2026-09-14T09:00:00+07:00"
           }
@@ -2090,7 +2081,7 @@
         "routing_correct": true,
         "args_correct": true,
         "actual_tool_calls": [],
-        "actual_text": "{\n  \"intent\": \"cancel_ticket_creation\",\n  \"action\": \"acknowledge\",\n  \"reply\": \"Tôi đã hiểu yêu cầu hủy tạo ticket.\",\n  \"evidence_ids\": []\n}",
+        "actual_text": "{\n  \"intent\": \"ticket_management\",\n  \"action\": \"cancel_ticket_creation\",\n  \"reply\": \"Tôi đã hiểu yêu cầu hủy tạo ticket.\",\n  \"evidence_ids\": []\n}",
         "case_failure_type": "unnecessary_tool",
         "observed_mismatch": null,
         "failure_type": null,
@@ -2263,7 +2254,7 @@
           {
             "name": "clarify",
             "args": {
-              "question": "Bạn có xác nhận rằng tóm tắt ticket là 'lỗi Wi-Fi LT-240', mức ưu tiên là 'critical', và nội dung là 'nghi mất dữ liệu' không?",
+              "question": "Bạn có xác nhận rằng tóm tắt ticket là \"lỗi Wi-Fi LT-240\" với mức ưu tiên \"critical\" và nội dung là \"nghi mất dữ liệu\" không?",
               "response_type": "yes_no"
             }
           }
@@ -2278,12 +2269,12 @@
         {
           "tool": "clarify",
           "args": {
-            "question": "Bạn có xác nhận rằng tóm tắt ticket là 'lỗi Wi-Fi LT-240', mức ưu tiên là 'critical', và nội dung là 'nghi mất dữ liệu' không?",
+            "question": "Bạn có xác nhận rằng tóm tắt ticket là \"lỗi Wi-Fi LT-240\" với mức ưu tiên \"critical\" và nội dung là \"nghi mất dữ liệu\" không?",
             "response_type": "yes_no"
           },
           "result": {
             "tool": "clarify",
-            "question": "Bạn có xác nhận rằng tóm tắt ticket là 'lỗi Wi-Fi LT-240', mức ưu tiên là 'critical', và nội dung là 'nghi mất dữ liệu' không?",
+            "question": "Bạn có xác nhận rằng tóm tắt ticket là \"lỗi Wi-Fi LT-240\" với mức ưu tiên \"critical\" và nội dung là \"nghi mất dữ liệu\" không?",
             "response_type": "yes_no",
             "options": [],
             "awaiting_user": true
