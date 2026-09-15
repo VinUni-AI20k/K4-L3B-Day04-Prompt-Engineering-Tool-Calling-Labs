@@ -4,10 +4,10 @@
 
 ## Thông tin bài nộp
 
-- Tên nhóm:
-- Người đại diện / MSSV:
-- Tên repo: `K4-L3-DAY04-HoVaTen-MSSV-PromptEngineeringToolCalling`
-- URL repo, nhánh nộp, commit chốt:
+- Tên nhóm:2A202602407
+- Người đại diện / MSSV: ĐẶNG VĂN THÁI ANH/ 
+- Tên repo: `K4-L3-DAY04-DangVanThaiAnh-2A202602407-PromptEngineeringToolCalling`
+- URL repo, nhánh nộp, commit chốt: https://github.com/anhdvt24/K4-L3-DAY04-DangVanThaiAnh-2A202602407-PromptEngineeringToolCalling.git
 - Deadline áp dụng và link thông báo đổi hạn nếu có:
 
 ## Thành viên

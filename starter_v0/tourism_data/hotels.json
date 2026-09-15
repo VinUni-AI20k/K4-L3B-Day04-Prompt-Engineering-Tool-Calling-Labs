@@ -1,0 +1,55 @@
+{
+  "snapshot_at": "2026-09-15T10:00:00+07:00",
+  "hotels": [
+    {
+      "hotel_id": "HTL-NT5",
+      "name": "Vinpearl Resort Nha Trang",
+      "location": "Nha Trang, Khanh Hoa",
+      "category": "5-star beach resort",
+      "amenities": ["pool", "private_beach", "spa", "kids_club"],
+      "check_in_time": "14:00",
+      "check_out_time": "11:00",
+      "avg_price_vnd_per_night": 4500000
+    },
+    {
+      "hotel_id": "HTL-DN7",
+      "name": "Vinpearl Da Nang Resort",
+      "location": "Da Nang",
+      "category": "5-star beach resort",
+      "amenities": ["pool", "spa", "golf", "conference"],
+      "check_in_time": "14:00",
+      "check_out_time": "12:00",
+      "avg_price_vnd_per_night": 3200000
+    },
+    {
+      "hotel_id": "HTL-PQ3",
+      "name": "Vinpearl Phu Quoc",
+      "location": "Phu Quoc, Kien Giang",
+      "category": "5-star island resort",
+      "amenities": ["private_beach", "villa", "diving", "spa"],
+      "check_in_time": "15:00",
+      "check_out_time": "11:00",
+      "avg_price_vnd_per_night": 5200000
+    },
+    {
+      "hotel_id": "HTL-HL4",
+      "name": "Vinpearl Ha Long Bay Cruise",
+      "location": "Ha Long, Quang Ninh",
+      "category": "4-star cruise",
+      "amenities": ["cabin", "kayak", "cooking_class"],
+      "check_in_time": "12:00",
+      "check_out_time": "11:00",
+      "avg_price_vnd_per_night": 2800000
+    },
+    {
+      "hotel_id": "HTL-SG2",
+      "name": "Saigon Sky Hotel",
+      "location": "District 1, Ho Chi Minh City",
+      "category": "4-star city hotel",
+      "amenities": ["gym", "rooftop_bar", "business_center"],
+      "check_in_time": "14:00",
+      "check_out_time": "12:00",
+      "avg_price_vnd_per_night": 2100000
+    }
+  ]
+}

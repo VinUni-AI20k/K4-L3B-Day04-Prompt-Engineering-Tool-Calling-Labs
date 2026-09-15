@@ -1,7 +1,94 @@
 {
-  "dataset_id": "day04_v3_helpdesk_group",
+  "dataset_id": "day04_tourism_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
+  "description": "Team-authored original VietTravel Tourism Helpdesk cases: 5 single-turn and 5 multi-turn cases written by the team. Covers domain-specific scenarios for a Vietnamese tourism customer support context.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_group_refund_no_id", "phase": "B", "suite": "group",
+      "query": "Tôi muốn hoàn tiền booking của mình nhưng không nhớ mã.",
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"skill": "group_refund_no_id", "difficulty": "medium", "what_it_tests": "Yêu cầu refund nhưng không có booking ID; phải hỏi lại."}
+    },
+    {
+      "id": "G02_group_visa_e_visa", "phase": "B", "suite": "group",
+      "query": "Khách Nhật có cần xin visa khi đến Việt Nam không, và thời hạn ở bao lâu?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"query": "visa requirements Japan", "category": "visa"}}]},
+      "metadata": {"skill": "group_visa_nationality", "difficulty": "easy", "what_it_tests": "Hỏi visa theo quốc tịch phải vào search_travel_kb."}
+    },
+    {
+      "id": "G03_group_cancel_refund_policy", "phase": "B", "suite": "group",
+      "query": "Hủy booking trước 5 ngày thì được hoàn bao nhiêu phần trăm?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"query": "refund cancellation 5 days", "category": "refund"}}]},
+      "metadata": {"skill": "group_cancel_specific_window", "difficulty": "medium", "what_it_tests": "Hủy trong khoảng ngày cụ thể phải tra refund policy."}
+    },
+    {
+      "id": "G04_group_loyalty_lookup", "phase": "B", "suite": "group",
+      "query": "Khách hàng CUST-077 có thuộc loyalty tier nào?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "lookup_customer", "args": {"customer_id": "CUST-077"}}]},
+      "metadata": {"skill": "group_loyalty_tier", "difficulty": "easy", "what_it_tests": "Tra cứu loyalty tier phải dùng lookup_customer."}
+    },
+    {
+      "id": "G05_group_booking_hotel_combo", "phase": "B", "suite": "group",
+      "query": "Khách đặt HTL-HL4, booking đang ở trạng thái nào?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "lookup_hotel", "args": {"hotel_id": "HTL-HL4"}},
+        {"name": "check_booking_status", "args": {"booking_id": "BK-1007"}}
+      ]},
+      "metadata": {"skill": "group_hotel_booking_combo", "difficulty": "hard", "what_it_tests": "Khi đề cập hotel ID và booking context, phải gọi cả lookup_hotel và check_booking_status."}
+    },
+    {
+      "id": "G06_group_multiturn_carry_refund", "phase": "B", "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tôi muốn hỏi về refund."},
+        {"role": "user", "content": "Booking của tôi là BK-1005."},
+        {"role": "user", "content": "Cho biết tôi được hoàn bao nhiêu."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "check_booking_status", "args": {"booking_id": "BK-1005"}}]},
+      "metadata": {"skill": "group_multiturn_refund_carry", "difficulty": "hard", "what_it_tests": "Sau khi biết BK-1005 và hỏi refund, phải tra booking trước để biết amount."}
+    },
+    {
+      "id": "G07_group_multiturn_switch", "phase": "B", "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tra CUST-042."},
+        {"role": "user", "content": "Thôi, hỏi về cách thanh toán qua MoMo."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"query": "payment MoMo e-wallet", "category": "payment"}}]},
+      "metadata": {"skill": "group_multiturn_switch_payment", "difficulty": "medium", "what_it_tests": "Intent mới thay thế intent cũ; không tra customer nữa mà hỏi payment."}
+    },
+    {
+      "id": "G08_group_multiturn_create_ticket", "phase": "B", "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Phòng ở HTL-NT5 bị ẩm mốc, tạo ticket hỗ trợ."},
+        {"role": "user", "content": "Mức critical nhé."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"skill": "group_multiturn_ticket_critical", "difficulty": "medium", "what_it_tests": "Sau khi biết hotel và priority, vẫn phải confirm trước khi tạo."}
+    },
+    {
+      "id": "G09_group_multiturn_cancel", "phase": "B", "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tạo ticket cho BK-1005."},
+        {"role": "user", "content": "Không cần tạo nữa, quên đi."}
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {"no_tool": true, "behavior": "answer_without_tool"},
+      "metadata": {"skill": "group_multiturn_cancel", "difficulty": "easy", "what_it_tests": "User hủy yêu cầu ở lượt 2; không tạo ticket."}
+    },
+    {
+      "id": "G10_group_payment_installment", "phase": "B", "suite": "group",
+      "query": "Thanh toán booking trả góp 6 tháng được không, và áp dụng cho những ngân hàng nào?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"query": "installment payment bank 6 months", "category": "payment"}}]},
+      "metadata": {"skill": "group_payment_installment", "difficulty": "medium", "what_it_tests": "Câu hỏi trả góp phải vào search_travel_kb payment."}
+    }
+  ]
 }

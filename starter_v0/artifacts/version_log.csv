@@ -1,1 +1,2 @@
 version,author,changed_artifact,artifact_version,prompt_hash,tools_hash,reason,hypothesis,metric_name,metric_before,metric_after,run_file
+v0,DangVanThaiAnh,both baseline,intentionally-incomplete-v0,N/A,N/A,Baseline (no changes yet). Weak keyword router shows 13.3% accuracy (4/30 PASS). Top failures: wrong_tool(12), wrong_arg_value(6), wrong_boundary(5).,N/A,N/A,N/A,N/A,runs/v0_local_eval_base_tourism_20260915T183333155234.json
