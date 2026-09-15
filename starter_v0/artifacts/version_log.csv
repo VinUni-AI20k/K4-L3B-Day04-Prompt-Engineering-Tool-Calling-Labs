@@ -1,3 +1,4 @@
 version,author,changed_artifact,artifact_version,prompt_hash,tools_hash,reason,hypothesis,metric_name,metric_before,metric_after,run_file
 v0,Trung,none,v0+p27467914bc4d+td4848549884e,27467914bc4d,d4848549884e,baseline — chạy starter chưa sửa,none,case_accuracy,,0.7,runs/v0_B_base_openrouter_20260915T183850004285.json
 v1,Giáp,system_prompt+tools.yaml,v1+p24fcd5eb2b45+t97e3ae2cf2d1,24fcd5eb2b45,97e3ae2cf2d1,6/9 FAIL do thiếu quy tắc clarify và confirmation,Thêm Missing Information + Write Actions rules sẽ sửa missing_info và wrong_boundary,case_accuracy,0.7,0.8333,runs/v1_B_base_openrouter_20260915T185803162016.json
+v2,team,system_prompt,v2+p5f8801e18a64+t97e3ae2cf2d1,5f8801e18a64,97e3ae2cf2d1,5/5 FAIL (v1) do sai tham số check/category và gọi thừa tool,Thêm Argument Extraction Rules sẽ ép Agent lấy đúng tham số cụ thể từ ngữ cảnh,case_accuracy,0.8333,0.9667,runs/v2_B_base_openrouter_20260915T193102746987.json

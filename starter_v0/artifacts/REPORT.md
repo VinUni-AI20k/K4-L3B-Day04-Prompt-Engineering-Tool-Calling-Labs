@@ -52,8 +52,26 @@ total_cases`, và tool result error đã được review thủ công.
 |---|---|---|---|---:|---:|---|
 | v0 | baseline (starter chưa sửa) | — | case_accuracy | — | 0.70 (21/30) | [v0 run](../runs/v0_B_base_openrouter_20260915T183850004285.json) |
 | v1 | Prompt: thêm Missing Information + Write Actions rules. Tools: sửa description clarify + create_ticket | Thêm quy tắc clarify (thiếu ID → hỏi lại) và confirmation (create_ticket → phải yes/no trước) sẽ sửa 6 cases missing_info + wrong_boundary | case_accuracy | 0.70 | 0.8333 (25/30) | [v1 run](../runs/v1_B_base_openrouter_20260915T185803162016.json) |
-| v2 |  |  |  |  |  |  |
+| v2 | Prompt: thêm Argument Extraction Rules | Ép Agent lấy đúng tham số cụ thể (check, category) từ ngữ cảnh sẽ sửa lỗi wrong_arg_value và extra_tool_call | case_accuracy | 0.8333 | 0.9667 (29/30) | [v2 run](../runs/v2_B_base_openrouter_20260915T193102746987.json) |
 | v3 |  |  |  |  |  |  |
+
+### v1 → v2: Chi tiết thay đổi
+
+**Đã sửa (5 cases FAIL → PASS):**
+
+| Case | Loại lỗi v1 | v1 đã làm sai | v2 đã sửa đúng |
+|------|------------|---------------|----------------|
+| H02_device_routing | wrong_tool | Thiếu check="all" | Đã trích xuất đúng check="all" |
+| H04_user_routing | wrong_tool | Gọi thừa inspect_device(EMP-1003) | Đã không gọi inspect_device sau lookup_user |
+| H13_parallel_status_and_device | wrong_tool | Thiếu check="vpn" | Đã trích xuất đúng check="vpn" |
+| M06_switch_tool | wrong_tool | Dùng category="all" | Đã trích xuất đúng category="wifi" |
+| H17_triage_with_three_sources | wrong_tool | Thiếu check="vpn", category="vpn" | Đã trích xuất đúng VPN args |
+
+**Regression (1 case PASS → FAIL):**
+
+| Case | Lỗi mới | Nguyên nhân có thể |
+|------|---------|-------------------|
+| H16_compare_two_assets | check: expected "hardware", got "all" | Do quy tắc ép "tổng thể/toàn bộ" phải dùng check="all", agent đã nhầm "so sánh snapshot" thành "tổng thể" thay vì "hardware" |
 
 ### v0 → v1: Chi tiết thay đổi
 
@@ -77,15 +95,11 @@ total_cases`, và tool result error đã được review thủ công.
 
 ## B2. Failure analysis
 
-Phân tích dựa trên v0 run (9 cases FAIL) và v1 run (5 cases FAIL):
+Phân tích dựa trên v2 run (chỉ còn 1 case FAIL duy nhất):
 
-| Case ID | Failure type | Actual calls (v1) | What failed | Planned fix |
+| Case ID | Failure type | Actual calls (v2) | What failed | Planned fix |
 |---|---|---|---|---|
-| H02_device_routing | wrong_tool (regression) | inspect_device(asset_id="LT-204") — thiếu check="all" | Agent không truyền check khi user nói "tổng thể" | v2: thêm rule "nếu không chỉ rõ loại kiểm tra → dùng check=all" |
-| H04_user_routing | wrong_tool | lookup_user(EMP-1003) + inspect_device(LT-1003) | Gọi thêm inspect_device không cần thiết, bịa asset_id từ employee_id | v2: thêm rule "lookup_user đã trả info thiết bị, không cần gọi inspect thêm" |
-| H13_parallel_status_and_device | wrong_tool | check_service_status ✔ + inspect_device(LT-204) — thiếu check="vpn" | Đúng routing nhưng thiếu check arg cụ thể | v2: thêm rule trích check type từ ngữ cảnh |
-| M06_switch_tool | wrong_tool (regression) | search_kb(query="Wi-Fi", category="all") | category="all" thay vì "wifi" | v2: thêm rule trích category cụ thể từ ngữ cảnh |
-| H17_triage_with_three_sources | wrong_tool | 3 tools đúng nhưng thiếu check="vpn" + category="vpn" | Không trích args cụ thể từ context VPN | v2: thêm rule trích args cụ thể |
+| H16_compare_two_assets | wrong_tool (regression) | inspect_device(asset_id="LT-204", check="all") + DT-031 | Agent truyền check="all" thay vì check="hardware" khi user yêu cầu "so sánh hardware snapshot". | v3: Cập nhật Argument Extraction Rule để hỗ trợ thêm từ khoá "hardware". |
 
 ## B3. Team eval cases
 
