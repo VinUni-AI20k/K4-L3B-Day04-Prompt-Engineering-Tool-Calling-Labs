@@ -273,6 +273,7 @@ def main() -> None:
     parser.add_argument("--runs-dir", type=Path, default=ROOT / "runs")
     parser.add_argument("--batch-size", type=int, default=2, help="Number of cases per batch before pausing")
     parser.add_argument("--batch-delay", type=int, default=90, help="Pause duration in seconds between batches")
+    parser.add_argument("--retry-run-file", type=Path, default=None, help="Path to an existing run JSON to retry only provider_error cases")
     args = parser.parse_args()
 
     system_prompt = args.system_prompt.read_text(encoding="utf-8")
@@ -281,6 +282,20 @@ def main() -> None:
     selected_model = args.model or getattr(provider, "default_model", None)
     dataset_info = load_dataset_info(args.eval_cases)
     cases = load_cases(args.eval_cases, args.phase)
+
+    previous_run_data = None
+    existing_results_map = {}
+    if args.retry_run_file and args.retry_run_file.exists():
+        previous_run_data = json.loads(args.retry_run_file.read_text(encoding="utf-8"))
+        for item in previous_run_data.get("results", []):
+            existing_results_map[item["id"]] = item
+        err_ids = {item["id"] for item in previous_run_data.get("results", []) if item.get("result", {}).get("failure_type") == "provider_error"}
+        if err_ids:
+            print(f"[Retry Mode] Retrying only {len(err_ids)} cases with provider_error: {sorted(err_ids)}", flush=True)
+            cases = [c for c in cases if c["id"] in err_ids]
+        else:
+            print("[Retry Mode] No provider_error cases found to retry.", flush=True)
+            return
     if not cases:
         raise SystemExit(f"No cases matched phase={args.phase!r} in {args.eval_cases}")
 
@@ -327,6 +342,13 @@ def main() -> None:
             "result": result,
             "tool_results": tool_results,
         })
+
+    if previous_run_data and existing_results_map:
+        for new_item in results:
+            existing_results_map[new_item["id"]] = new_item
+        # preserve original case ordering
+        all_cases = load_cases(args.eval_cases, args.phase)
+        results = [existing_results_map[c["id"]] for c in all_cases if c["id"] in existing_results_map]
 
     summary = summarize(results)
     args.runs_dir.mkdir(parents=True, exist_ok=True)
