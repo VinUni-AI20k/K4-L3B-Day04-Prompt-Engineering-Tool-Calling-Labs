@@ -1,1 +1,4 @@
 version,author,changed_artifact,artifact_version,prompt_hash,tools_hash,reason,hypothesis,metric_name,metric_before,metric_after,run_file
+v0,baseline,system_prompt.md+tools.yaml,baseline,N/A,N/A,Initial baseline,N/A,N/A,N/A,N/A,N/A
+v1,Trương Hoàng Thanh An,system_prompt.md,improved_v1,N/A,N/A,Fix H08 out_of_scope + H12 confirm boundary,H08 + H12 should pass with better routing,case_accuracy,66.67%,expected 75%,pending
+v2,Trương Hoàng Thanh An,system_prompt.md,improved_v2,N/A,N/A,Fix multi-turn failures M02,M03,M05,M06,Multi-turn handling should improve,multiturn_accuracy,40%,expected 60%,pending
