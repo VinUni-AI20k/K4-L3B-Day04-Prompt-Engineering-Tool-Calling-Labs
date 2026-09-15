@@ -53,7 +53,18 @@ total_cases`, và tool result error đã được review thủ công.
 | v0 | baseline (starter chưa sửa) | — | case_accuracy | — | 0.70 (21/30) | [v0 run](../runs/v0_B_base_openrouter_20260915T183850004285.json) |
 | v1 | Prompt: thêm Missing Information + Write Actions rules. Tools: sửa description clarify + create_ticket | Thêm quy tắc clarify (thiếu ID → hỏi lại) và confirmation (create_ticket → phải yes/no trước) sẽ sửa 6 cases missing_info + wrong_boundary | case_accuracy | 0.70 | 0.8333 (25/30) | [v1 run](../runs/v1_B_base_openrouter_20260915T185803162016.json) |
 | v2 | Prompt: thêm Argument Extraction Rules | Ép Agent lấy đúng tham số cụ thể (check, category) từ ngữ cảnh sẽ sửa lỗi wrong_arg_value và extra_tool_call | case_accuracy | 0.8333 | 0.9667 (29/30) | [v2 run](../runs/v2_B_base_openrouter_20260915T193102746987.json) |
-| v3 |  |  |  |  |  |  |
+| v3 | Prompt: bổ sung từ khoá "hardware" vào Argument Extraction Rules | Giúp Agent nhận diện đúng yêu cầu phần cứng thay vì kiểm tra tổng thể, sửa nốt lỗi H16 | case_accuracy | 0.9667 | 1.0 (30/30) | [v3 run](../runs/v3_B_base_openrouter_20260915T193541762132.json) |
+
+### v2 → v3: Chi tiết thay đổi
+
+**Đã sửa (1 case FAIL → PASS):**
+
+| Case | Loại lỗi v2 | v2 đã làm sai | v3 đã sửa đúng |
+|------|------------|---------------|----------------|
+| H16_compare_two_assets | wrong_tool | Truyền check="all" | Đã hiểu từ "hardware snapshot" và truyền check="hardware" |
+
+**Regression (0 case PASS → FAIL):**
+Không có lỗi mới phát sinh. Agent hoạt động hoàn hảo 100%.
 
 ### v1 → v2: Chi tiết thay đổi
 
@@ -95,11 +106,11 @@ total_cases`, và tool result error đã được review thủ công.
 
 ## B2. Failure analysis
 
-Phân tích dựa trên v2 run (chỉ còn 1 case FAIL duy nhất):
+Phân tích dựa trên kết quả cuối cùng (v3 run):
 
-| Case ID | Failure type | Actual calls (v2) | What failed | Planned fix |
-|---|---|---|---|---|
-| H16_compare_two_assets | wrong_tool (regression) | inspect_device(asset_id="LT-204", check="all") + DT-031 | Agent truyền check="all" thay vì check="hardware" khi user yêu cầu "so sánh hardware snapshot". | v3: Cập nhật Argument Extraction Rule để hỗ trợ thêm từ khoá "hardware". |
+**HIỆN TẠI ĐÃ ĐẠT 30/30 (100% PASS). KHÔNG CÒN CASE NÀO FAIL.**
+
+Toàn bộ các lỗi `wrong_tool`, `missing_info`, và `wrong_boundary` từ phiên bản gốc (v0) đều đã được xử lý triệt để qua 3 vòng cải thiện prompt và tool description.
 
 ## B3. Team eval cases
 
