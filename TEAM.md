@@ -18,7 +18,7 @@
 | Nguyễn Hữu Thành | 2A202602813 | nhthanh1106 | Tiếp tục lặp (v2, v3): tiếp nối v1, mỗi vòng 1 giả thuyết + 1 thay đổi chính, chạy lại, so sánh metric/trace, cập nhật version log | |
 | Hà Thị Mỹ Linh | 2A202602619 | | Bộ case & an toàn: viết 10 case nhóm (5 một lượt + 5 nhiều lượt) vào eval_group.json, chạy 12 case adversarial, phân tích ≥3 case (hỏi lại/xác nhận/hủy/dữ liệu) | |
 | Đặng Quang Hưng | 2A202602719 | hungdq1306 | Baseline & Eval infra (v0): chạy preflight, chạy v0 gốc, đọc lỗi/trace, phân loại failure (sai tool/sai input/thiếu info/nhiều lượt/an toàn). Giao sản phẩm: log v0 + danh sách giả thuyết cho cả nhóm dùng | |
-| Nguyễn Hoàng Anh | 2A202602811 | hoanganhIT04 | Prompt & tool declaration (v1): dựa trên giả thuyết của v0, sửa system_prompt.md + tools.yaml, chạy v1, so sánh với v0, ghi vào version_log.csv | |
+| Nguyễn Hoàng Anh | 2A202602811 | hoanganhIT04 | Prompt & tool declaration (v1): dựa trên giả thuyết của v0, sửa system_prompt.md + tools.yaml, chạy v1, so sánh với v0, ghi vào version_log.csv | starter_v0/artifacts/system_prompt.md, starter_v0/artifacts/tools.yaml, starter_v0/providers/__init__.py, starter_v0/providers/ollama_provider.py, starter_v0/run_eval.py |
 
 ## Quy trình v0–v3 và bàn giao
 
