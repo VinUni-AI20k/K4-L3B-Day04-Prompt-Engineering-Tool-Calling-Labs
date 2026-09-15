@@ -37,3 +37,10 @@ Sao chép mục này cho từng thành viên.
 - AI/công cụ đã dùng và cách kiểm tra: Sử dụng AI Agent hỗ trợ phân tích log và format báo cáo. Kiểm tra bằng cách chạy liên tục lệnh `run_eval.py`.
 - Thời điểm đã tự nộp URL repo chung trên VLearn: Hôm nay.
 
+### Cao Đức Anh — 2A202602754
+
+- Phần việc và file/commit/PR: Thiết kế và triển khai giao diện trò chuyện trực tiếp (CLI) cùng vòng lặp xử lý tool (tool loop). Chịu trách nhiệm chính các file `chat.py` và `agent.py`.
+- Quyết định, khó khăn và cách xử lý: Khó khăn lớn nhất là phải dừng vòng lặp suy luận khi model gọi tool `clarify` để chờ người dùng nhập thêm thông tin. Đã giải quyết bằng cách nhận diện cờ `awaiting_user` để tạm dừng, lấy input từ user và nhồi lại vào lịch sử.
+- Điều đã học: Nắm bắt cách quản lý message history đa lượt (multi-turn), cách bóc tách tool calls JSON và thiết kế cơ chế lưu trữ transcript để truy vết lỗi dễ dàng.
+- AI/công cụ đã dùng và cách kiểm tra: Dùng AI hỗ trợ viết hàm phân tích JSON và quản lý file. Kiểm thử trực tiếp trên terminal với lệnh `python chat.py`.
+- Thời điểm đã tự nộp URL repo chung trên VLearn: Hôm nay.
