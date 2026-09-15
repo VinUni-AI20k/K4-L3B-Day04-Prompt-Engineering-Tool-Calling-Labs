@@ -18,11 +18,11 @@ tools:
       required: [question]
 
   - name: search_kb
-    description: "Tìm hướng dẫn hỗ trợ kỹ thuật."
+    description: "Tìm hướng dẫn hoặc các bước xử lý trong knowledge base. Dùng khi người dùng yêu cầu tìm tài liệu, hướng dẫn cấu hình hoặc khắc phục lỗi. Luôn truyền query và category phù hợp với chủ đề: VPN -> vpn; Wi-Fi -> wifi; máy in -> printing. Chỉ dùng category=all khi không xác định được nhóm hoặc yêu cầu bao phủ nhiều nhóm."
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Nội dung cần tìm"}
+        query: {type: string, default: "", description: " Nhóm nội dung cần tìm. Phải truyền rõ nhóm khi yêu cầu đã xác định chủ đề. Không bỏ qua category chỉ vì query đã chứa tên chủ đề."}
         category: {type: string, enum: [all, vpn, email, wifi, printing, account, security, hardware, software, meeting_room], default: "all", description: "Nhóm hướng dẫn"}
         top_k: {type: integer, default: 3, description: "Số kết quả"}
       required: [query]
@@ -37,16 +37,16 @@ tools:
       required: [service]
 
   - name: inspect_device
-    description: "Kiểm tra thông tin và chẩn đoán thiết bị."
+    description: " Kiểm tra thông tin và chẩn đoán một thiết bị bằng mã tài sản asset_id. Không dùng để tra cứu tài khoản nhân viên hoặc chỉ liệt kê thiết bị được cấp; các yêu cầu đó dùng lookup_user. Luôn truyền check theo vấn đề người dùng yêu cầu.  Chỉ dùng check=all khi người dùng yêu cầu kiểm tra tổng thể hoặc không nêu nhóm vấn đề cụ thể. Nếu yêu cầu có cả trạng thái dịch vụ dùng chung và kiểm tra thiết bị, gọi cả check_service_status và inspect_device."
     parameters:
       type: object
       properties:
-        asset_id: {type: string, description: "Mã tài sản"}
-        check: {type: string, enum: [all, network, vpn, security, hardware, software], default: "all", description: "Nhóm kiểm tra"}
+        asset_id: {type: string, description: "Mã tài sản của thiết bị, ví dụ LT-204. Không truyền mã nhân viên dạng EMP-xxxx. Nếu chỉ biết employee_id, dùng lookup_user để lấy assigned_assets trước; không suy đoán mã thiết bị."}
+        check: {type: string, enum: [all, network, vpn, security, hardware, software], default: "all", description: "  Phạm vi chẩn đoán. Luôn truyền rõ giá trị phù hợp với ngữ cảnh. Khi vấn đề là VPN hoặc certificate VPN, dùng vpn kể cả khi người dùng nói chung. Chỉ dùng all cho yêu cầu kiểm tra tổng thể hoặc không xác định nhóm vấn đề."}
       required: [asset_id]
 
   - name: lookup_user
-    description: "Tra cứu người dùng trong danh bạ hỗ trợ."
+    description: "Tra cứu tài khoản nhân viên bằng employee_id.  Kết quả bao gồm thông tin tài khoản và danh sách mã thiết bị được cấp trong assigned_assets. Nếu người dùng chỉ hỏi tài khoản và thiết bị được cấp, chỉ cần gọi tool này.  Chỉ gọi thêm inspect_device khi người dùng yêu cầu kiểm tra hoặc chẩn đoán thiết bị; khi đó dùng mã tài sản thực tế, không dùng employee_id."
     parameters:
       type: object
       properties:
