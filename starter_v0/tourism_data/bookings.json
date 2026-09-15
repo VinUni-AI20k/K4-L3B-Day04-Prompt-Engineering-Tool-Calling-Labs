@@ -1,0 +1,97 @@
+{
+  "snapshot_at": "2026-09-15T10:00:00+07:00",
+  "bookings": [
+    {
+      "booking_id": "BK-1001",
+      "customer_id": "CUST-042",
+      "hotel_id": "HTL-NT5",
+      "check_in": "2026-09-20",
+      "check_out": "2026-09-25",
+      "status": "confirmed",
+      "total_amount_vnd": 18500000,
+      "paid": true,
+      "rooms": 2,
+      "guests": 4,
+      "package": "Vinpearl Nha Trang - Deluxe Ocean View"
+    },
+    {
+      "booking_id": "BK-1002",
+      "customer_id": "CUST-118",
+      "hotel_id": "HTL-DN7",
+      "check_in": "2026-10-05",
+      "check_out": "2026-10-08",
+      "status": "pending_payment",
+      "total_amount_vnd": 9700000,
+      "paid": false,
+      "rooms": 1,
+      "guests": 2,
+      "package": "Vinpearl Da Nang - Garden Suite"
+    },
+    {
+      "booking_id": "BK-1003",
+      "customer_id": "CUST-205",
+      "hotel_id": "HTL-PQ3",
+      "check_in": "2026-09-18",
+      "check_out": "2026-09-19",
+      "status": "checked_in",
+      "total_amount_vnd": 3200000,
+      "paid": true,
+      "rooms": 1,
+      "guests": 2,
+      "package": "Phu Quoc - Beach Bungalow"
+    },
+    {
+      "booking_id": "BK-1004",
+      "customer_id": "CUST-077",
+      "hotel_id": "HTL-NT5",
+      "check_in": "2026-09-22",
+      "check_out": "2026-09-26",
+      "status": "confirmed",
+      "total_amount_vnd": 22300000,
+      "paid": true,
+      "rooms": 3,
+      "guests": 6,
+      "package": "Vinpearl Nha Trang - Family Villa"
+    },
+    {
+      "booking_id": "BK-1005",
+      "customer_id": "CUST-301",
+      "hotel_id": "HTL-SG2",
+      "check_in": "2026-11-12",
+      "check_out": "2026-11-15",
+      "status": "cancelled",
+      "total_amount_vnd": 12500000,
+      "paid": true,
+      "refund_amount_vnd": 11250000,
+      "rooms": 1,
+      "guests": 2,
+      "package": "Saigon Sky - Premium King"
+    },
+    {
+      "booking_id": "BK-1006",
+      "customer_id": "CUST-042",
+      "hotel_id": "HTL-DN7",
+      "check_in": "2026-12-24",
+      "check_out": "2026-12-28",
+      "status": "confirmed",
+      "total_amount_vnd": 14200000,
+      "paid": true,
+      "rooms": 1,
+      "guests": 2,
+      "package": "Vinpearl Da Nang - Christmas Package"
+    },
+    {
+      "booking_id": "BK-1007",
+      "customer_id": "CUST-099",
+      "hotel_id": "HTL-HL4",
+      "check_in": "2026-10-15",
+      "check_out": "2026-10-18",
+      "status": "confirmed",
+      "total_amount_vnd": 8400000,
+      "paid": false,
+      "rooms": 1,
+      "guests": 2,
+      "package": "Ha Long - Cruise Cabin Deluxe"
+    }
+  ]
+}
