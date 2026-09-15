@@ -8,13 +8,13 @@
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
-    description: "Gửi một câu hỏi cho người dùng."
+    description: "Ask the user for a missing required value and stop. Use when the user did not give a valid inventory ID, employee ID, or production/staging environment. Do not call inspect_device, lookup_user, or check_service_status in the same turn."
     parameters:
       type: object
       properties:
-        question: {type: string, default: "", description: "Câu hỏi"}
-        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Kiểu trả lời"}
-        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn"}
+        question: {type: string, default: "", description: "Short question asking for the missing value"}
+        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "text = need an ID or free answer; yes_no = confirmation; choice = pick from options"}
+        options: {type: array, default: [], items: {type: string}, description: "Required when response_type is choice, for example production and staging"}
       required: [question, response_type]
 
   - name: search_kb
@@ -28,21 +28,21 @@ tools:
       required: [query]
 
   - name: check_service_status
-    description: "Kiểm tra trạng thái một dịch vụ."
+    description: "Read shared service health for VPN, email, SSO, Wi-Fi, or printing. Call only when environment is clearly production or staging. If the user said demo, QA, test, sandbox, or did not name production/staging, call clarify with response_type=choice and options [production, staging] instead. Never map unofficial environment names onto staging or production."
     parameters:
       type: object
       properties:
-        service: {type: string, enum: [vpn, email, sso, wifi, printing], description: "Tên dịch vụ"}
-        environment: {type: string, enum: [production, staging], default: "production", description: "Môi trường"}
+        service: {type: string, enum: [vpn, email, sso, wifi, printing], description: "Shared service name from the user"}
+        environment: {type: string, enum: [production, staging], default: "production", description: "Pass production or staging only when the user said that word. Do not use the default to guess. demo/QA/test are not valid values."}
       required: [service]
 
   - name: inspect_device
-    description: "Kiểm tra thông tin và chẩn đoán thiết bị."
+    description: "Look up one company device by its inventory ID and return stored diagnostics. Call only when the user already provided an ID such as LT-204 or DT-031. If they referred to a laptop/computer without that ID, call clarify instead. Never put a device type, English word, or employee ID into asset_id."
     parameters:
       type: object
       properties:
-        asset_id: {type: string, description: "Mã tài sản"}
-        check: {type: string, enum: [all, network, vpn, security, hardware, software], default: "all", description: "Nhóm kiểm tra"}
+        asset_id: {type: string, description: "Exact inventory ID copied from the user (LT|DT|MB|PR|RM plus hyphen and digits). Not 'laptop', not a person, not EMP-…"}
+        check: {type: string, enum: [all, network, vpn, security, hardware, software], default: "all", description: "Always pass this field. all = overall; network = Wi-Fi/network; vpn = VPN; otherwise security, hardware, or software."}
       required: [asset_id]
 
   - name: lookup_user
