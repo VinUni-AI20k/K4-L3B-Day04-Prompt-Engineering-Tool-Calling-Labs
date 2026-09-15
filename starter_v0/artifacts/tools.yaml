@@ -1,31 +1,6 @@
 tools:
   - name: clarify
-<<<<<<< HEAD
-    description: "Hỏi người dùng để bổ sung hoặc xác nhận thông tin cần thiết trước khi tiếp tục."
-    parameters:
-      type: object
-      properties:
-        question:
-          type: string
-          default: ""
-          description: "Câu hỏi gửi cho người dùng"
-        response_type:
-          type: string
-          enum: [text, yes_no, choice]
-          default: text
-          description: "Kiểu câu trả lời mong đợi"
-        options:
-          type: array
-          default: []
-          items:
-            type: string
-          description: "Các lựa chọn khi response_type là choice"
-      required: [question]
-  - name: search_products
-    description: "Tìm laptop mock theo từ khóa, hãng, ngân sách và nhu cầu."
-=======
     description: "Gửi câu hỏi cho khách hàng khi thiếu thông tin cần thiết (như thiếu chi nhánh khi kiểm tra tồn kho) hoặc để yêu cầu xác nhận trước khi thực hiện hành động tạo đơn hàng."
->>>>>>> origin/vubaanh_02893
     parameters:
       type: object
       properties:

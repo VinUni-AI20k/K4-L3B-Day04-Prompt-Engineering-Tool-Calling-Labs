@@ -1,0 +1,733 @@
+{
+  "run_id": "v3_B_group_openai_20260915T201608478647",
+  "version": "v3",
+  "artifact_version": "v3+p9b82dafa338f+tdd87e0b37314",
+  "prompt_hash": "9b82dafa338f78c7ccdcd66a9bf18a4afd3f785eadd377c0feab9be4f75e1433",
+  "tools_hash": "dd87e0b37314e5cc117e79383ec86b721cb0e345bb7d656deba0c92aba21ec25",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "system_prompt": "C:\\vinuni\\lab\\K4-L3-DAY04-PhamAnhMinh-2A202603009-PromptEngineeringToolCalling\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "C:\\vinuni\\lab\\K4-L3-DAY04-PhamAnhMinh-2A202603009-PromptEngineeringToolCalling\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day04_v3_sales_group",
+  "dataset_role": "group",
+  "description": "Ten original Nova Laptop team cases: five single-turn and five multi-turn cases.",
+  "generated_at": "2026-09-15T20:16:08",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 10,
+    "case_accuracy": 1.0,
+    "tool_routing_accuracy": 1.0,
+    "argument_accuracy": 1.0,
+    "multiturn_accuracy": 1.0,
+    "failure_counts": {},
+    "observed_mismatch_counts": {}
+  },
+  "results": [
+    {
+      "id": "G01_combined_brand_need_budget",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "combined_search_filters",
+        "difficulty": "hard",
+        "what_it_tests": "Kết hợp đồng thời hãng, nhu cầu và ngân sách."
+      },
+      "input": "Lọc giúp tôi laptop Acer dùng thiết kế, ngân sách tối đa 26 triệu đồng.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_products",
+            "args": {
+              "brand": "acer",
+              "need": "design",
+              "max_price_vnd": 26000000
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "search_products",
+            "args": {
+              "brand": "acer",
+              "max_price_vnd": 26000000,
+              "need": "design"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "search_products",
+          "args": {
+            "brand": "acer",
+            "max_price_vnd": 26000000,
+            "need": "design"
+          },
+          "result": {
+            "tool": "search_products",
+            "query": "",
+            "brand": "acer",
+            "max_price_vnd": 26000000,
+            "need": "design",
+            "results": [
+              {
+                "product_id": "PROD012",
+                "brand": "Acer",
+                "name": "Nitro V 15",
+                "price_vnd": 24990000,
+                "cpu": "Intel Core i5-13420H",
+                "ram_gb": 16,
+                "storage_gb": 512,
+                "display": "15.6 inch FHD 144Hz",
+                "needs": [
+                  "gaming",
+                  "design"
+                ]
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_inventory_across_two_branches",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "multi_branch_inventory",
+        "difficulty": "hard",
+        "what_it_tests": "Gọi cùng tool hai lần với branch khác nhau."
+      },
+      "input": "Kiểm tra PROD008 tại cả chi nhánh Thủ Đức và Hà Nội, đừng bỏ sót nơi nào.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_inventory",
+            "args": {
+              "product_id": "PROD008",
+              "branch": "thu_duc"
+            }
+          },
+          {
+            "name": "check_inventory",
+            "args": {
+              "product_id": "PROD008",
+              "branch": "ha_noi"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "check_inventory",
+            "args": {
+              "product_id": "PROD008",
+              "branch": "thu_duc"
+            }
+          },
+          {
+            "name": "check_inventory",
+            "args": {
+              "product_id": "PROD008",
+              "branch": "ha_noi"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "check_inventory",
+          "args": {
+            "product_id": "PROD008",
+            "branch": "thu_duc"
+          },
+          "result": {
+            "tool": "check_inventory",
+            "product_id": "PROD008",
+            "branch": "thu_duc",
+            "quantity": 4,
+            "availability": "in_stock",
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        },
+        {
+          "tool": "check_inventory",
+          "args": {
+            "product_id": "PROD008",
+            "branch": "ha_noi"
+          },
+          "result": {
+            "tool": "check_inventory",
+            "product_id": "PROD008",
+            "branch": "ha_noi",
+            "quantity": 1,
+            "availability": "in_stock",
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_customer_and_order_parallel",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "customer_order_parallel",
+        "difficulty": "hard",
+        "what_it_tests": "Hai nguồn dữ liệu độc lập cần hai calls."
+      },
+      "input": "Tra thông tin khách CUS003 và trạng thái đơn ORD003 trong cùng yêu cầu này.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_customer",
+            "args": {
+              "customer_id": "CUS003"
+            }
+          },
+          {
+            "name": "get_order_status",
+            "args": {
+              "order_id": "ORD003"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup_customer",
+            "args": {
+              "customer_id": "CUS003"
+            }
+          },
+          {
+            "name": "get_order_status",
+            "args": {
+              "order_id": "ORD003"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup_customer",
+          "args": {
+            "customer_id": "CUS003"
+          },
+          "result": {
+            "tool": "lookup_customer",
+            "customer": {
+              "customer_id": "CUS003",
+              "display_name": "Quang Huy",
+              "tier": "standard"
+            },
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        },
+        {
+          "tool": "get_order_status",
+          "args": {
+            "order_id": "ORD003"
+          },
+          "result": {
+            "tool": "get_order_status",
+            "order": {
+              "order_id": "ORD003",
+              "customer_id": "CUS003",
+              "product_id": "PROD006",
+              "quantity": 1,
+              "branch": "ha_noi",
+              "status": "shipped"
+            },
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_unknown_order_id",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "unknown_order",
+        "difficulty": "medium",
+        "manual_review": true,
+        "what_it_tests": "Route đúng unknown ID và review order_not_found."
+      },
+      "input": "Giữ nguyên mã và kiểm tra trạng thái đơn ORD999 giúp tôi.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "get_order_status",
+            "args": {
+              "order_id": "ORD999"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "get_order_status",
+            "args": {
+              "order_id": "ORD999"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "get_order_status",
+          "args": {
+            "order_id": "ORD999"
+          },
+          "result": {
+            "tool": "get_order_status",
+            "error": "order_not_found",
+            "order_id": "ORD999"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G05_meta_capabilities_no_tool",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "meta_capabilities",
+        "difficulty": "easy",
+        "what_it_tests": "Giới thiệu năng lực mà không gọi tool."
+      },
+      "input": "Bạn có thể hỗ trợ những phần nào khi tôi mua laptop?",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Tôi có thể hỗ trợ bạn trong các phần sau khi mua laptop:\n\n1. **Tìm kiếm sản phẩm**: Giúp bạn tìm laptop theo thương hiệu, giá cả, hoặc nhu cầu sử dụng (học tập, văn phòng, gaming, v.v.).\n2. **Thông tin sản phẩm**: Cung cấp thông tin chi tiết về cấu hình, giá cả và các chương trình khuyến mãi của laptop.\n3. **So sánh sản phẩm**: So sánh cấu hình và giá giữa nhiều laptop để bạn có thể đưa ra quyết định tốt nhất.\n4. **Kiểm tra tồn kho**: Xem số lượng laptop có sẵn tại các chi nhánh khác nhau.\n5. **Chính sách**: Cung cấp thông tin về chính sách bảo hành, đổi trả và giao hàng.\n6. **Đặt hàng**: Hỗ trợ bạn trong quá trình đặt hàng và xác nhận đơn hàng.\n\nNếu bạn cần hỗ trợ cụ thể ở phần nào, hãy cho tôi biết!",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "GM01_compare_then_promotion",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "latest_product_promotion",
+        "difficulty": "hard",
+        "what_it_tests": "Latest intent chỉ tra promotion của lựa chọn cuối."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tôi đang cân nhắc PROD005 và PROD009."
+        },
+        {
+          "role": "user",
+          "content": "Tôi nghiêng về PROD009; chỉ kiểm tra khuyến mãi của lựa chọn đó."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_promotion",
+            "args": {
+              "product_id": "PROD009"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "check_promotion",
+            "args": {
+              "product_id": "PROD009"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "check_promotion",
+          "args": {
+            "product_id": "PROD009"
+          },
+          "result": {
+            "tool": "check_promotion",
+            "product_id": "PROD009",
+            "promotions": [
+              {
+                "promotion_id": "PROMO003",
+                "product_id": "PROD009",
+                "title": "Giảm 1.000.000 VND cho sinh viên",
+                "discount_vnd": 1000000,
+                "valid_until": "2026-10-15"
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "GM02_policy_then_product_search",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "topic_switch_to_search",
+        "difficulty": "hard",
+        "what_it_tests": "Intent mới thay thế policy lookup cũ."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Cửa hàng có chính sách giao hàng thế nào?"
+        },
+        {
+          "role": "user",
+          "content": "Thôi chưa cần policy; tìm giúp laptop Lenovo để lập trình dưới 29 triệu."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_products",
+            "args": {
+              "brand": "lenovo",
+              "need": "programming",
+              "max_price_vnd": 29000000
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "search_products",
+            "args": {
+              "brand": "lenovo",
+              "max_price_vnd": 29000000,
+              "need": "programming"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "search_products",
+          "args": {
+            "brand": "lenovo",
+            "max_price_vnd": 29000000,
+            "need": "programming"
+          },
+          "result": {
+            "tool": "search_products",
+            "query": "",
+            "brand": "lenovo",
+            "max_price_vnd": 29000000,
+            "need": "programming",
+            "results": [
+              {
+                "product_id": "PROD001",
+                "brand": "Lenovo",
+                "name": "ThinkBook 14 Gen 6",
+                "price_vnd": 18990000,
+                "cpu": "Intel Core i5-1335U",
+                "ram_gb": 16,
+                "storage_gb": 512,
+                "display": "14 inch FHD",
+                "needs": [
+                  "study",
+                  "office",
+                  "programming"
+                ]
+              },
+              {
+                "product_id": "PROD002",
+                "brand": "Lenovo",
+                "name": "LOQ 15IRX9",
+                "price_vnd": 27990000,
+                "cpu": "Intel Core i5-13450HX",
+                "ram_gb": 24,
+                "storage_gb": 512,
+                "display": "15.6 inch FHD 144Hz",
+                "needs": [
+                  "programming",
+                  "gaming"
+                ]
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "GM03_inventory_latest_branch",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "latest_branch_wins",
+        "difficulty": "hard",
+        "what_it_tests": "Carry product và dùng branch cập nhật cuối."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm hiểu PROD010 rồi kiểm tra nơi còn hàng."
+        },
+        {
+          "role": "user",
+          "content": "Kiểm tra ở Thủ Đức."
+        },
+        {
+          "role": "user",
+          "content": "Đổi lại, chỉ kiểm tra tồn kho tại Hà Nội."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_inventory",
+            "args": {
+              "product_id": "PROD010",
+              "branch": "ha_noi"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "check_inventory",
+            "args": {
+              "product_id": "PROD010",
+              "branch": "ha_noi"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "check_inventory",
+          "args": {
+            "product_id": "PROD010",
+            "branch": "ha_noi"
+          },
+          "result": {
+            "tool": "check_inventory",
+            "product_id": "PROD010",
+            "branch": "ha_noi",
+            "quantity": 2,
+            "availability": "in_stock",
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "GM04_product_changed_before_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "changed_product_confirmation",
+        "difficulty": "hard",
+        "what_it_tests": "Product đổi trước confirmation; dừng ở boundary với payload mới."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tôi muốn mua 1 PROD002 cho CUS002 tại ha_noi."
+        },
+        {
+          "role": "user",
+          "content": "Đổi sản phẩm thành PROD012."
+        },
+        {
+          "role": "user",
+          "content": "Cho tôi xác nhận lại payload mới trước khi tạo."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn muốn xác nhận đơn hàng với thông tin sau không? \n- Mã khách hàng: CUS002 \n- Mã sản phẩm: PROD012 \n- Số lượng: 1 \n- Chi nhánh: Hà Nội",
+              "response_type": "yes_no"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn muốn xác nhận đơn hàng với thông tin sau không? \n- Mã khách hàng: CUS002 \n- Mã sản phẩm: PROD012 \n- Số lượng: 1 \n- Chi nhánh: Hà Nội",
+            "response_type": "yes_no"
+          },
+          "result": {
+            "tool": "clarify",
+            "question": "Bạn muốn xác nhận đơn hàng với thông tin sau không? \n- Mã khách hàng: CUS002 \n- Mã sản phẩm: PROD012 \n- Số lượng: 1 \n- Chi nhánh: Hà Nội",
+            "response_type": "yes_no",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "GM05_cancel_after_branch_selection",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "cancel_latest_action",
+        "difficulty": "hard",
+        "what_it_tests": "Hủy là latest intent và không phát sinh tool call."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đặt PROD008 cho CUS004, nhận tại thu_duc."
+        },
+        {
+          "role": "user",
+          "content": "Tôi chưa xác nhận và muốn hủy toàn bộ yêu cầu."
+        },
+        {
+          "role": "user",
+          "content": "Không gọi công cụ nào; chỉ báo đã hiểu."
+        }
+      ],
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "{\"intent\":\"understand\",\"action\":\"acknowledge\",\"reply\":\"Đã hiểu yêu cầu của bạn.\",\"evidence_ids\":[]}",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    }
+  ]
+}
