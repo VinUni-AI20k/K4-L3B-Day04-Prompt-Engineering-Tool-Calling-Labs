@@ -28,14 +28,14 @@
       "id": "T04_visa_kb_routing", "phase": "B", "suite": "base",
       "query": "Khách nước ngoài cần visa để nhập Việt Nam không?",
       "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"query": "visa requirements foreign tourist", "category": "visa"}}]},
+      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"category": "visa"}}]},
       "metadata": {"skill": "route_kb_visa", "difficulty": "medium", "what_it_tests": "Câu hỏi về visa phải vào search_travel_kb, không phải lookup_customer."}
     },
     {
       "id": "T05_refund_kb_routing", "phase": "B", "suite": "base",
       "query": "Chính sách hoàn tiền khi hủy booking là gì?",
       "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"query": "refund cancellation policy", "category": "refund"}}]},
+      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"category": "refund"}}]},
       "metadata": {"skill": "route_kb_refund", "difficulty": "medium", "what_it_tests": "Câu hỏi refund policy phải vào search_travel_kb."}
     },
     {
@@ -77,7 +77,7 @@
       "id": "T11_payment_kb_routing", "phase": "B", "suite": "base",
       "query": "VietTravel có chấp nhận thanh toán bằng MoMo không?",
       "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"query": "payment methods MoMo", "category": "payment"}}]},
+      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"category": "payment"}}]},
       "metadata": {"skill": "route_kb_payment", "difficulty": "easy", "what_it_tests": "Câu hỏi payment phải vào search_travel_kb."}
     },
     {
@@ -98,28 +98,28 @@
       "id": "T14_insurance_kb_routing", "phase": "B", "suite": "base",
       "query": "Bảo hiểm du lịch do công ty nào cung cấp?",
       "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"query": "travel insurance partners", "category": "insurance"}}]},
+      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"category": "insurance"}}]},
       "metadata": {"skill": "route_kb_insurance", "difficulty": "easy", "what_it_tests": "Câu hỏi bảo hiểm phải vào search_travel_kb."}
     },
     {
       "id": "T15_booking_guide_kb", "phase": "B", "suite": "base",
       "query": "Hướng dẫn tôi cách đặt phòng trên VietTravel.",
       "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"query": "how to make a booking", "category": "booking"}}]},
+      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"category": "booking"}}]},
       "metadata": {"skill": "route_kb_booking", "difficulty": "easy", "what_it_tests": "Hướng dẫn booking phải vào search_travel_kb."}
     },
     {
       "id": "T16_policy_ticketing_sla", "phase": "B", "suite": "base",
       "query": "Thời gian phản hồi cho ticket priority critical là bao lâu?",
       "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [{"name": "travel_policy", "args": {"query": "ticketing SLA priority response time", "policy_area": "ticketing"}}]},
+      "expect": {"tool_calls": [{"name": "travel_policy", "args": {"policy_area": "ticketing"}}]},
       "metadata": {"skill": "route_policy_ticketing", "difficulty": "medium", "what_it_tests": "Câu hỏi về SLA ticketing phải vào travel_policy."}
     },
     {
       "id": "T17_policy_data_privacy", "phase": "B", "suite": "base",
       "query": "Dữ liệu cá nhân của tôi được bảo vệ như thế nào?",
       "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [{"name": "travel_policy", "args": {"query": "customer data privacy rights", "policy_area": "data_privacy"}}]},
+      "expect": {"tool_calls": [{"name": "travel_policy", "args": {"policy_area": "data_privacy"}}]},
       "metadata": {"skill": "route_policy_privacy", "difficulty": "medium", "what_it_tests": "Câu hỏi privacy phải vào travel_policy."}
     },
     {
@@ -208,7 +208,7 @@
         {"role": "user", "content": "Chỉ cần hướng dẫn refund."}
       ],
       "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"query": "refund cancellation policy", "category": "refund"}}]},
+      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"category": "refund"}}]},
       "metadata": {"skill": "multiturn_intent_switch", "difficulty": "hard", "what_it_tests": "Intent mới thay thế hoàn toàn intent cũ ở lượt 1."}
     },
     {
