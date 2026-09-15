@@ -21,7 +21,7 @@ Trợ lý ảo đóng vai trò nhân viên IT Service Desk nội bộ, hỗ tr�
 
 **Link dùng thử:**
 
-> URL: [Chưa có link public, hiện đang chạy giao diện local]
+> Chạy trực tiếp qua Terminal (CLI): `python chat.py --provider openai --version v3`
 
 
 ## A2. Tool agent có
