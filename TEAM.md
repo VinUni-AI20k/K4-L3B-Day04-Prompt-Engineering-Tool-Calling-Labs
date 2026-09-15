@@ -4,17 +4,19 @@
 
 ## Thông tin bài nộp
 
-- Tên nhóm:
-- Người đại diện / MSSV:
-- Tên repo: `K4-L3-DAY04-HoVaTen-MSSV-PromptEngineeringToolCalling`
+- Tên nhóm: TH True Mi
+- Người đại diện / MSSV: Mai Huy Hoàng / 2A202602685
+- Tên repo: `K4B-DAY04-THTrueMi-PromptEngineeringToolCalling`
 - URL repo, nhánh nộp, commit chốt:
+  - URL repo: https://github.com/huyhoang1706/K4B-DAY04-THTrueMi-PromptEngineeringToolCalling
+  - nhánh nộp: main
 - Deadline áp dụng và link thông báo đổi hạn nếu có:
 
 ## Thành viên
 
 | Họ và tên | MSSV | GitHub | Vai trò và công việc | File/commit/PR |
 |---|---|---|---|---|
-| | | | | |
+| Mai Huy Hoàng | 2A202602685 | | Technical Leader | |
 
 ## Nhận xét chung
 
