@@ -14,7 +14,7 @@
 - Team:
 - Thành viên và INDIVIDUAL: [TEAM.md](../../TEAM.md)
 - Members:
-- Provider/model:
+- Provider/model: v0–v2 chạy trên `openai`/`gpt-4o-mini`; v3 chạy trên `ollama` (`gpt-oss:20b`, endpoint OpenAI-compatible `https://ollama.com/v1`)
 
 # PHẦN A — Giới thiệu agent
 
@@ -62,7 +62,7 @@ total_cases`, và tool result error đã được review thủ công.
 | v0 | baseline | Prompt ban đầu xử lý luồng cơ bản nhưng chưa chặt chẽ khi thiếu xe | case_accuracy | 0.0000 | 0.9667 | runs/v0_B_base_openai_20260915T201355997904.json |
 | v1 | baseline_retest | Đo lường biến thiên khi chạy lặp lại v0 | case_accuracy | 0.9667 | 0.9333 | runs/v1_B_base_openai_20260915T201251303090.json |
 | v2 | system_prompt.md | Cấm đoán vehicle_id và chỉ định response_type=text cho clarify sẽ đạt 100% | case_accuracy | 0.9333 | 1.0000 | runs/v2_B_base_openai_20260915T202158087868.json |
-| v3 |  |  |  |  |  |  |
+| v3 | system_prompt.md | Chuyển sang provider ollama (gpt-oss:20b) làm lộ lại lỗi: model tự soạn câu hỏi dạng JSON thay vì gọi `clarify`, gọi thẳng `create_reservation` khi user mới yêu cầu đặt lịch (chưa xác nhận), và bỏ qua `top_k=N` khi user nêu số lượng. Bắt buộc gọi tool thay vì tự trả JSON, tách rõ "yêu cầu đặt lịch" và "xác nhận", và nhắc lại rõ top_k/so sánh nhiều trạm sẽ đưa case_accuracy trở lại mức tương đương v2 | case_accuracy | 0.9333 | 0.9667 | runs/v3_B_base_ollama_20260915T205014144276.json |
 
 ## B2. Failure analysis
 
@@ -70,6 +70,10 @@ total_cases`, và tool result error đã được review thủ công.
 |---|---|---|---|---|
 | SC09_missing_vehicle | missing_info | `find_charging_offers(vehicle_id="EV-101", ...)` | Câu hỏi không có xe nhưng agent tự đoán `EV-101` và gọi tool lập phương án | Bổ sung quy tắc cấm đoán xe, bắt buộc gọi `clarify` với `response_type="text"` |
 | SC20_invalid_soc_order | wrong_arg_value | `clarify(response_type="yes_no", ...)` | `target_soc <= current_soc`, agent gọi clarify nhưng dùng `yes_no` thay vì `text` | Chỉ định rõ: thiếu dữ liệu hoặc mức pin không hợp lệ bắt buộc dùng `response_type="text"` |
+| SC09/SC13/SC20 (trên ollama) | missing_info / wrong_arg_value | Không gọi tool nào, trả thẳng JSON `{"intent":"clarify",...}` | Với model yếu hơn (gpt-oss:20b), agent bỏ qua tool `clarify` và tự soạn câu hỏi trong phần trả lời cuối | Thêm quy tắc đầu `## Rules`: mọi lần cần hỏi người dùng bắt buộc gọi `clarify`, không được tự soạn câu hỏi trong JSON reply; làm rõ trong `## Output format` rằng định dạng JSON không thay thế lệnh gọi tool bắt buộc |
+| SC15_confirm_before_reservation | wrong_boundary | `create_reservation(offer_id="OFF-SEED-101", confirmed=true)` | "Đặt lịch theo offer X giúp tôi" là yêu cầu, không phải xác nhận, nhưng agent gọi thẳng `create_reservation` | Tách rõ: yêu cầu đặt lịch (kể cả có offer ID) luôn cần `clarify(response_type=yes_no)` trước; chỉ gọi `create_reservation` khi câu nói chứa từ xác nhận rõ ràng ("tôi xác nhận", "chốt", ...) |
+| SC04_top_two_offers | wrong_arg_value | `find_charging_offers(top_k=3, allow_partial=false, ...)` | User xin "2 phương án" nhưng agent dùng `top_k` mặc định và tự thêm `allow_partial=false` không được yêu cầu | Bắt buộc `top_k=N` khi user nêu số lượng; chỉ định `allow_partial` khi user thực sự nói tới sạc một phần |
+| SC08_compare_two_stations | wrong_tool (còn tồn tại ở v3) | Chỉ gọi `check_station_status(station_id="ST-101")`, thiếu `ST-202` | Agent (gpt-oss:20b qua Ollama) không phát 2 tool call song song trong cùng một lượt dù đã có ví dụ cụ thể trong prompt | Chưa khắc phục hoàn toàn ở v3; nghi ngờ là giới hạn parallel tool-call của model/harness một-lượt (`agent.py` chỉ gọi provider một lần), không đơn thuần do prompt — cần thử model khác hoặc vòng lặp nhiều lượt ở v4 |
 
 ## B3. Team eval cases
 
