@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Northstar Labs — IT Helpdesk</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">NL</div>
+      <div>
+        <h1>Northstar Labs Helpdesk</h1>
+        <p class="sub">Agent chat · hiện tool, args, kết quả/lỗi, version</p>
+      </div>
+    </div>
+    <div class="meta-chips" id="meta-chips">
+      <span class="chip">Đang tải phiên bản…</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <section>
+        <h2>Phiên chạy</h2>
+        <dl id="session-dl" class="kv"></dl>
+        <p class="hint">Transcript được ghi mỗi lượt, không ẩn lỗi tool/provider.</p>
+      </section>
+      <section>
+        <h2>Câu mẫu</h2>
+        <div class="prompts" id="prompts"></div>
+      </section>
+      <section class="actions">
+        <button type="button" id="btn-reset">Hội thoại mới</button>
+        <button type="button" id="btn-download" class="secondary">Tải transcript</button>
+      </section>
+    </aside>
+
+    <section class="chat-panel">
+      <div id="status-banner" class="banner" hidden></div>
+      <div id="log" class="log" aria-live="polite"></div>
+      <form id="composer" class="composer">
+        <textarea id="input" rows="2" placeholder="Nhập yêu cầu IT helpdesk…" required></textarea>
+        <button type="submit" id="btn-send">Gửi</button>
+      </form>
+    </section>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>
