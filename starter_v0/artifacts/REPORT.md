@@ -59,16 +59,17 @@ total_cases`, và tool result error đã được review thủ công.
 
 | Version | Prompt/tool change | Hypothesis | Metric | Before | After | Run file |
 |---|---|---|---|---:|---:|---|
-| v0 | baseline |  |  |  |  |  |
-| v1 |  |  |  |  |  |  |
-| v2 |  |  |  |  |  |  |
+| v0 | baseline | Prompt ban đầu xử lý luồng cơ bản nhưng chưa chặt chẽ khi thiếu xe | case_accuracy | 0.0000 | 0.9667 | runs/v0_B_base_openai_20260915T201355997904.json |
+| v1 | baseline_retest | Đo lường biến thiên khi chạy lặp lại v0 | case_accuracy | 0.9667 | 0.9333 | runs/v1_B_base_openai_20260915T201251303090.json |
+| v2 | system_prompt.md | Cấm đoán vehicle_id và chỉ định response_type=text cho clarify sẽ đạt 100% | case_accuracy | 0.9333 | 1.0000 | runs/v2_B_base_openai_20260915T202158087868.json |
 | v3 |  |  |  |  |  |  |
 
 ## B2. Failure analysis
 
 | Case ID | Failure type | Actual calls | What failed | Fix |
 |---|---|---|---|---|
-|  |  |  |  |  |
+| SC09_missing_vehicle | missing_info | `find_charging_offers(vehicle_id="EV-101", ...)` | Câu hỏi không có xe nhưng agent tự đoán `EV-101` và gọi tool lập phương án | Bổ sung quy tắc cấm đoán xe, bắt buộc gọi `clarify` với `response_type="text"` |
+| SC20_invalid_soc_order | wrong_arg_value | `clarify(response_type="yes_no", ...)` | `target_soc <= current_soc`, agent gọi clarify nhưng dùng `yes_no` thay vì `text` | Chỉ định rõ: thiếu dữ liệu hoặc mức pin không hợp lệ bắt buộc dùng `response_type="text"` |
 
 ## B3. Team eval cases
 
