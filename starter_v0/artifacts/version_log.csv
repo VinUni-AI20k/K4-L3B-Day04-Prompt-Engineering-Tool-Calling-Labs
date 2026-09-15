@@ -1,1 +1,4 @@
 version,author,changed_artifact,artifact_version,prompt_hash,tools_hash,reason,hypothesis,metric_name,metric_before,metric_after,run_file
+v0,Nguyen Thi Hai Mi,baseline,v0+p27467914bc4d+td4848549884e,27467914bc4d,d4848549884e,baseline (starter chưa sửa),Đo hành vi chưa tối ưu trước khi sửa,case_accuracy_base,,0.70,runs/v0_B_base_openai_20260915T184512171021.json
+v0,Nguyen Thi Hai Mi,baseline,v0+p27467914bc4d+td4848549884e,27467914bc4d,d4848549884e,baseline (starter chưa sửa),Đo hành vi chưa tối ưu trước khi sửa,case_accuracy_adversarial,,0.4167,runs/v0_B_adversarial_openai_20260915T184529079084.json
+v0,Nguyen Thi Hai Mi,baseline,v0+p27467914bc4d+td4848549884e,27467914bc4d,d4848549884e,baseline (starter chưa sửa),Đo hành vi chưa tối ưu trước khi sửa,case_accuracy_extension,,0.60,runs/v0_B_extension_openai_20260915T184545991696.json
