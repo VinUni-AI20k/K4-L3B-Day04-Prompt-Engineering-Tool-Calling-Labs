@@ -77,6 +77,37 @@ python run_eval.py --provider openrouter --version v0 --suite base --eval-cases 
 
 Thay `openrouter` bằng `openai`, `anthropic` hoặc `gemini` khi dùng provider khác. Không commit `.env`.
 
+## Khởi chạy Web UI & Demo Thực tế
+
+Dự án cung cấp giao diện Web UI tương tác thời gian thực (`starter_v0/ui.py`) hiển thị đầy đủ:
+- Lịch sử hội thoại nhiều lượt
+- Badge phiên bản artifact hiện tại (kèm hash SHA-256)
+- Khối trực quan hóa Tool Calls: hiển thị tên tool, tham số (arguments), và kết quả trả về hoặc lỗi
+- Nút kịch bản mẫu nhanh (Quick Scenario Buttons)
+- Tải về và lưu phiên hội thoại thành file transcript JSON chuẩn
+
+### Cách chạy Web UI:
+
+```bash
+cd starter_v0
+python ui.py --port 8080 --provider openrouter
+```
+Truy cập trình duyệt tại: `http://localhost:8080` (hoặc mở cổng tùy chỉnh qua tham số `--port <port>`).
+
+### Kiểm thử Technical Bonus Tool (`check_asset_warranty`):
+
+```bash
+cd starter_v0
+python scripts/test_bonus_tool.py
+```
+
+### Sinh 5 demo transcripts thực tế:
+
+```bash
+cd starter_v0
+python scripts/generate_demo_transcripts.py
+```
+
 ## Tài liệu cần đọc
 
 | File | Dùng khi |

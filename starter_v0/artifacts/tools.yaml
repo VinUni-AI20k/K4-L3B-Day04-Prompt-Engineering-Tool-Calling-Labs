@@ -105,3 +105,13 @@ tools:
         asset_id: {type: string, default: "", description: "Mã tài sản nếu có"}
         confirmed: {type: boolean, default: false, description: "Chỉ true khi người dùng đã xác nhận rõ đúng payload hiện tại; không tự suy luận"}
       required: [summary, priority, confirmed]
+
+  - name: check_asset_warranty
+    description: "Tra cứu thông tin bảo hành, ngày mua và vòng đời thiết bị (active, expiring_soon, expired). Dùng khi người dùng hỏi về thời hạn bảo hành, hợp đồng bảo trì, hay chu kỳ thay thế phần cứng của một máy. Bắt buộc có mã tài sản hợp lệ (LT-xxx hoặc PR-xxx)."
+    parameters:
+      type: object
+      properties:
+        asset_id: {type: string, description: "Mã tài sản chuẩn (ví dụ: LT-204, PR-101)"}
+        alert_threshold_days: {type: integer, default: 180, description: "Ngưỡng số ngày cảnh báo sắp hết hạn bảo hành"}
+      required: [asset_id]
+

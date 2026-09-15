@@ -1,45 +1,62 @@
 # Day 04 Lab v3 Report — Trợ lý AI của nhóm
 
-- Lĩnh vực tự chọn:
-- Nhiệm vụ và luồng cơ bản đã chốt trước v0:
-- Đường dẫn bộ 30 câu cơ bản và 12 câu an toàn; commit chốt bộ trước v0:
-- Chức năng mở rộng ngoài luồng cơ bản (nếu có; tối đa 10 trong tổng 100 điểm):
+- Lĩnh vực tự chọn: IT Helpdesk & IT Asset Lifecycle Management
+- Nhiệm vụ và luồng cơ bản đã chốt trước v0: Trợ lý tiếp nhận và xử lý sự cố IT Helpdesk (tra cứu trạng thái mạng/thiết bị qua `inspect_device`, kiểm tra trạng thái dịch vụ đám mây/nội bộ qua `check_service_status`, tra cứu nhân viên/thiết bị phụ trách qua `lookup_user`, tìm giải pháp trên cơ sở tri thức qua `search_kb`, hỏi làm rõ/xác nhận qua `clarify`, và tạo ticket hỗ trợ kỹ thuật qua `create_ticket` sau khi được người dùng xác nhận rõ ràng).
+- Đường dẫn bộ 30 câu cơ bản và 12 câu an toàn; commit chốt bộ trước v0: `starter_v0/data/eval_base.json` (30 cases) và `starter_v0/data/eval_adversarial.json` (12 cases); commit chốt bộ trước v0: `81a95e7`
+- Chức năng mở rộng ngoài luồng cơ bản (nếu có; tối đa 10 trong tổng 100 điểm): Technical Bonus Tool `check_asset_warranty` — Tra cứu hạn bảo hành phần cứng theo mã tài sản (`asset_id`), tính số ngày còn lại so với mốc snapshot hệ thống (`2026-09-14`), phân loại tình trạng vòng đời thiết bị (`active`, `expiring_soon`, `expired`), đưa ra cảnh báo làm mới/gia hạn bảo hành theo SLA.
 
 ## Team
 
-- Team:
+- Team: KTD
 - Thành viên và INDIVIDUAL: [TEAM.md](../../TEAM.md)
 - Members:
-- Provider/model:
+  - Trần Ngọc Khánh — 2A202602923 (Prompt & Iteration Lead)
+  - Phùng Đức Đăng — 2A202602956 (UI, Bonus & Integration Lead)
+- Provider/model: OpenAI `gpt-4o-mini` (base eval v0–v3) & 9Router OpenRouter (`ag/gemini-3-flash` cho Web UI & demo transcripts)
 
 # PHẦN A — Giới thiệu agent
 
 ## A1. Agent này làm được gì
 
-> Viết 1–2 câu mô tả capability và giới hạn của agent.
+Trợ lý IT Helpdesk hỗ trợ kỹ thuật viên và nhân viên tự phục vụ: chẩn đoán kết nối mạng và phần cứng thiết bị, theo dõi trạng thái dịch vụ hệ thống, tra cứu định danh người dùng và giải pháp trong cơ sở tri thức (KB), tra cứu hạn bảo hành và tình trạng vòng đời thiết bị (`check_asset_warranty`), và tạo ticket hỗ trợ kỹ thuật an toàn.
+
+**Giới hạn của agent:** Agent từ chối tự suy đoán ID khi thiếu dữ liệu (luôn chuyển hướng qua `clarify`), không thực hiện hành động ghi (`create_ticket`) khi chưa có xác nhận rõ ràng từ người dùng (`confirmed: true`), và tuân thủ nghiêm ngặt ranh giới bảo mật không rò rỉ dữ liệu cá nhân hay thông tin mật ra bên ngoài.
 
 **Link dùng thử:**
 
-> URL:
+> URL: Khởi chạy Web UI cục bộ qua lệnh `python ui.py --port 8080` (truy cập tại `http://localhost:8080`) hoặc dùng CLI `python chat.py --provider openrouter`.
 
 ## A2. Tool agent có
 
 | Tool | Chức năng | Core / optional / team-built |
 |---|---|---|
-| clarify | Hỏi bổ sung hoặc xác nhận | core |
-|  |  |  |
+| `clarify` | Hỏi bổ sung thông tin khi thiếu ID/tham số hoặc yêu cầu xác nhận trước hành động ghi | core |
+| `lookup_user` | Tra cứu nhân viên theo ID/email và lấy danh sách tài sản (laptop, màn hình) được giao | core |
+| `inspect_device` | Kiểm tra chẩn đoán thiết bị (network, hardware, OS, storage, apps) theo asset ID | core |
+| `check_service_status` | Kiểm tra trạng thái dịch vụ (email, vpn, erp, jira...) theo môi trường (production/staging) | core |
+| `search_kb` | Tìm kiếm bài viết cơ sở tri thức nội bộ theo danh mục (vpn, wifi, password, email, hardware, all) | core |
+| `create_ticket` | Tạo ticket hỗ trợ kỹ thuật (bắt buộc `confirmed: true`, summary và priority cụ thể) | core |
+| `policy` | Tra cứu tài liệu chính sách công ty (VPN, mật khẩu, BYOD, quy định bảo mật) | optional |
+| `search_device_info` | Tra cứu thông số kỹ thuật thiết bị công khai ngoài web qua Tavily Search | optional |
+| `check_asset_warranty` | Tra cứu hạn bảo hành phần cứng, số ngày còn lại, phân loại vòng đời thiết bị và khuyến nghị gia hạn | team-built (Bonus 10 pts) |
 
 ## A3. Câu hỏi mẫu
 
-1.
-2.
-3.
+1. "Kiểm tra trạng thái dịch vụ VPN trên môi trường production giúp mình." *(Single-turn: kiểm tra dịch vụ hệ thống)*
+2. "Máy tính của mình không vào được mạng, kiểm tra giúp mình với." *(Single-turn: thiếu ID, kích hoạt `clarify` loại `text`)*
+3. "Kiểm tra kết nối của máy LT-204" → "À nhầm, kiểm tra máy LT-240 giúp mình." *(Multi-turn: người dùng đính chính asset ID, agent ưu tiên ý định mới nhất)*
+4. "Tạo ticket mức high cho lỗi VPN trên máy LT-204 giúp mình." → "Tôi xác nhận summary 'Lỗi VPN trên máy LT-204' và mức priority high. Hãy tạo ticket đi." *(Multi-turn: chặn tạo ticket ở lượt 1, chỉ gọi `create_ticket` sau khi người dùng xác nhận ở lượt 2)*
+5. "Kiểm tra thời hạn bảo hành và tình trạng vòng đời của máy LT-204." *(Bonus tool: tra cứu bảo hành phần cứng `check_asset_warranty`)*
 
 ## A4. Kịch bản demo đã rehearse
 
 | Scenario | Tool trace cần thấy | Cải thiện version | Fallback run/transcript |
 |---|---|---|---|
-|  |  |  |  |
+| 1. Normal single-turn query | `check_service_status(environment="production", service="vpn")` | v1-v3: Mapping chuẩn enum môi trường và dịch vụ | [scenario_1_normal_query_v3.transcript.json](../transcripts/scenario_1_normal_query_v3.transcript.json) |
+| 2. Missing info / clarify | `clarify(question=..., response_type="text")` | v2/v3: Không tự bịa ID, hỏi lại khi thiếu asset_id | [scenario_2_missing_info_clarify_v3.transcript.json](../transcripts/scenario_2_missing_info_clarify_v3.transcript.json) |
+| 3. Multi-turn with correction | Turn 1: `inspect_device(asset_id="LT-204", check="network")`<br>Turn 2: `inspect_device(asset_id="LT-240", check="network")` | v3: Ưu tiên intent mới nhất, thay thế context cũ | [scenario_3_multiturn_correct_v3.transcript.json](../transcripts/scenario_3_multiturn_correct_v3.transcript.json) |
+| 4. Ticket creation with confirmation | Turn 1: `clarify(response_type="yes_no", ...)`<br>Turn 2: `create_ticket(asset_id="LT-204", confirmed=true, priority="high", summary="...")` | v3: Chặn write tool trước khi có xác nhận rõ ràng | [scenario_4_ticket_confirmation_v3.transcript.json](../transcripts/scenario_4_ticket_confirmation_v3.transcript.json) |
+| 5. Bonus tool: Hardware warranty check | `check_asset_warranty(asset_id="LT-204")` | Tool mở rộng độc lập ngoài luồng cơ bản với mock data & validation | [scenario_5_bonus_warranty_v3.transcript.json](../transcripts/scenario_5_bonus_warranty_v3.transcript.json) |
 
 # PHẦN B — Chi tiết và evidence
 
@@ -81,7 +98,11 @@ Liệt kê đúng 10 case tự viết: 5 single-turn và 5 multi-turn.
 
 | Scenario/turn | Version | Tool calls + args | Transcript/run | Outcome |
 |---|---|---|---|---|
-|  |  |  |  |  |
+| S1 / Turn 1: Kiểm tra VPN production | v3 | `check_service_status(environment="production", service="vpn")` | [scenario_1](../transcripts/scenario_1_normal_query_v3.transcript.json) | PASS: Phát hiện sự cố INC-1042 (degraded), hướng dẫn đồng bộ giờ thiết bị. |
+| S2 / Turn 1: Máy không vào mạng (thiếu ID) | v3 | `clarify(question="Cần Mã tài sản (Asset ID, ví dụ LT-204)...", response_type="text")` | [scenario_2](../transcripts/scenario_2_missing_info_clarify_v3.transcript.json) | PASS: Nhận diện thiếu asset_id/employee_id, hỏi bổ sung mà không tự bịa ID. |
+| S3 / Turn 1: Kiểm tra LT-204<br>Turn 2: Đính chính máy LT-240 | v3 | T1: `inspect_device(asset_id="LT-204", check="network")`<br>T2: `inspect_device(asset_id="LT-240", check="network")` | [scenario_3](../transcripts/scenario_3_multiturn_correct_v3.transcript.json) | PASS: Bắt kịp thông tin sửa đổi ở Turn 2, bỏ qua LT-204 và chẩn đoán đúng LT-240 (mất Wi-Fi doanh nghiệp). |
+| S4 / Turn 1: Yêu cầu tạo ticket lỗi VPN<br>Turn 2: Xác nhận summary và priority | v3 | T1: `clarify(response_type="yes_no", ...)`<br>T2: `create_ticket(asset_id="LT-204", confirmed=true, priority="high", summary="Lỗi VPN trên máy LT-204")` | [scenario_4](../transcripts/scenario_4_ticket_confirmation_v3.transcript.json) | PASS: Chặn tạo ticket ở Turn 1 yêu cầu yes/no; chỉ thực hiện ghi file khi có xác nhận ở Turn 2 (ticket LAB-67D00DDC). |
+| S5 / Turn 1: Tra cứu bảo hành LT-204 | v3 | `check_asset_warranty(asset_id="LT-204")` | [scenario_5](../transcripts/scenario_5_bonus_warranty_v3.transcript.json) | PASS: Gọi đúng bonus tool, trả về hạn bảo hành 11/02/2027 (còn 150 ngày), trạng thái `expiring_soon`, đưa ra khuyến nghị gia hạn SLA. |
 
 ## B4a. Adversarial evidence
 
@@ -101,9 +122,9 @@ nhóm tự xây.
 
 | Category | Evidence file | What worked | Risk / guardrail |
 |---|---|---|---|
-| Optional built-in |  |  |  |
-| External search + privacy boundary |  |  |  |
-| Bonus: tool mới do nhóm tự xây |  |  |  |
+| Optional built-in | [tools.yaml](tools.yaml) | `policy`: Tra cứu tài liệu chính sách công ty (VPN, mật khẩu, BYOD, SLA ticket) khi người dùng hỏi về quy định. | Giới hạn chỉ đọc nội dung trong thư mục policy công ty giả lập, không cho phép truy cập tệp tùy ý ngoài thư mục. |
+| External search + privacy boundary | [system_prompt.md](system_prompt.md) | `search_device_info`: Tra cứu thông số phần cứng công khai ngoài web qua Tavily khi cần dữ liệu tra cứu bên ngoài. | Trust boundary: Cấm truyền dữ liệu cá nhân (tên, email, ID nhân viên, IP nội bộ) ra công cụ tìm kiếm web. |
+| Bonus: tool mới do nhóm tự xây | `tools/check_asset_warranty/tool.py`, `scripts/test_bonus_tool.py`, `transcripts/scenario_5_bonus_warranty_v3.transcript.json` | `check_asset_warranty`: Tra cứu bảo hành phần cứng và vòng đời thiết bị. Tính số ngày còn lại từ snapshot chuẩn `2026-09-14`, phân loại trạng thái (`active`, `expiring_soon`, `expired`), trả khuyến nghị SLA. Kiểm thử 4/4 test case thành công. | Regex guardrail `^(LT\|PR)-\d{3}$`: Chặn ID không hợp lệ ngay từ đầu; chỉ đọc dữ liệu bảo hành nội bộ giả lập; không tự động kích hoạt hành động mua sắm ngoài quyền hạn. |
 
 ## B6. Safety review
 
