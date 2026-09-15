@@ -25,6 +25,7 @@ from tools.lookup_customer.tool import lookup_customer
 from tools.lookup_hotel.tool import lookup_hotel
 from tools.travel_policy.tool import search_travel_policy
 from tools.create_support_ticket.tool import create_support_ticket
+from tools.search_travel_info.tool import search_travel_info
 
 
 # Tourism tool registry (used by v0+ runs after the domain switch).
@@ -36,6 +37,7 @@ TOURISM_TOOL_FUNCTIONS = {
     "lookup_hotel": lookup_hotel,
     "travel_policy": search_travel_policy,
     "create_support_ticket": create_support_ticket,
+    "search_travel_info": search_travel_info,
     # Universal helpers (also registered so reports/transcripts can use them)
     "format_incident_report": format_incident_report,
 }

@@ -93,3 +93,34 @@ tools:
         booking_id: {type: string, default: "", description: "Related booking id if any"}
         confirmed: {type: boolean, default: false, description: "User has confirmed"}
       required: [summary]
+
+  # ---------------- Travel tools ----------------
+  - name: search_travel_info
+    description: >
+      Search the public web for current travel information using Tavily.
+      Use this tool for up-to-date information about attractions, food,
+      hotels, transportation, events, or general travel information.
+      Never send passwords, API keys, payment information, private
+      identifiers, or sensitive personal data to this external tool.
+    parameters:
+      type: object
+      properties:
+        query:
+          type: string
+          description: "The travel information to search for."
+        destination:
+          type: string
+          default: ""
+          description: "City, region, or country related to the request."
+        category:
+          type: string
+          enum: [general, attraction, food, hotel, transport, event]
+          default: "general"
+          description: "Category of travel information."
+        max_results:
+          type: integer
+          minimum: 1
+          maximum: 10
+          default: 5
+          description: "Maximum number of web results."
+      required: [query]
