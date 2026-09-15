@@ -12,5 +12,5 @@ class GroqProvider(OpenAIProvider):
         super().__init__(
             api_key_env="GROQ_API_KEY",
             base_url=os.getenv("GROQ_BASE_URL", "https://api.groq.com/openai/v1"),
-            default_model="groq/compound",
+            default_model="openai/gpt-oss-120b",
         )
