@@ -1,0 +1,53 @@
+{
+  "updated_at": "2026-09-15T18:00:00Z",
+  "orders": [
+    {
+      "order_id": "ORD-7001",
+      "customer_id": "CUST-2001",
+      "items": [
+        {
+          "sku": "PREBUILT-GAMING-MID",
+          "name": "PC Gaming Dragon (i5-13400F | RTX 4060 | 16GB DDR4 | 500GB SSD | 650W)",
+          "quantity": 1,
+          "price": 17490000
+        }
+      ],
+      "total_price": 17490000,
+      "delivery_option": "express",
+      "status": "completed",
+      "created_at": "2026-09-01T10:00:00Z"
+    },
+    {
+      "order_id": "ORD-7002",
+      "customer_id": "CUST-2002",
+      "items": [
+        {
+          "sku": "GPU-RTX-4060",
+          "name": "VGA ASUS Dual GeForce RTX 4060 EVO OC 8GB",
+          "quantity": 1,
+          "price": 7990000
+        }
+      ],
+      "total_price": 7990000,
+      "delivery_option": "standard",
+      "status": "shipping",
+      "created_at": "2026-09-10T14:30:00Z"
+    },
+    {
+      "order_id": "ORD-7003",
+      "customer_id": "CUST-2003",
+      "items": [
+        {
+          "sku": "RAM-CORSAIR-32GB-D5",
+          "name": "RAM Corsair Vengeance 32GB (2x16GB) DDR5 6000MHz",
+          "quantity": 1,
+          "price": 2890000
+        }
+      ],
+      "total_price": 2890000,
+      "delivery_option": "standard",
+      "status": "processing",
+      "created_at": "2026-09-14T09:15:00Z"
+    }
+  ]
+}

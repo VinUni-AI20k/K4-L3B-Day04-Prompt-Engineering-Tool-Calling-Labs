@@ -1,0 +1,41 @@
+{
+  "updated_at": "2026-09-15T18:00:00Z",
+  "customers": [
+    {
+      "customer_id": "CUST-2001",
+      "name": "Nguyễn Văn An",
+      "phone": "0901234567",
+      "email": "an.nguyen@example.com",
+      "tier": "VIP",
+      "orders": ["ORD-7001"],
+      "shipping_address": "Số 12 phố Trần Duy Hưng, Cầu Giấy, Hà Nội"
+    },
+    {
+      "customer_id": "CUST-2002",
+      "name": "Trần Thị Bích",
+      "phone": "0912345678",
+      "email": "bich.tran@example.com",
+      "tier": "Gold",
+      "orders": ["ORD-7002"],
+      "shipping_address": "Tầng 5 toà nhà Landmark 81, Bình Thạnh, TP. Hồ Chí Minh"
+    },
+    {
+      "customer_id": "CUST-2003",
+      "name": "Lê Hoàng Long",
+      "phone": "0987654321",
+      "email": "long.le@example.com",
+      "tier": "Silver",
+      "orders": ["ORD-7003"],
+      "shipping_address": "Số 45 đường Lê Lợi, Hải Châu, Đà Nẵng"
+    },
+    {
+      "customer_id": "CUST-2004",
+      "name": "Phạm Minh Đức",
+      "phone": "0934567890",
+      "email": "duc.pham@example.com",
+      "tier": "Standard",
+      "orders": [],
+      "shipping_address": "Số 88 đường Nguyễn Trãi, Thanh Xuân, Hà Nội"
+    }
+  ]
+}

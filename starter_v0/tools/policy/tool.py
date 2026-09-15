@@ -59,12 +59,12 @@ def _split_trusted_facts(section_text: str) -> tuple[str, list[str]]:
 
 def search_company_policy(query: str = "", policy_area: str = "all", top_k: int = 3) -> dict[str, Any]:
     try:
+        wanted_area = (policy_area or "all").strip().lower()
         query_terms = terms(query)
-        if not query_terms:
+        if not query_terms and wanted_area == "all":
             return {"tool": "search_company_policy", "query": query, "policy_area": policy_area, "results": []}
 
         hits: list[dict[str, Any]] = []
-        wanted_area = (policy_area or "all").strip().lower()
         for path in sorted(POLICY_DIR.glob("*.md")):
             meta, body = _parse_markdown_doc(path)
             doc_area = str(meta.get("policy_area") or path.stem).strip().lower()
@@ -81,7 +81,9 @@ def search_company_policy(query: str = "", policy_area: str = "all", top_k: int 
                 facts, untrusted_text = _split_trusted_facts(section_text)
                 section_terms = terms(" ".join([section_title, facts]))
                 score = len(query_terms & section_terms) + 3 * len(query_terms & weighted_terms)
-                if score <= 0:
+                if not query_terms and wanted_area != "all":
+                    score = 1
+                elif score <= 0:
                     continue
                 hits.append({
                     "doc_id": meta.get("doc_id") or path.stem,
