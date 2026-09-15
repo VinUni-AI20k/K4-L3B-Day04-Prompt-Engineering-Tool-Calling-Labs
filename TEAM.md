@@ -4,10 +4,10 @@
 
 ## Thông tin bài nộp
 
-- Tên nhóm:
-- Người đại diện / MSSV:
-- Tên repo: `K4-L3-DAY04-HoVaTen-MSSV-PromptEngineeringToolCalling`
-- URL repo, nhánh nộp, commit chốt:
+- Tên nhóm: Enigma
+- Người đại diện / MSSV: Nguyễn Anh Tuấn - 2A202602700
+- Tên repo: `K4-L3B-Day04-Enigma`
+- URL repo, nhánh nộp, commit chốt: https://github.com/harrynguyen127/K4-L3B-Day04-Enigma
 - Deadline áp dụng và link thông báo đổi hạn nếu có:
 
 ## Thành viên
