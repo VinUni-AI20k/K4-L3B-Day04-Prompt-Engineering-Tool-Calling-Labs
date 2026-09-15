@@ -1,7 +1,295 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
-  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "description": "Team-authored original eval for IT Helpdesk Agent v3. Contains exactly 10 cases: 5 single-turn and 5 multi-turn cases covering ambiguity, correction, cancellation, policy lookup, and ticket confirmation.",
+  "allowed_failure_types": [
+    "wrong_tool",
+    "wrong_arg_value",
+    "wrong_boundary",
+    "unnecessary_tool",
+    "out_of_scope",
+    "missing_info"
+  ],
+  "cases": [
+    {
+      "id": "G01_ambiguous_device_request",
+      "phase": "B",
+      "suite": "group",
+      "query": "Máy của tôi đang có vấn đề, kiểm tra giúp tôi nhé.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "ambiguous_device",
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu asset ID và loại vấn đề; Agent phải hỏi lại thay vì đoán thiết bị."
+      }
+    },
+    {
+      "id": "G02_service_status_specific_environment",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra giúp mình xem dịch vụ VPN production có đang gặp sự cố không.",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "vpn",
+              "environment": "production"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "explicit_service_status",
+        "difficulty": "easy",
+        "what_it_tests": "Nhận diện đúng shared service và environment được nêu rõ."
+      }
+    },
+    {
+      "id": "G03_missing_asset_ticket",
+      "phase": "B",
+      "suite": "group",
+      "query": "Laptop của tôi không kết nối được Wi-Fi, tạo ticket giúp tôi.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "ticket_missing_asset",
+        "difficulty": "hard",
+        "what_it_tests": "Không được đoán asset ID và không được tạo ticket khi thiếu thông tin thiết bị."
+      }
+    },
+    {
+      "id": "G04_policy_lookup",
+      "phase": "B",
+      "suite": "group",
+      "query": "Cho tôi biết chính sách IT về việc thay màn hình laptop bị hỏng.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_kb",
+            "args": {
+              "category": "hardware"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "policy_lookup",
+        "difficulty": "medium",
+        "what_it_tests": "Yêu cầu chính sách/hướng dẫn phải tra knowledge base thay vì inspect device."
+      }
+    },
+    {
+      "id": "G05_ticket_confirmation_boundary",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tạo ticket mức high cho lỗi Wi-Fi trên LT-512.",
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "confirm_ticket_write",
+        "difficulty": "medium",
+        "what_it_tests": "Write action phải dừng ở bước xác nhận trước khi tạo ticket."
+      }
+    },
+    {
+      "id": "G06_correct_device_after_clarification",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra Wi-Fi trên laptop của tôi."
+        },
+        {
+          "role": "user",
+          "content": "Mã máy là LT-512."
+        },
+        {
+          "role": "user",
+          "content": "À, xin lỗi, mã đúng là LT-521."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ kiểm tra network trên máy đúng mã đó."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-521",
+              "check": "network"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "correct_asset_latest_value",
+        "difficulty": "hard",
+        "what_it_tests": "Asset ID được đính chính ở lượt sau phải thay thế hoàn toàn giá trị cũ."
+      }
+    },
+    {
+      "id": "G07_cancel_ticket_request",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tôi muốn tạo ticket cho lỗi VPN trên LT-620."
+        },
+        {
+          "role": "user",
+          "content": "Thôi, tôi đổi ý. Không tạo ticket nữa."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ xác nhận rằng bạn đã hủy yêu cầu của tôi."
+        }
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "metadata": {
+        "skill": "cancel_pending_action",
+        "difficulty": "hard",
+        "what_it_tests": "Cancellation mới nhất phải thắng yêu cầu tạo ticket trước đó; không được gọi create ticket."
+      }
+    },
+    {
+      "id": "G08_change_device_and_decision",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tạo ticket lỗi màn hình cho LT-701."
+        },
+        {
+          "role": "user",
+          "content": "Khoan, không phải LT-701. Máy đúng là LT-702."
+        },
+        {
+          "role": "user",
+          "content": "Và đổi ý, chưa tạo ticket. Chỉ kiểm tra tình trạng máy trước."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-702",
+              "check": "all"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "latest_decision_wins",
+        "difficulty": "hard",
+        "what_it_tests": "Agent phải dùng asset mới và hành động mới nhất; không được tạo ticket theo ý định cũ."
+      }
+    },
+    {
+      "id": "G09_policy_then_ticket_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Chính sách IT có cho phép thay màn hình laptop bị hỏng do lỗi phần cứng không?"
+        },
+        {
+          "role": "user",
+          "content": "Nếu chính sách cho phép thì tôi muốn tạo ticket cho LT-810."
+        },
+        {
+          "role": "user",
+          "content": "Hãy kiểm tra chính sách trước và nếu đủ điều kiện thì hỏi tôi xác nhận trước khi tạo ticket."
+        }
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_kb",
+            "args": {
+              "category": "hardware"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "policy_then_confirmed_ticket",
+        "difficulty": "hard",
+        "what_it_tests": "Phải tra policy trước; nếu đủ điều kiện thì vẫn phải dừng ở confirmation boundary trước write action."
+      }
+    },
+    {
+      "id": "G10_cancel_after_policy",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Cho tôi biết chính sách tạo ticket cho lỗi VPN."
+        },
+        {
+          "role": "user",
+          "content": "Nếu được thì tôi muốn tạo ticket cho LT-900."
+        },
+        {
+          "role": "user",
+          "content": "Thôi, tôi không cần nữa. Hủy yêu cầu tạo ticket."
+        }
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "metadata": {
+        "skill": "cancel_after_policy",
+        "difficulty": "hard",
+        "what_it_tests": "Cancellation ở lượt cuối phải loại bỏ ý định tạo ticket trước đó và không gọi write tool."
+      }
+    }
+  ]
 }
