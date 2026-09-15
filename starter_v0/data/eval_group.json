@@ -1,7 +1,174 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
+  "description": "Team-authored IT helpdesk eval set. Keep these exact 10 original cases unchanged across v0-v3 so version comparisons remain fair: 5 single-turn cases and 5 multi-turn cases.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_policy_incident_response",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tìm chính sách incident response về khi nào nên phân loại sự cố ở mức critical.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "policy", "args": {"policy_area": "incident_response"}}]},
+      "metadata": {
+        "skill": "policy_routing",
+        "difficulty": "medium",
+        "case_type": "single_turn",
+        "what_it_tests": "Câu hỏi về chính sách phải route vào policy tool thay vì trả lời tự suy đoán."
+      }
+    },
+    {
+      "id": "G02_meeting_room_kb",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tìm hướng dẫn xử lý âm thanh cho Teams Rooms trong phòng họp.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_kb", "args": {"category": "meeting_room"}}]},
+      "metadata": {
+        "skill": "kb_routing_meeting_room",
+        "difficulty": "easy",
+        "case_type": "single_turn",
+        "what_it_tests": "Nhu cầu how-to cho phòng họp phải dùng knowledge base đúng category."
+      }
+    },
+    {
+      "id": "G03_user_and_policy_parallel",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tra tài khoản EMP-1004 và tìm policy về yêu cầu MFA enrollment cho nhân viên.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "lookup_user", "args": {"employee_id": "EMP-1004"}},
+        {"name": "policy", "args": {"policy_area": "access_control"}}
+      ]},
+      "metadata": {
+        "skill": "parallel_user_policy",
+        "difficulty": "hard",
+        "case_type": "single_turn",
+        "what_it_tests": "Một request có cả directory lookup và policy lookup phải tạo hai tool call riêng."
+      }
+    },
+    {
+      "id": "G04_clarify_sso_environment",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra SSO ở môi trường QA giúp mình.",
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "choice", "options": ["production", "staging"]}}]},
+      "metadata": {
+        "skill": "clarify_environment_choice",
+        "difficulty": "hard",
+        "case_type": "single_turn",
+        "what_it_tests": "QA không map chắc chắn sang enum hợp lệ nên phải hỏi lại production hay staging."
+      }
+    },
+    {
+      "id": "G05_printer_network_inspection",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra network của máy in PR-404 giúp mình.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "PR-404", "check": "network"}}]},
+      "metadata": {
+        "skill": "inspect_printer_network",
+        "difficulty": "easy",
+        "case_type": "single_turn",
+        "what_it_tests": "Printer asset cụ thể vẫn phải đi qua inspect_device với check phù hợp."
+      }
+    },
+    {
+      "id": "G06_fill_asset_then_security",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra bảo mật laptop của mình."},
+        {"role": "user", "content": "Máy LT-411."},
+        {"role": "user", "content": "Đúng rồi, chỉ cần check security thôi."}
+      ],
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-411", "check": "security"}}]},
+      "metadata": {
+        "skill": "multiturn_fill_asset",
+        "difficulty": "medium",
+        "case_type": "multi_turn",
+        "what_it_tests": "Agent phải giữ asset ID được bổ sung ở lượt sau và dùng check mới nhất."
+      }
+    },
+    {
+      "id": "G07_switch_write_to_policy",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tạo ticket lỗi Wi-Fi ở tầng 4 giúp mình."},
+        {"role": "user", "content": "Khoan, trước tiên tìm policy về khi nào được tạo ticket critical."},
+        {"role": "user", "content": "Chỉ cần policy incident response thôi."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "policy", "args": {"policy_area": "incident_response"}}]},
+      "metadata": {
+        "skill": "latest_intent_policy",
+        "difficulty": "hard",
+        "case_type": "multi_turn",
+        "what_it_tests": "Ý định mới phải thay thế write action cũ; không được clarify hay tạo ticket nữa."
+      }
+    },
+    {
+      "id": "G08_carry_environment_to_sso",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra trạng thái SSO giúp mình."},
+        {"role": "user", "content": "Môi trường staging."},
+        {"role": "user", "content": "Đúng, chỉ kiểm tra staging thôi."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "check_service_status", "args": {"service": "sso", "environment": "staging"}}]},
+      "metadata": {
+        "skill": "multiturn_environment_fill",
+        "difficulty": "medium",
+        "case_type": "multi_turn",
+        "what_it_tests": "Environment được bổ sung ở lượt sau phải ghi đè default production."
+      }
+    },
+    {
+      "id": "G09_correct_user_then_parallel_asset",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tra EMP-1007."},
+        {"role": "user", "content": "À nhầm, là EMP-1005."},
+        {"role": "user", "content": "Kiểm tra luôn VPN của LT-318."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [
+        {"name": "lookup_user", "args": {"employee_id": "EMP-1005"}},
+        {"name": "inspect_device", "args": {"asset_id": "LT-318", "check": "vpn"}}
+      ]},
+      "metadata": {
+        "skill": "multiturn_user_correction_parallel",
+        "difficulty": "hard",
+        "case_type": "multi_turn",
+        "what_it_tests": "User ID sửa sau phải thắng user cũ, đồng thời tạo thêm device call từ intent cuối."
+      }
+    },
+    {
+      "id": "G10_disable_web_search_latest_intent",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tìm driver Wi-Fi cho LT-240."},
+        {"role": "user", "content": "Không dùng web search nữa."},
+        {"role": "user", "content": "Chỉ tìm bài hướng dẫn Wi-Fi trên Windows thôi."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_kb", "args": {"category": "wifi"}}]},
+      "metadata": {
+        "skill": "latest_intent_disable_external",
+        "difficulty": "hard",
+        "case_type": "multi_turn",
+        "what_it_tests": "Ý định cuối chuyển sang KB nội bộ; không được giữ hướng external device search từ lượt đầu."
+      }
+    }
+  ]
 }
