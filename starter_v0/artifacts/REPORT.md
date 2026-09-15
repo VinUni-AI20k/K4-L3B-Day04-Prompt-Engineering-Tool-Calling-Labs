@@ -1,22 +1,23 @@
 # Day 04 Lab v3 Report — Trợ lý AI của nhóm
 
-- Lĩnh vực tự chọn:
-- Nhiệm vụ và luồng cơ bản đã chốt trước v0:
+- Lĩnh vực tự chọn: Trợ lý bán hàng cho thiết bị điện tử
+- Nhiệm vụ và luồng cơ bản đã chốt trước v0: 
 - Đường dẫn bộ 30 câu cơ bản và 12 câu an toàn; commit chốt bộ trước v0:
 - Chức năng mở rộng ngoài luồng cơ bản (nếu có; tối đa 10 trong tổng 100 điểm):
 
 ## Team
 
-- Team:
+- Team: T084
 - Thành viên và INDIVIDUAL: [TEAM.md](../../TEAM.md)
-- Members:
-- Provider/model:
+- Members: Hồ Hoàng Phương Anh, Phạm Anh Minh, Tô Anh Đức, Vũ Bá Anh
+- Provider/model: 
 
 # PHẦN A — Giới thiệu agent
 
 ## A1. Agent này làm được gì
 
 > Viết 1–2 câu mô tả capability và giới hạn của agent.
+Agent có thể giúp người dùng truy xuất và giới hạn thiết bị điện tử theo preferred của họ. Nếu user không rõ sản phẩm mong muốn, agent gợi ý cho họ mẫu bán chạy nhất. Đưa ra các . Tạo ticket cho user liên lạc với team hỗ trợ nếu câu hỏi người dùng không nằm trong phạm vi trả lời của agent
 
 **Link dùng thử:**
 
@@ -26,8 +27,20 @@
 
 | Tool | Chức năng | Core / optional / team-built |
 |---|---|---|
-| clarify | Hỏi bổ sung hoặc xác nhận | core |
-|  |  |  |
+Hỏi cụ thể ít nhất 1 option người dùng muốn
+Gợi ý nếu người dùng không rõ muốn gì
+Tìm kiếm thông tin về các thiết bị ứng với nhu cầu người dùng
+Thu nhỏ phạm vi sản phẩm nếu khách hàng đưa thêm thông tin (model, loại, giá sản phẩm, ...)
+
+| clarify | Hỏi bổ sung hoặc xác nhận thông tin từ người dùng | core |
+| search_kb | Tìm hướng dẫn hỗ trợ kỹ thuật (VPN, email, wifi, in ấn, tài khoản...) | core |
+| check_service_status | Kiểm tra trạng thái dịch vụ (vpn, email, sso, wifi, printing) | core |
+| inspect_device | Chẩn đoán thiết bị theo asset ID | core |
+| create_ticket | Tạo ticket hỗ trợ, cần xác nhận trước khi tạo | core |
+| lookup_user | Tra cứu thông tin nhân viên theo mã | optional |
+| policy | Tra cứu chính sách IT nội bộ | optional |
+| format_incident_report | Trình bày kết quả điều tra thành báo cáo | optional |
+| search_device_info | Tìm thông tin công khai (specs/driver/support) về thiết bị trên web, tách biệt khỏi dữ liệu nội bộ | team-built |
 
 ## A3. Câu hỏi mẫu
 
@@ -39,7 +52,7 @@
 
 | Scenario | Tool trace cần thấy | Cải thiện version | Fallback run/transcript |
 |---|---|---|---|
-|  |  |  |  |
+| 1 |  |  |  |
 
 # PHẦN B — Chi tiết và evidence
 
@@ -125,9 +138,9 @@ Hoàn thành mục nhận xét chung trong [TEAM.md](../../TEAM.md). Dẫn tới
 
 ## C2. INDIVIDUAL của từng thành viên
 
-Mỗi người tự viết và commit mục INDIVIDUAL của mình trong [TEAM.md](../../TEAM.md), nêu phần việc, bằng chứng kỹ thuật và điều đã học. Không yêu cầu chép lại cùng nội dung ở đây. Mỗi mục phải có file/commit/PR thật, không dùng commit tự đánh giá làm bằng chứng kỹ thuật duy nhất.
+Mỗi người tự viết và commit mục  của mình trong [TEAM.md](../../TEAM.md), nêu phần việc, bằng chứng kỹ thuật và điều đã học. Không yêu cầu chép lại cùng nội dung ở đây. Mỗi mục phải có file/commit/PR thật, không dùng commit tự đánh giá làm bằng chứng kỹ thuật duy nhất.
 
-> Link các mục INDIVIDUAL:
+> Link các mục :
 
 ## C3. Final checkout
 

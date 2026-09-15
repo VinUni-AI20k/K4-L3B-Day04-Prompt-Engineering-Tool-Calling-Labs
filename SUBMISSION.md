@@ -5,7 +5,7 @@
 ## Tên repo
 
 ```text
-K4-L3-DAY04-HoVaTen-MSSV-PromptEngineeringToolCalling
+K4-L3-DAY04-PhamAnhMinh-2A202603009-PromptEngineeringToolCalling
 ```
 
 Dùng họ tên không dấu và MSSV của người đại diện; không có khoảng trắng; dùng `DAY04` và `L3`. Liệt kê mọi thành viên trong [TEAM.md](TEAM.md).

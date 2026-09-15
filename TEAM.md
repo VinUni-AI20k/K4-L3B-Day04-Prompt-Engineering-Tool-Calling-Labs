@@ -4,8 +4,8 @@
 
 ## Thông tin bài nộp
 
-- Tên nhóm:
-- Người đại diện / MSSV:
+- Tên nhóm: T084
+- Người đại diện / MSSV: Phạm Anh Minh
 - Tên repo: `K4-L3-DAY04-HoVaTen-MSSV-PromptEngineeringToolCalling`
 - URL repo, nhánh nộp, commit chốt:
 - Deadline áp dụng và link thông báo đổi hạn nếu có:
@@ -14,8 +14,10 @@
 
 | Họ và tên | MSSV | GitHub | Vai trò và công việc | File/commit/PR |
 |---|---|---|---|---|
-| | | | | |
-
+|Phạm Anh Minh |2A202603009 |map1509 | UX/UI design |  |
+|Tô Anh Đức | 2A202602639| AnhDuc0712 | Thiết kế based line đầu tiên | |
+|Vũ Bá Anh | 2A202602893| anhvb702| Phụ trách sửa v0-v3 của model| |
+|Hồ Hoàng Phương Anh |2A202602460|abbeyIsMe | | Viết file MD |
 ## Nhận xét chung
 
 - Kết quả và bằng chứng:
@@ -30,7 +32,7 @@ Sao chép mục này cho từng thành viên.
 ### Họ và tên — MSSV
 
 - Phần việc và file/commit/PR:
-- Quyết định, khó khăn và cách xử lý:
+- Quyết định, khó khăn và cách xử lý: 
 - Điều đã học:
 - AI/công cụ đã dùng và cách kiểm tra:
 - Thời điểm đã tự nộp URL repo chung trên VLearn:
