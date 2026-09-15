@@ -6,7 +6,7 @@
 
 - Tên nhóm:
 - Người đại diện / MSSV:
-- Tên repo: `K4-L3-DAY04-HoVaTen-MSSV-PromptEngineeringToolCalling`
+- Tên repo: `K4B-DAY4-TUDAIBOTUC`
 - URL repo, nhánh nộp, commit chốt:
 - Deadline áp dụng và link thông báo đổi hạn nếu có:
 
@@ -14,7 +14,9 @@
 
 | Họ và tên | MSSV | GitHub | Vai trò và công việc | File/commit/PR |
 |---|---|---|---|---|
-| | | | | |
+|Đỗ Nguyễn Ngọc Long |2A202602390 |https://github.com/ngoclongdo |Triển khai version 1 | |
+|Nguyễn Tuấn Anh |2A202602535 |https://github.com/Tuan2Anh |Triển khai version 2 | |
+|Cao Đức Anh |2A202602754 |https://github.com/CDanh0301 |Triển khai version 3 | |
 
 ## Nhận xét chung
 
