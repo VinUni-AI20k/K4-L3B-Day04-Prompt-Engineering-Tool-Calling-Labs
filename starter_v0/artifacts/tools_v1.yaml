@@ -1,6 +1,9 @@
-# starter_v0 — intentionally incomplete first-draft declarations.
-# Students improve routing guidance, argument conventions, missing-information
-# handling, and confirmation boundaries through v1/v2/v3.
+# starter_v1 — improved from v0 baseline.
+# Changes from v0:
+# - Better routing guidance for service vs device
+# - Added refusal for out-of-scope requests
+# - Added confirmation boundary for ticket creation
+# - Added parallel tool call guidance
 #
 # Keep built-in names and supplied evaluation cases unchanged.
 # Improve descriptions and compatible schemas. Declare team-built bonus tools

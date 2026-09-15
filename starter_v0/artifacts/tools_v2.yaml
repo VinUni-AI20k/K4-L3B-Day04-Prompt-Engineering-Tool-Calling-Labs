@@ -1,6 +1,7 @@
-# starter_v0 — intentionally incomplete first-draft declarations.
-# Students improve routing guidance, argument conventions, missing-information
-# handling, and confirmation boundaries through v1/v2/v3.
+# starter_v2 — improved from v1.
+# Changes from v1:
+# - Added multi-turn context handling (carry forward, corrections, intent changes)
+# - Better parallel tool call guidance
 #
 # Keep built-in names and supplied evaluation cases unchanged.
 # Improve descriptions and compatible schemas. Declare team-built bonus tools

@@ -1,6 +1,12 @@
-# starter_v0 — intentionally incomplete first-draft declarations.
-# Students improve routing guidance, argument conventions, missing-information
-# handling, and confirmation boundaries through v1/v2/v3.
+# starter_v3 — final version with all improvements.
+# Changes from v0:
+# - Better routing guidance for service vs device
+# - Refuse out-of-scope directly without clarify
+# - Confirmation boundary for ticket creation
+# - Multi-turn handling (carry forward, corrections, intent changes, cancellation)
+# - Confirmation invalidation when ticket details change
+# - Parallel tool call guidance
+# - Safety rules
 #
 # Keep built-in names and supplied evaluation cases unchanged.
 # Improve descriptions and compatible schemas. Declare team-built bonus tools
@@ -8,7 +14,7 @@
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
-    description: "Hỏi người dùng đúng một câu hỏi ngắn khi thiếu tham số bắt buộc hoặc cần lựa chọn trước khi tra cứu. Không dùng để thay thế một tool đã có đủ input."
+    description: "Hỏi người dùng đúng một câu hỏi ngắn khi thiếu tham số bắt buộc hoặc cần lựa chọn trước khi tra cứu. Không dùng để thay thế một tool đã có đủ input. Không dùng cho out-of-scope requests."
     parameters:
       type: object
       properties:

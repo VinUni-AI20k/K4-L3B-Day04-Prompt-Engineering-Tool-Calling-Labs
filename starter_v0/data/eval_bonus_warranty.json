@@ -1,0 +1,48 @@
+{
+  "dataset_id": "day04_v3_bonus_warranty",
+  "dataset_role": "bonus",
+  "description": "Test cases for team-built bonus tool check_asset_warranty.",
+  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
+  "cases": [
+    {
+      "id": "W01_warranty_active",
+      "phase": "B",
+      "query": "Kiểm tra bảo hành máy LT-204.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "check_asset_warranty", "args": {"asset_id": "LT-204"}}]},
+      "metadata": {"skill": "bonus_warranty_check", "difficulty": "easy", "what_it_tests": "Asset LT-204 có warranty còn active (149 ngày)."}
+    },
+    {
+      "id": "W02_warranty_expired",
+      "phase": "B",
+      "query": "Xem tình trạng bảo hành của thiết bị PR-404.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "check_asset_warranty", "args": {"asset_id": "PR-404"}}]},
+      "metadata": {"skill": "bonus_warranty_check", "difficulty": "easy", "what_it_tests": "Asset PR-404 đã hết bảo hành."}
+    },
+    {
+      "id": "W03_warranty_dt031",
+      "phase": "B",
+      "query": "Asset DT-031 có còn bảo hành không?",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "check_asset_warranty", "args": {"asset_id": "DT-031"}}]},
+      "metadata": {"skill": "bonus_warranty_check", "difficulty": "easy", "what_it_tests": "Asset DT-031 có warranty còn active (65 ngày)."}
+    },
+    {
+      "id": "W04_warranty_not_found",
+      "phase": "B",
+      "query": "Tra cứu bảo hành thiết bị XXX-999.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "check_asset_warranty", "args": {"asset_id": "XXX-999"}}]},
+      "metadata": {"skill": "bonus_warranty_error", "difficulty": "medium", "what_it_tests": "Asset không tồn tại phải trả về error asset_not_found."}
+    },
+    {
+      "id": "W05_warranty_missing_info",
+      "phase": "B",
+      "query": "Kiểm tra bảo hành thiết bị của tôi.",
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"skill": "bonus_warranty_clarify", "difficulty": "medium", "what_it_tests": "Không có asset ID phải hỏi lại."}
+    }
+  ]
+}
