@@ -1,0 +1,105 @@
+{
+  "snapshot_at": "2026-09-15T08:00:00+07:00",
+  "authenticated_driver_id": "DRV-1001",
+  "vehicles": [
+    {
+      "vehicle_id": "EV-101",
+      "owner_id": "DRV-1001",
+      "manufacturer": "VinFast",
+      "model": "VF 8 Eco",
+      "battery_capacity_kwh": 87.7,
+      "connector_type": "ccs2",
+      "max_dc_power_kw": 150
+    },
+    {
+      "vehicle_id": "EV-202",
+      "owner_id": "DRV-1001",
+      "manufacturer": "Nissan",
+      "model": "Leaf",
+      "battery_capacity_kwh": 40.0,
+      "connector_type": "chademo",
+      "max_dc_power_kw": 50
+    },
+    {
+      "vehicle_id": "EV-303",
+      "owner_id": "DRV-2002",
+      "manufacturer": "Hyundai",
+      "model": "Ioniq 5",
+      "battery_capacity_kwh": 77.4,
+      "connector_type": "ccs2",
+      "max_dc_power_kw": 220
+    }
+  ],
+  "stations": [
+    {
+      "station_id": "ST-101",
+      "name": "Ben Thanh EV Hub",
+      "area": "Quận 1",
+      "status": "operational",
+      "site_available_power_kw": 180,
+      "price_vnd_per_kwh": 6200,
+      "connectors": [
+        {"type": "ccs2", "available_ports": 1, "max_power_kw": 120, "next_available_at": "2026-09-15T08:00:00+07:00"}
+      ]
+    },
+    {
+      "station_id": "ST-202",
+      "name": "Thu Thiem FastCharge",
+      "area": "Thủ Đức",
+      "status": "operational",
+      "site_available_power_kw": 300,
+      "price_vnd_per_kwh": 7200,
+      "connectors": [
+        {"type": "ccs2", "available_ports": 2, "max_power_kw": 180, "next_available_at": "2026-09-15T08:00:00+07:00"}
+      ]
+    },
+    {
+      "station_id": "ST-303",
+      "name": "Tan Thuan GreenCharge",
+      "area": "Quận 7",
+      "status": "operational",
+      "site_available_power_kw": 90,
+      "price_vnd_per_kwh": 4800,
+      "connectors": [
+        {"type": "ccs2", "available_ports": 0, "max_power_kw": 60, "next_available_at": "2026-09-15T08:30:00+07:00"},
+        {"type": "chademo", "available_ports": 1, "max_power_kw": 50, "next_available_at": "2026-09-15T08:00:00+07:00"}
+      ]
+    },
+    {
+      "station_id": "ST-404",
+      "name": "Airport Charge Point",
+      "area": "Tân Bình",
+      "status": "maintenance",
+      "site_available_power_kw": 0,
+      "price_vnd_per_kwh": 6900,
+      "connectors": [
+        {"type": "ccs2", "available_ports": 0, "max_power_kw": 120, "next_available_at": "2026-09-15T12:00:00+07:00"}
+      ]
+    }
+  ],
+  "routes": [
+    {"origin": "Quận 1", "station_id": "ST-101", "distance_km": 2.4, "travel_minutes": 10, "evidence_id": "ROUTE-Q1-ST101"},
+    {"origin": "Quận 1", "station_id": "ST-202", "distance_km": 5.8, "travel_minutes": 18, "evidence_id": "ROUTE-Q1-ST202"},
+    {"origin": "Quận 1", "station_id": "ST-303", "distance_km": 7.2, "travel_minutes": 24, "evidence_id": "ROUTE-Q1-ST303"},
+    {"origin": "Quận 7", "station_id": "ST-101", "distance_km": 6.5, "travel_minutes": 22, "evidence_id": "ROUTE-Q7-ST101"},
+    {"origin": "Quận 7", "station_id": "ST-202", "distance_km": 8.1, "travel_minutes": 27, "evidence_id": "ROUTE-Q7-ST202"},
+    {"origin": "Quận 7", "station_id": "ST-303", "distance_km": 2.1, "travel_minutes": 9, "evidence_id": "ROUTE-Q7-ST303"},
+    {"origin": "Thủ Đức", "station_id": "ST-101", "distance_km": 9.4, "travel_minutes": 30, "evidence_id": "ROUTE-TD-ST101"},
+    {"origin": "Thủ Đức", "station_id": "ST-202", "distance_km": 3.0, "travel_minutes": 12, "evidence_id": "ROUTE-TD-ST202"},
+    {"origin": "Thủ Đức", "station_id": "ST-303", "distance_km": 12.0, "travel_minutes": 38, "evidence_id": "ROUTE-TD-ST303"}
+  ],
+  "seed_offers": [
+    {
+      "offer_id": "OFF-SEED-101",
+      "driver_id": "DRV-1001",
+      "vehicle_id": "EV-101",
+      "station_id": "ST-202",
+      "start_time": "2026-09-15T08:18:00+07:00",
+      "finish_time": "2026-09-15T08:40:00+07:00",
+      "expected_soc": 80,
+      "estimated_cost_vnd": 350800,
+      "verified": true,
+      "route_evidence_id": "ROUTE-Q1-ST202"
+    }
+  ]
+}

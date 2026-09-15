@@ -1,9 +1,13 @@
 # Day 04 Lab v3 Report — Trợ lý AI của nhóm
 
-- Lĩnh vực tự chọn:
-- Nhiệm vụ và luồng cơ bản đã chốt trước v0:
-- Đường dẫn bộ 30 câu cơ bản và 12 câu an toàn; commit chốt bộ trước v0:
-- Chức năng mở rộng ngoài luồng cơ bản (nếu có; tối đa 10 trong tổng 100 điểm):
+- Lĩnh vực tự chọn: SmartCharging — trợ lý lập phương án sạc xe điện từ dữ liệu giả lập.
+- Người dùng chính: Tài xế đã đăng nhập, cần tìm phương án sạc cho xe thuộc quyền sở hữu của mình.
+- Nhiệm vụ chính: Thu thập xe, SOC hiện tại, SOC mục tiêu, deadline, vị trí xuất phát và tiêu chí ưu tiên; gọi lớp nghiệp vụ để trả Top-K offer đã được xác minh; tạo reservation chỉ sau khi tài xế xác nhận đúng offer hiện tại.
+- Luồng cơ bản đã chốt trước v0: `clarify` dữ liệu thiếu → tùy yêu cầu dùng `lookup_vehicle`/`check_station_status` → `find_charging_offers` tính và verify offer → trình bày offer → hỏi xác nhận → `create_reservation` tái kiểm tra rồi ghi lịch giả lập.
+- Ranh giới: AI không tự quyết định tính khả thi và không bịa trạm, connector, route, thời gian, công suất, giá, offer hoặc verdict. Tool error hay thiếu route evidence không được diễn giải thành “không khả thi”.
+- Đường dẫn bộ 30 câu cơ bản chốt trước v0: `data/eval_smartcharging_base.json` (20 single-turn + 10 multi-turn). Commit chốt: nhóm điền hash commit sau khi review và trước khi chạy v0.
+- Dữ liệu giả lập: `smartcharging_data/network.json`.
+- Chức năng mở rộng ngoài luồng cơ bản: Không thực hiện trong phạm vi v0.
 
 ## Team
 
@@ -16,7 +20,9 @@
 
 ## A1. Agent này làm được gì
 
-> Viết 1–2 câu mô tả capability và giới hạn của agent.
+Agent hỗ trợ tài xế tra cứu xe/trạm và tìm các phương án sạc đã được tool nghiệp
+vụ xác minh theo thời gian hoàn tất, chi phí hoặc quãng đường. Agent không tự
+tính tính khả thi; offer chưa phải lịch giữ chỗ và reservation cần xác nhận rõ.
 
 **Link dùng thử:**
 
@@ -27,13 +33,16 @@
 | Tool | Chức năng | Core / optional / team-built |
 |---|---|---|
 | clarify | Hỏi bổ sung hoặc xác nhận | core |
-|  |  |  |
+| lookup_vehicle | Tra xe và kiểm tra quyền sở hữu | core, domain-built |
+| check_station_status | Đọc snapshot trạng thái/cổng/công suất/giá của một trạm | core, domain-built |
+| find_charging_offers | Tối ưu và verify Top-K offer từ dữ liệu giả lập | core, domain-built |
+| create_reservation | Tái kiểm tra và tạo lịch sau xác nhận | core, domain-built action |
 
 ## A3. Câu hỏi mẫu
 
-1.
-2.
-3.
+1. `EV-101 đang 30%, cần 80% trước 10:30 ngày 15/09/2026 UTC+07, xuất phát Quận 1; tìm phương án hoàn tất sớm nhất.`
+2. `Kiểm tra trạng thái và cổng trống của trạm ST-303.`
+3. `Tôi xác nhận đặt lịch đúng offer OFF-SEED-101.`
 
 ## A4. Kịch bản demo đã rehearse
 
