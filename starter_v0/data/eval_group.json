@@ -1,7 +1,273 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
-  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "description": "Team-authored evaluation cases: 5 single-turn and 5 multi-turn scenarios covering IT Helpdesk operations.",
+  "cases": [
+    {
+      "id": "G01_kb_wifi_guide",
+      "phase": "B",
+      "suite": "group",
+      "metadata": {
+        "skill": "search_kb",
+        "difficulty": "easy",
+        "what_it_tests": "Tìm hướng dẫn kết nối wifi văn phòng"
+      },
+      "query": "Cho mình xin tài liệu hướng dẫn kết nối vào mạng Wi-Fi khách văn phòng.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_kb",
+            "args": {
+              "category": "wifi"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "G02_sso_service_status",
+      "phase": "B",
+      "suite": "group",
+      "metadata": {
+        "skill": "check_service",
+        "difficulty": "easy",
+        "what_it_tests": "Kiểm tra dịch vụ SSO production"
+      },
+      "query": "Cổng đăng nhập SSO production hiện tại có hoạt động ổn định không?",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "sso",
+              "environment": "production"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "G03_hardware_diagnostics",
+      "phase": "B",
+      "suite": "group",
+      "metadata": {
+        "skill": "device_inspection",
+        "difficulty": "medium",
+        "what_it_tests": "Kiểm tra phần cứng thiết bị chỉ định"
+      },
+      "query": "Kiểm tra tình trạng phần cứng của máy DT-031 giúp mình.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "DT-031",
+              "check": "hardware"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "G04_missing_asset_clarification",
+      "phase": "B",
+      "suite": "group",
+      "metadata": {
+        "skill": "clarify_missing",
+        "difficulty": "medium",
+        "what_it_tests": "Hỏi lại mã máy khi user báo hỏng màn hình nhưng không đưa asset id"
+      },
+      "query": "Màn hình máy bàn của mình bị sọc đen, bạn kiểm tra máy giúp mình với.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "G05_ticket_confirmation_boundary",
+      "phase": "B",
+      "suite": "group",
+      "metadata": {
+        "skill": "write_boundary",
+        "difficulty": "medium",
+        "what_it_tests": "Yêu cầu tạo ticket phải dừng ở confirmation clarify"
+      },
+      "query": "Tạo ticket mức medium báo hỏng bàn phím cho máy LT-240.",
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "G06_clarify_then_inspect",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra mạng trên máy tính giúp tôi."
+        },
+        {
+          "role": "user",
+          "content": "Máy LT-204 nhé, kiểm tra kết nối mạng."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-204",
+              "check": "network"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_clarify",
+        "difficulty": "medium",
+        "what_it_tests": "Lượt 1 thiếu asset id, lượt 2 cung cấp thì tiến hành kiểm tra"
+      }
+    },
+    {
+      "id": "G07_correct_asset_multiturn",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra bảo mật máy DT-087."
+        },
+        {
+          "role": "user",
+          "content": "À mình nhìn nhầm, đổi sang máy DT-031 nhé, vẫn kiểm tra security."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "DT-031",
+              "check": "security"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_correction",
+        "difficulty": "hard",
+        "what_it_tests": "User sửa lại mã máy ở lượt sau, thông tin mới phải thắng"
+      }
+    },
+    {
+      "id": "G08_intent_switch_multiturn",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra máy LT-204 giúp mình."
+        },
+        {
+          "role": "user",
+          "content": "Thôi không cần kiểm tra máy nữa."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ tra cứu tài khoản nhân viên EMP-1009 giúp mình."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_user",
+            "args": {
+              "employee_id": "EMP-1009"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "intent_switch",
+        "difficulty": "hard",
+        "what_it_tests": "Chuyển hướng từ tra cứu máy sang tra cứu tài khoản nhân viên"
+      }
+    },
+    {
+      "id": "G09_modify_ticket_reconfirm",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tạo ticket lỗi in ấn máy LT-204 mức low."
+        },
+        {
+          "role": "user",
+          "content": "Đổi sang mức critical và hỏi xác nhận lại nhé."
+        }
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "reconfirm_boundary",
+        "difficulty": "hard",
+        "what_it_tests": "Thay đổi mức priority khiến xác nhận cũ vô hiệu hóa, phải hỏi lại"
+      }
+    },
+    {
+      "id": "G10_cancel_ticket_creation",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tạo ticket lỗi màn hình máy DT-087."
+        },
+        {
+          "role": "user",
+          "content": "Thôi mình cắm lại dây được rồi, hủy không cần tạo ticket nữa đâu."
+        }
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "no_tool": true
+      },
+      "metadata": {
+        "skill": "cancel_action",
+        "difficulty": "medium",
+        "what_it_tests": "Hủy yêu cầu tạo ticket thì không được gọi tool tạo"
+      }
+    }
+  ]
 }
