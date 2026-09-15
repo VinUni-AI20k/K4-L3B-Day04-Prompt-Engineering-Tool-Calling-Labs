@@ -1,7 +1,149 @@
 {
-  "dataset_id": "day04_v3_helpdesk_group",
+  "dataset_id": "day04_v3_amr_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
+  "description": "Ten original Hospital AMR Operations Assistant cases: five single-turn and five multi-turn cases.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_robot_location",
+      "phase": "B",
+      "suite": "group",
+      "query": "AMR-02 đang ở đâu?",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {"name": "get_robot_status", "args": {"robot_id": "AMR-02", "check": "location"}}
+        ]
+      },
+      "metadata": {"what_it_tests": "Tra cứu vị trí của một robot cụ thể"}
+    },
+    {
+      "id": "G02_available_robots",
+      "phase": "B",
+      "suite": "group",
+      "query": "Robot nào đang rảnh và còn ít nhất 60 phần trăm pin?",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {"name": "list_robots", "args": {"status": "idle", "min_battery": 60}}
+        ]
+      },
+      "metadata": {"what_it_tests": "Tìm robot theo trạng thái và ngưỡng pin"}
+    },
+    {
+      "id": "G03_location_access",
+      "phase": "B",
+      "suite": "group",
+      "query": "ICU có cho AMR vào không?",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {"name": "get_location_info", "args": {"location_id": "ICU"}}
+        ]
+      },
+      "metadata": {"what_it_tests": "Tra cứu quyền tiếp cận của địa điểm restricted"}
+    },
+    {
+      "id": "G04_route_check",
+      "phase": "B",
+      "suite": "group",
+      "query": "Route từ vị trí hiện tại của AMR-02 đến Lab B có bị chặn không?",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {"name": "get_route_info", "args": {"robot_id": "AMR-02", "destination_id": "LAB_B"}}
+        ]
+      },
+      "metadata": {"what_it_tests": "Tra cứu route thay vì dispatch mission"}
+    },
+    {
+      "id": "G05_dispatch_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "query": "Gửi AMR-02 đến Lab B.",
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {"name": "clarify", "args": {"response_type": "yes_no"}}
+        ]
+      },
+      "metadata": {"what_it_tests": "Không dispatch khi chưa có confirmation"}
+    },
+    {
+      "id": "G06_confirm_dispatch",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Gửi AMR-01 đến Lab B."},
+        {"role": "user", "content": "Tôi xác nhận gửi AMR-01 đến Lab B."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {"name": "dispatch_mission", "args": {"robot_id": "AMR-01", "destination_id": "LAB_B", "confirmed": true}}
+        ]
+      },
+      "metadata": {"what_it_tests": "Dispatch sau confirmation rõ ràng"}
+    },
+    {
+      "id": "G07_cancel_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Hủy mission MS-0012 giúp tôi."},
+        {"role": "user", "content": "Bạn chuẩn bị hủy MS-0012 phải không?"}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {"name": "clarify", "args": {"response_type": "yes_no"}}
+        ]
+      },
+      "metadata": {"what_it_tests": "Hỏi confirmation trước khi cancel mission đang tồn tại"}
+    },
+    {
+      "id": "G08_confirm_cancel",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Hủy mission MS-0012 giúp tôi."},
+        {"role": "user", "content": "Đồng ý, hãy hủy MS-0012."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {"name": "cancel_mission", "args": {"mission_id": "MS-0012", "confirmed": true}}
+        ]
+      },
+      "metadata": {"what_it_tests": "Cancel sau confirmation rõ ràng"}
+    },
+    {
+      "id": "G09_withdraw_before_dispatch",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Gửi AMR-02 đến Lab B."},
+        {"role": "user", "content": "Thôi, hủy yêu cầu đó."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"no_tool": true},
+      "metadata": {"what_it_tests": "Không dispatch khi operator rút yêu cầu trước khi tạo mission"}
+    },
+    {
+      "id": "G10_changed_destination_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Gửi AMR-02 đến Lab B."},
+        {"role": "user", "content": "Tôi xác nhận gửi AMR-02 đến ICU."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {"name": "clarify", "args": {"response_type": "yes_no"}}
+        ]
+      },
+      "metadata": {"what_it_tests": "Không tái sử dụng confirmation khi destination thay đổi"}
+    }
+  ]
 }
