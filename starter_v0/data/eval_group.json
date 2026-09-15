@@ -1,281 +1,108 @@
 {
-  "dataset_id": "day04_v3_helpdesk_group",
+  "dataset_id": "day04_v3_helpdesk_group_team_an",
   "dataset_role": "group",
-  "description": "Team-authored IT helpdesk eval cases: 5 single-turn and 5 multi-turn cases.",
+  "description": "10 original IT helpdesk eval cases written by team. 5 single-turn and 5 multi-turn cases covering wrong_tool, wrong_arg_value, missing_info, out_of_scope, unnecessary_tool, and wrong_boundary failure types.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
   "cases": [
     {
       "id": "G01_wrong_tool_service_status",
       "phase": "B",
+      "query": "Kiểm tra xem dịch vụ printing production có hoạt động không.",
       "failure_type": "wrong_tool",
-      "is_multiturn": false,
-      "input": "In bình thường ở tầng 3 chứ?",
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "check_service_status",
-            "args": {
-              "service": "printing",
-              "environment": "production"
-            }
-          }
-        ]
-      },
-      "metadata": {
-        "skill": "route_shared_service",
-        "difficulty": "easy",
-        "what_it_tests": "Yêu cầu dịch vụ in ấn phải dùng check_service_status, không dùng inspect_device."
-      }
+      "expect": {"tool_calls": [{"name": "check_service_status", "args": {"service": "printing", "environment": "production"}}]},
+      "metadata": {"skill": "route_shared_service", "difficulty": "easy", "what_it_tests": "Service printing phải dùng check_service_status, không phải inspect_device."}
     },
     {
       "id": "G02_wrong_arg_device_check",
       "phase": "B",
+      "query": "Kiểm tra security của laptop LT-318.",
       "failure_type": "wrong_arg_value",
-      "is_multiturn": false,
-      "input": "Kiểm tra bảo mật laptop LT-318 giúp mình.",
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "inspect_device",
-            "args": {
-              "asset_id": "LT-318",
-              "check": "security"
-            }
-          }
-        ]
-      },
-      "metadata": {
-        "skill": "device_check_arg",
-        "difficulty": "medium",
-        "what_it_tests": "Trích đúng asset ID và check=security."
-      }
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-318", "check": "security"}}]},
+      "metadata": {"skill": "device_check_arg", "difficulty": "medium", "what_it_tests": "Phải trích đúng asset_id=LT-318 và check=security."}
     },
     {
       "id": "G03_missing_info_department",
       "phase": "B",
+      "query": "Tra tài khoản nhân viên bên Engineering ở Bangkok.",
       "failure_type": "missing_info",
-      "is_multiturn": false,
-      "input": "Cho tôi xem thông tin nhân viên phòng Kỹ thuật.",
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "clarify",
-            "args": {
-              "response_type": "text"
-            }
-          }
-        ]
-      },
-      "metadata": {
-        "skill": "clarify_employee",
-        "difficulty": "medium",
-        "what_it_tests": "Tên phòng ban không đủ để tra cứu, phải hỏi employee ID."
-      }
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"skill": "clarify_employee_id", "difficulty": "medium", "what_it_tests": "Thông tin department/office không thay thế employee ID; phải hỏi lại."}
     },
     {
       "id": "G04_out_of_scope_travel",
       "phase": "B",
+      "query": "Gợi ý cho tôi các địa điểm du lịch nổi tiếng ở Bangkok.",
       "failure_type": "out_of_scope",
-      "is_multiturn": false,
-      "input": "Tôi cần đặt vé máy bay đi Hà Nội tuần sau.",
-      "expect": {
-        "no_tool": true,
-        "behavior": "refuse"
-      },
-      "metadata": {
-        "skill": "out_of_scope",
-        "difficulty": "easy",
-        "what_it_tests": "Yêu cầu đặt vé ngoài IT helpdesk không gọi tool."
-      }
+      "expect": {"no_tool": true, "behavior": "refuse"},
+      "metadata": {"skill": "out_of_scope_travel", "difficulty": "easy", "what_it_tests": "Yêu cầu du lịch hoàn toàn ngoài IT helpdesk."}
     },
     {
       "id": "G05_wrong_boundary_no_confirm",
       "phase": "B",
+      "query": "Tạo ngay ticket mức critical cho lỗi máy in PR-404.",
       "failure_type": "wrong_boundary",
-      "is_multiturn": false,
-      "input": "Tạo ticket lỗi Wi-Fi cho máy DT-031.",
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "clarify",
-            "args": {
-              "response_type": "yes_no"
-            }
-          }
-        ]
-      },
-      "metadata": {
-        "skill": "confirm_write",
-        "difficulty": "medium",
-        "what_it_tests": "Tạo ticket là write action, phải xác nhận trước bằng clarify."
-      }
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"skill": "confirm_before_action", "difficulty": "medium", "what_it_tests": "Tạo ticket là write action, phải xác nhận trước khi confirmed=true."}
     },
     {
       "id": "G06_multi_clarify_and_resolve",
       "phase": "B",
-      "failure_type": "missing_info",
-      "is_multiturn": true,
-      "input": [
-        {
-          "role": "user",
-          "content": "Kiểm tra laptop của tôi."
-        },
-        {
-          "role": "user",
-          "content": "Mã máy là LT-240."
-        },
-        {
-          "role": "user",
-          "content": "Chỉ kiểm tra VPN trên máy đó."
-        }
+      "turns": [
+        {"role": "user", "content": "Tôi gặp lỗi VPN trên laptop của mình."},
+        {"role": "user", "content": "Mã máy là LT-240."},
+        {"role": "user", "content": "Kiểm tra kết nối VPN trên đúng máy đó."}
       ],
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "inspect_device",
-            "args": {
-              "asset_id": "LT-240",
-              "check": "vpn"
-            }
-          }
-        ]
-      },
-      "metadata": {
-        "skill": "multiturn_fill_asset",
-        "difficulty": "hard",
-        "what_it_tests": "Sau khi có asset ID, gọi inspect_device với check phù hợp."
-      }
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-240", "check": "vpn"}}]},
+      "metadata": {"skill": "multiturn_fill_asset", "difficulty": "hard", "what_it_tests": "Carry asset ID từ lượt 2 và dùng check=vpn ở lượt 3."}
     },
     {
       "id": "G07_multi_correct_asset",
       "phase": "B",
-      "failure_type": "wrong_arg_value",
-      "is_multiturn": true,
-      "input": [
-        {
-          "role": "user",
-          "content": "Kiểm tra phần cứng máy DT-087."
-        },
-        {
-          "role": "user",
-          "content": "Nhầm rồi, máy là DT-031."
-        },
-        {
-          "role": "user",
-          "content": "Vẫn kiểm tra hardware nhé."
-        }
+      "turns": [
+        {"role": "user", "content": "Kiểm tra phần cứng máy LT-204."},
+        {"role": "user", "content": "Nhầm rồi, là máy DT-087."},
+        {"role": "user", "content": "Giữ nguyên check hardware nhé."}
       ],
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "inspect_device",
-            "args": {
-              "asset_id": "DT-031",
-              "check": "hardware"
-            }
-          }
-        ]
-      },
-      "metadata": {
-        "skill": "multiturn_correction",
-        "difficulty": "hard",
-        "what_it_tests": "Thông tin sửa sau phải thắng thông tin cũ."
-      }
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "DT-087", "check": "hardware"}}]},
+      "metadata": {"skill": "multiturn_asset_correction", "difficulty": "hard", "what_it_tests": "Asset ID mới (DT-087) thắng asset ID cũ (LT-204), giữ check=hardware."}
     },
     {
       "id": "G08_multi_cancel_ticket",
       "phase": "B",
-      "failure_type": "unnecessary_tool",
-      "is_multiturn": true,
-      "input": [
-        {
-          "role": "user",
-          "content": "Tạo ticket lỗi VPN LT-204 mức medium."
-        },
-        {
-          "role": "user",
-          "content": "Thôi không cần nữa, hủy ticket này."
-        }
+      "turns": [
+        {"role": "user", "content": "Tạo ticket lỗi Wi-Fi LT-240 mức high."},
+        {"role": "user", "content": "Khoan, dừng lại. Không cần tạo ticket."},
+        {"role": "user", "content": "Chỉ cho biết bạn đã hiểu yêu cầu hủy."}
       ],
-      "expect": {
-        "no_tool": true,
-        "behavior": "cancel"
-      },
-      "metadata": {
-        "skill": "multiturn_cancel",
-        "difficulty": "medium",
-        "what_it_tests": "Khi user hủy, không gọi create_ticket."
-      }
+      "failure_type": "unnecessary_tool",
+      "expect": {"no_tool": true, "behavior": "answer_without_tool"},
+      "metadata": {"skill": "multiturn_cancel_action", "difficulty": "hard", "what_it_tests": "Lượt hủy mới nhất thắng action request cũ; không tạo ticket."}
     },
     {
       "id": "G09_multi_switch_intent",
       "phase": "B",
-      "failure_type": "wrong_tool",
-      "is_multiturn": true,
-      "input": [
-        {
-          "role": "user",
-          "content": "VPN production đang ổn không?"
-        },
-        {
-          "role": "user",
-          "content": "Thôi không xem status nữa, tìm hướng dẫn cài VPN."
-        },
-        {
-          "role": "user",
-          "content": "Tìm cho Windows."
-        }
+      "turns": [
+        {"role": "user", "content": "Tra tài khoản EMP-1009."},
+        {"role": "user", "content": "Thôi không cần tra nữa, hãy tìm hướng dẫn sửa lỗi VPN trên Windows."},
+        {"role": "user", "content": "Chỉ cần hướng dẫn VPN Windows."}
       ],
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "search_kb",
-            "args": {
-              "category": "vpn"
-            }
-          }
-        ]
-      },
-      "metadata": {
-        "skill": "multiturn_switch_tool",
-        "difficulty": "hard",
-        "what_it_tests": "Khi user đổi intent, dùng tool mới phù hợp."
-      }
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_kb", "args": {"category": "vpn"}}]},
+      "metadata": {"skill": "multiturn_intent_replacement", "difficulty": "hard", "what_it_tests": "Intent mới (KB search) thay thế intent cũ (lookup_user)."}
     },
     {
       "id": "G10_multi_confirm_then_change",
       "phase": "B",
-      "failure_type": "wrong_boundary",
-      "is_multiturn": true,
-      "input": [
-        {
-          "role": "user",
-          "content": "Tạo ticket mức medium cho lỗi email."
-        },
-        {
-          "role": "user",
-          "content": "Đổi mức ưu tiên thành critical."
-        },
-        {
-          "role": "user",
-          "content": "Hãy hỏi xác nhận trước khi tạo."
-        }
+      "turns": [
+        {"role": "user", "content": "Tôi xác nhận tạo ticket: printer PR-404 lỗi, mức medium."},
+        {"role": "user", "content": "Đổi priority thành critical và thêm nghi vấn đề hết mực."},
+        {"role": "user", "content": "Hãy rà lại payload mới trước."}
       ],
-      "expect": {
-        "tool_calls": [
-          {
-            "name": "clarify",
-            "args": {
-              "response_type": "yes_no"
-            }
-          }
-        ]
-      },
-      "metadata": {
-        "skill": "multiturn_confirmation",
-        "difficulty": "hard",
-        "what_it_tests": "Sau khi đổi priority, vẫn phải xác nhận lại."
-      }
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"skill": "confirmation_invalidation", "difficulty": "hard", "what_it_tests": "Confirmation cũ mất hiệu lực khi payload thay đổi; phải xác nhận lại."}
     }
   ]
 }
