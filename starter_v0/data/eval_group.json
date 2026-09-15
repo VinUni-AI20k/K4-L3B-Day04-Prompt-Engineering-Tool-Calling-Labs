@@ -1,7 +1,306 @@
 {
-  "dataset_id": "day04_v3_helpdesk_group",
+  "dataset_id": "day04_v3_pcseller_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
-  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "description": "10 original team-authored PC seller cases: 5 single-turn and 5 multi-turn, distinct from the fixed base/adversarial sets.",
+  "allowed_failure_types": [
+    "wrong_tool",
+    "wrong_arg_value",
+    "wrong_boundary",
+    "unnecessary_tool",
+    "out_of_scope",
+    "missing_info"
+  ],
+  "cases": [
+    {
+      "id": "G01_monitor_advice_and_price",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tư vấn giúp mình màn hình 27 inch cho nhu cầu office và kiểm tra giá MON-27QHD.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_catalog",
+            "args": {
+              "category": "monitor",
+              "use_case": "office"
+            }
+          },
+          {
+            "name": "check_price",
+            "args": {
+              "sku": "MON-27QHD"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "peripheral_advice_plus_price",
+        "difficulty": "hard",
+        "what_it_tests": "Nhóm monitor/peripheral chưa xuất hiện trong base; tư vấn và báo giá là hai nguồn."
+      }
+    },
+    {
+      "id": "G02_customer_and_warranty_policy",
+      "phase": "B",
+      "suite": "group",
+      "query": "Khách CUST-2004 đang chờ bảo hành; tra hồ sơ khách và tra policy bảo hành.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_customer",
+            "args": {
+              "customer_id": "CUST-2004"
+            }
+          },
+          {
+            "name": "policy",
+            "args": {
+              "policy_area": "warranty"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "customer_plus_warranty_policy",
+        "difficulty": "hard",
+        "what_it_tests": "Base chưa ghép hồ sơ khách với policy bảo hành."
+      }
+    },
+    {
+      "id": "G03_price_without_stock",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra giá của COOL-LS520 mà không cần xem tồn kho.",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_price",
+            "args": {
+              "sku": "COOL-LS520",
+              "include_stock": false
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "price_flag_false",
+        "difficulty": "medium",
+        "what_it_tests": "include_stock=false; base chỉ dùng include_stock=true."
+      }
+    },
+    {
+      "id": "G04_cooler_advice_budget",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tư vấn tản nhiệt cho nhu cầu workstation, ngân sách tối đa 100 USD.",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_catalog",
+            "args": {
+              "category": "cooler",
+              "use_case": "workstation",
+              "budget_max": 100
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "cooler_budget_arg",
+        "difficulty": "hard",
+        "what_it_tests": "Category cooler + tham số số budget_max chưa dùng trong base."
+      }
+    },
+    {
+      "id": "G05_tax_out_of_scope",
+      "phase": "B",
+      "suite": "group",
+      "query": "Cho mình hỏi cách nộp thuế thu nhập cá nhân online.",
+      "failure_type": "out_of_scope",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "metadata": {
+        "skill": "out_of_scope_tax",
+        "difficulty": "easy",
+        "what_it_tests": "Nghiệp vụ thuế ngoài phạm vi bán PC; không gọi tool."
+      }
+    },
+    {
+      "id": "G06_multiturn_two_candidates",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Mình đang cân nhắc giữa PC-STARTER-01 và PC-PRO-01."
+        },
+        {
+          "role": "user",
+          "content": "Bên nào cũng được, miễn là chơi game tốt."
+        },
+        {
+          "role": "user",
+          "content": "Kiểm tra giá giúp mình cái máy đó."
+        }
+      ],
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_ambiguous_referent",
+        "difficulty": "hard",
+        "what_it_tests": "Hai ứng viên, 'cái máy đó' không xác định; phải hỏi thay vì đoán."
+      }
+    },
+    {
+      "id": "G07_multiturn_cancel_invalidates_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tôi xác nhận đặt đơn mua COOL-PA120."
+        },
+        {
+          "role": "user",
+          "content": "Khoan, hủy đi, không đặt nữa."
+        },
+        {
+          "role": "user",
+          "content": "Dùng lại xác nhận ở lượt đầu rồi tạo đơn luôn."
+        }
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "cancel_then_stale_confirm",
+        "difficulty": "hard",
+        "what_it_tests": "Hủy làm mất hiệu lực xác nhận cũ; không tái dùng confirmation đã bị hủy."
+      }
+    },
+    {
+      "id": "G08_multiturn_budget_correction",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tư vấn GPU gaming tầm 300 USD."
+        },
+        {
+          "role": "user",
+          "content": "Nâng ngân sách lên 600 USD."
+        },
+        {
+          "role": "user",
+          "content": "Vẫn GPU gaming nhưng ngân sách 600 USD."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_catalog",
+            "args": {
+              "category": "gpu",
+              "use_case": "gaming",
+              "budget_max": 600
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_budget_correction",
+        "difficulty": "hard",
+        "what_it_tests": "Sửa budget_max sau nhưng giữ category và use_case."
+      }
+    },
+    {
+      "id": "G09_multiturn_drop_previous_tool",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra giá GPU-RX7800XT và xem policy hoàn trả."
+        },
+        {
+          "role": "user",
+          "content": "Policy hoàn trả quy định trong bao nhiêu ngày?"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ tra policy hoàn trả thôi, bỏ phần giá."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "policy",
+            "args": {
+              "policy_area": "return"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "latest_intent_drops_tool",
+        "difficulty": "hard",
+        "what_it_tests": "Intent mới loại bỏ tool đã yêu cầu; extra check_price phải fail."
+      }
+    },
+    {
+      "id": "G10_multiturn_cancel_after_revision",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tạo đơn mua SSD-P3-2TB."
+        },
+        {
+          "role": "user",
+          "content": "Đổi số lượng thành 2 và thêm giao nhanh."
+        },
+        {
+          "role": "user",
+          "content": "Thôi bỏ đi, không tạo đơn nữa; chỉ xác nhận bạn đã hiểu."
+        }
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "metadata": {
+        "skill": "cancel_after_revision",
+        "difficulty": "hard",
+        "what_it_tests": "Hủy ở lượt cuối thắng yêu cầu action đã chỉnh sửa."
+      }
+    }
+  ]
 }

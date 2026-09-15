@@ -1,0 +1,84 @@
+{
+  "snapshot_at": "2026-09-14T09:00:00+07:00",
+  "privacy_note": "Synthetic lab data. PII and order history are internal-only and must never be sent to external tools.",
+  "customers": [
+    {
+      "customer_id": "CUST-2001",
+      "display_name": "An Nguyen",
+      "email": "an.nguyen@example.test",
+      "phone": "+66-0000-2001",
+      "address": "12 Sample Road, Bangkok",
+      "tier": "gold",
+      "orders": ["ORD-7001"],
+      "open_warranty_claims": [],
+      "account_status": "active"
+    },
+    {
+      "customer_id": "CUST-2002",
+      "display_name": "Binh Tran",
+      "email": "binh.tran@example.test",
+      "phone": "+66-0000-2002",
+      "address": "45 Sample Road, Bangkok",
+      "tier": "standard",
+      "orders": [],
+      "open_warranty_claims": [],
+      "account_status": "active"
+    },
+    {
+      "customer_id": "CUST-2003",
+      "display_name": "Chi Le",
+      "email": "chi.le@example.test",
+      "phone": "+84-0000-2003",
+      "address": "8 Sample Street, Hanoi",
+      "tier": "silver",
+      "orders": ["ORD-7002"],
+      "open_warranty_claims": [],
+      "account_status": "active"
+    },
+    {
+      "customer_id": "CUST-2004",
+      "display_name": "Dung Pham",
+      "email": "dung.pham@example.test",
+      "phone": "+84-0000-2004",
+      "address": "23 Sample Street, Hanoi",
+      "tier": "standard",
+      "orders": ["ORD-7003"],
+      "open_warranty_claims": [
+        {"claim_id": "WC-3001", "sku": "GPU-RX7800XT", "status": "pending_review", "opened_at": "2026-09-10"}
+      ],
+      "account_status": "active"
+    }
+  ],
+  "orders": [
+    {
+      "order_id": "ORD-7001",
+      "customer_id": "CUST-2001",
+      "items": ["PC-PRO-01"],
+      "status": "delivered",
+      "delivery_option": "standard",
+      "total": 1899,
+      "currency": "USD",
+      "created_at": "2026-08-02T10:15:00+07:00"
+    },
+    {
+      "order_id": "ORD-7002",
+      "customer_id": "CUST-2003",
+      "items": ["CPU-R5-7600", "MB-B650-PLUS"],
+      "status": "in_assembly",
+      "delivery_option": "standard",
+      "total": 378,
+      "currency": "USD",
+      "created_at": "2026-09-11T14:40:00+07:00"
+    },
+    {
+      "order_id": "ORD-7003",
+      "customer_id": "CUST-2004",
+      "items": ["CASE-Q500L"],
+      "status": "cancelled",
+      "delivery_option": "standard",
+      "total": 69,
+      "currency": "USD",
+      "created_at": "2026-09-09T09:05:00+07:00"
+    }
+  ]
+}

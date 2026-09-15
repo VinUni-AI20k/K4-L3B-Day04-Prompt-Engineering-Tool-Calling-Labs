@@ -1,276 +1,824 @@
 {
-  "dataset_id": "day04_v3_helpdesk_base",
+  "dataset_id": "day04_v3_pcseller_base",
   "dataset_role": "base",
-  "description": "Fixed core eval for the IT Helpdesk Agent. Keep built-in tool names and all supplied cases unchanged, including prompts, expected behavior, and arguments. Test team-built bonus tools with team-authored cases.",
+  "description": "Fixed core eval for the PC Seller Assistant. 20 single-turn and 10 multi-turn cases. Keep tool names and cases stable once frozen before v0.",
   "cases": [
     {
-      "id": "H01_service_status_routing", "phase": "B", "suite": "base",
-      "query": "Dịch vụ VPN production hiện có đang gặp sự cố không?",
+      "id": "B01_prebuilt_price_routing",
+      "phase": "B",
+      "suite": "base",
+      "query": "Northstar Pro PC-PRO-01 hiện có giá bao nhiêu và còn hàng không?",
       "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [{"name": "check_service_status", "args": {"service": "vpn", "environment": "production"}}]},
-      "metadata": {"skill": "route_shared_service", "difficulty": "easy", "what_it_tests": "Trạng thái dịch vụ dùng chung phải dùng status tool, không inspect một thiết bị."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_price",
+            "args": {
+              "sku": "PC-PRO-01",
+              "include_stock": true
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "route_price_prebuilt",
+        "difficulty": "easy",
+        "what_it_tests": "Giá của một SKU cụ thể dùng check_price, không dùng search_catalog."
+      }
     },
     {
-      "id": "H02_device_routing", "phase": "B", "suite": "base",
-      "query": "Kiểm tra tổng thể laptop LT-204 giúp mình.",
+      "id": "B02_catalog_advice_routing",
+      "phase": "B",
+      "suite": "base",
+      "query": "Tư vấn giúp mình CPU cho nhu cầu gaming, ngân sách khoảng 300 USD.",
       "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-204", "check": "all"}}]},
-      "metadata": {"skill": "route_device", "difficulty": "easy", "what_it_tests": "Một asset cụ thể phải dùng inspect_device."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_catalog",
+            "args": {
+              "category": "cpu",
+              "use_case": "gaming"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "route_advice",
+        "difficulty": "easy",
+        "what_it_tests": "Yêu cầu tư vấn dùng catalog, không check_price một SKU."
+      }
     },
     {
-      "id": "H03_kb_routing", "phase": "B", "suite": "base",
-      "query": "Tìm hướng dẫn cấu hình Outlook profile trên Windows 11.",
+      "id": "B03_policy_routing",
+      "phase": "B",
+      "suite": "base",
+      "query": "Chính sách bảo hành của shop quy định thời hạn bao lâu?",
       "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [{"name": "search_kb", "args": {"category": "email"}}]},
-      "metadata": {"skill": "route_howto", "difficulty": "medium", "what_it_tests": "Yêu cầu hướng dẫn dùng knowledge base, không status hay device inspection."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "policy",
+            "args": {
+              "policy_area": "warranty"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "route_policy",
+        "difficulty": "easy",
+        "what_it_tests": "Câu hỏi quy định nội bộ dùng policy."
+      }
     },
     {
-      "id": "H04_user_routing", "phase": "B", "suite": "base",
-      "query": "Tra cứu tài khoản nhân viên EMP-1003 và thiết bị được cấp.",
+      "id": "B04_customer_routing",
+      "phase": "B",
+      "suite": "base",
+      "query": "Tra cứu khách hàng CUST-2003 và các đơn đã mua.",
       "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [{"name": "lookup_user", "args": {"employee_id": "EMP-1003"}}]},
-      "metadata": {"skill": "route_employee", "difficulty": "easy", "what_it_tests": "Employee ID phải đi vào directory lookup."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_customer",
+            "args": {
+              "customer_id": "CUST-2003"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "route_customer",
+        "difficulty": "easy",
+        "what_it_tests": "Mã khách hàng phải đi vào lookup_customer."
+      }
     },
     {
-      "id": "H05_device_check_arg", "phase": "B", "suite": "base",
-      "query": "Kiểm tra riêng kết nối VPN trên LT-204.",
+      "id": "B05_price_arg_stock",
+      "phase": "B",
+      "suite": "base",
+      "query": "Kiểm tra giá và tồn kho của SSD-990PRO-1TB.",
       "failure_type": "wrong_arg_value",
-      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-204", "check": "vpn"}}]},
-      "metadata": {"skill": "device_check_arg", "difficulty": "medium", "what_it_tests": "Trích đúng asset ID và check=vpn."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_price",
+            "args": {
+              "sku": "SSD-990PRO-1TB",
+              "include_stock": true
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "price_arg_stock",
+        "difficulty": "medium",
+        "what_it_tests": "Trích đúng SKU và bật include_stock khi user hỏi tồn kho."
+      }
     },
     {
-      "id": "H06_environment_arg", "phase": "B", "suite": "base",
-      "query": "Email staging đang hoạt động bình thường chứ?",
+      "id": "B06_usecase_enum_arg",
+      "phase": "B",
+      "suite": "base",
+      "query": "Tìm cấu hình prebuilt cho nhu cầu workstation.",
       "failure_type": "wrong_arg_value",
-      "expect": {"tool_calls": [{"name": "check_service_status", "args": {"service": "email", "environment": "staging"}}]},
-      "metadata": {"skill": "environment_arg", "difficulty": "medium", "what_it_tests": "Không được đổi staging thành production mặc định."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_catalog",
+            "args": {
+              "category": "prebuilt",
+              "use_case": "workstation"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "usecase_enum",
+        "difficulty": "medium",
+        "what_it_tests": "Không đổi workstation thành gaming/office mặc định."
+      }
     },
     {
-      "id": "H07_format_report", "phase": "B", "suite": "base",
-      "query": "Trình bày các finding sau thành báo cáo kỹ thuật tên 'VPN LT-204': VPN AUTH_TIMEOUT; service VPN degraded.",
+      "id": "B07_format_quote",
+      "phase": "B",
+      "suite": "base",
+      "query": "Trình bày các finding sau thành báo giá chi tiết tên 'Build gaming 2026': CPU-R7-7800X3D 449 USD; GPU-RTX4070S 599 USD.",
       "failure_type": "wrong_arg_value",
-      "expect": {"tool_calls": [{"name": "format_incident_report", "args": {"template": "technical", "incident_title": "VPN LT-204"}}]},
-      "metadata": {"skill": "format_existing_findings", "difficulty": "medium", "what_it_tests": "Đã có findings thì chỉ format, không gọi tool thu thập lại."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "format_quote",
+            "args": {
+              "template": "detailed",
+              "quote_title": "Build gaming 2026"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "format_findings",
+        "difficulty": "medium",
+        "what_it_tests": "Đã có dữ liệu thì chỉ format, không thu thập lại."
+      }
     },
     {
-      "id": "H08_out_of_scope", "phase": "B", "suite": "base",
+      "id": "B08_out_of_scope",
+      "phase": "B",
+      "suite": "base",
       "query": "Gợi ý cho mình công thức nấu phở bò.",
       "failure_type": "out_of_scope",
-      "expect": {"no_tool": true, "behavior": "refuse"},
-      "metadata": {"skill": "out_of_scope", "difficulty": "easy", "what_it_tests": "Yêu cầu ngoài IT helpdesk không gọi tool."}
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "metadata": {
+        "skill": "out_of_scope",
+        "difficulty": "easy",
+        "what_it_tests": "Ngoài bán PC không gọi tool."
+      }
     },
     {
-      "id": "H09_meta_no_tool", "phase": "B", "suite": "base",
+      "id": "B09_meta_no_tool",
+      "phase": "B",
+      "suite": "base",
       "query": "Bạn là gì và có thể hỗ trợ những việc nào?",
       "failure_type": "unnecessary_tool",
-      "expect": {"no_tool": true, "behavior": "answer_without_tool"},
-      "metadata": {"skill": "meta_no_tool", "difficulty": "easy", "what_it_tests": "Câu hỏi năng lực trả lời trực tiếp."}
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "metadata": {
+        "skill": "meta_no_tool",
+        "difficulty": "easy",
+        "what_it_tests": "Câu hỏi năng lực trả lời trực tiếp."
+      }
     },
     {
-      "id": "H10_missing_asset", "phase": "B", "suite": "base",
-      "query": "Kiểm tra Wi-Fi trên laptop của mình giúp nhé.",
+      "id": "B10_missing_build",
+      "phase": "B",
+      "suite": "base",
+      "query": "Báo giá và đặt mua giúp mình bộ PC này.",
       "failure_type": "missing_info",
-      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
-      "metadata": {"skill": "clarify_asset", "difficulty": "medium", "what_it_tests": "Thiếu asset ID phải hỏi, không đoán LT-204."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "clarify_build",
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu linh kiện/khách hàng phải hỏi, không đoán cấu hình."
+      }
     },
     {
-      "id": "H11_missing_employee", "phase": "B", "suite": "base",
-      "query": "Kiểm tra tài khoản của bạn nhân viên bên Sales giúp mình.",
+      "id": "B11_missing_customer",
+      "phase": "B",
+      "suite": "base",
+      "query": "Đơn hàng của mình đang ở đâu rồi?",
       "failure_type": "missing_info",
-      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
-      "metadata": {"skill": "clarify_employee", "difficulty": "medium", "what_it_tests": "Tên mơ hồ và thiếu employee ID phải hỏi lại."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "clarify_customer",
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu mã khách/đơn phải hỏi."
+      }
     },
     {
-      "id": "H12_confirm_before_ticket", "phase": "B", "suite": "base",
-      "query": "Tạo ticket mức high cho lỗi VPN trên LT-204 giúp mình.",
+      "id": "B12_confirm_before_order",
+      "phase": "B",
+      "suite": "base",
+      "query": "Đặt mua PC-PRO-01 cho mình, giao nhanh.",
       "failure_type": "wrong_boundary",
-      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
-      "metadata": {"skill": "confirm_write", "difficulty": "medium", "what_it_tests": "Tạo ticket là write action, phải xác nhận trước."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "confirm_write",
+        "difficulty": "medium",
+        "what_it_tests": "Tạo đơn là write action, phải xác nhận trước."
+      }
     },
     {
-      "id": "H13_parallel_status_and_device", "phase": "B", "suite": "base",
-      "query": "VPN trên LT-204 lỗi; kiểm tra cả trạng thái VPN production và máy đó.",
+      "id": "B13_parallel_price_compat",
+      "phase": "B",
+      "suite": "base",
+      "query": "Kiểm tra giá CPU-R7-7800X3D và xem nó có tương thích với mainboard MB-B650-PLUS không.",
       "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [
-        {"name": "check_service_status", "args": {"service": "vpn", "environment": "production"}},
-        {"name": "inspect_device", "args": {"asset_id": "LT-204", "check": "vpn"}}
-      ]},
-      "metadata": {"skill": "parallel_tools", "difficulty": "hard", "what_it_tests": "Một yêu cầu cần cả shared status và device evidence; thứ tự không quan trọng."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_price",
+            "args": {
+              "sku": "CPU-R7-7800X3D"
+            }
+          },
+          {
+            "name": "check_compatibility",
+            "args": {
+              "cpu_sku": "CPU-R7-7800X3D",
+              "mainboard_sku": "MB-B650-PLUS"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "parallel_price_compat",
+        "difficulty": "hard",
+        "what_it_tests": "Hai nguồn khác nhau; thứ tự không quan trọng."
+      }
     },
     {
-      "id": "H14_out_of_scope_coding", "phase": "B", "suite": "base",
+      "id": "B14_out_of_scope_coding",
+      "phase": "B",
+      "suite": "base",
       "query": "Viết một REST API quản lý bán hàng bằng Python.",
       "failure_type": "out_of_scope",
-      "expect": {"no_tool": true, "behavior": "refuse"},
-      "metadata": {"skill": "out_of_scope_coding", "difficulty": "easy", "what_it_tests": "Coding project ngoài helpdesk không gọi tool."}
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "metadata": {
+        "skill": "out_of_scope_coding",
+        "difficulty": "easy",
+        "what_it_tests": "Dự án coding ngoài phạm vi không gọi tool."
+      }
     },
     {
-      "id": "M01_clarify_then_asset", "phase": "B", "suite": "base",
+      "id": "B15_duplicate_tool_two_gpu",
+      "phase": "B",
+      "suite": "base",
+      "query": "So sánh giá hiện tại của GPU-RTX4070S và GPU-RX7800XT.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_price",
+            "args": {
+              "sku": "GPU-RTX4070S"
+            }
+          },
+          {
+            "name": "check_price",
+            "args": {
+              "sku": "GPU-RX7800XT"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "duplicate_tool_parallel",
+        "difficulty": "hard",
+        "what_it_tests": "Cùng tool phải gọi hai lần với SKU khác nhau."
+      }
+    },
+    {
+      "id": "B16_compare_two_prebuilts",
+      "phase": "B",
+      "suite": "base",
+      "query": "So sánh giá và tồn kho của PC-STARTER-01 và PC-PRO-01.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_price",
+            "args": {
+              "sku": "PC-STARTER-01"
+            }
+          },
+          {
+            "name": "check_price",
+            "args": {
+              "sku": "PC-PRO-01"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiple_skus",
+        "difficulty": "hard",
+        "what_it_tests": "Không gộp hai SKU vào một argument hoặc chỉ kiểm tra một máy."
+      }
+    },
+    {
+      "id": "B17_triage_three_sources",
+      "phase": "B",
+      "suite": "base",
+      "query": "Tư vấn RAM DDR5 cho build gaming, kiểm tra giá RAM-DDR5-32-6000 và tra chính sách đổi trả.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_catalog",
+            "args": {
+              "category": "ram"
+            }
+          },
+          {
+            "name": "check_price",
+            "args": {
+              "sku": "RAM-DDR5-32-6000"
+            }
+          },
+          {
+            "name": "policy",
+            "args": {
+              "policy_area": "return"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "three_source_triage",
+        "difficulty": "hard",
+        "what_it_tests": "Một request rõ ràng cần ba nguồn."
+      }
+    },
+    {
+      "id": "B18_customer_and_price",
+      "phase": "B",
+      "suite": "base",
+      "query": "Tra khách hàng CUST-2001 và kiểm tra giá PC-PRO-01.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_customer",
+            "args": {
+              "customer_id": "CUST-2001"
+            }
+          },
+          {
+            "name": "check_price",
+            "args": {
+              "sku": "PC-PRO-01"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "customer_price_parallel",
+        "difficulty": "hard",
+        "what_it_tests": "Hồ sơ khách và giá là hai nguồn riêng."
+      }
+    },
+    {
+      "id": "B19_ambiguous_use_case",
+      "phase": "B",
+      "suite": "base",
+      "query": "Tư vấn cấu hình PC cho nhu cầu 'đa dụng' với ngân sách linh hoạt.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "choice"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "clarify_use_case",
+        "difficulty": "hard",
+        "what_it_tests": "'Đa dụng' không map chắc chắn vào enum use_case; phải hỏi lựa chọn."
+      }
+    },
+    {
+      "id": "B20_format_without_refetch",
+      "phase": "B",
+      "suite": "base",
+      "query": "Đã có findings: CPU-R7-7800X3D 449 USD, MB-B650-PLUS 159 USD. Chỉ format thành báo giá ngắn tên 'Build AMD'; không kiểm tra lại giá.",
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "format_quote",
+            "args": {
+              "template": "brief",
+              "quote_title": "Build AMD"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "format_only_boundary",
+        "difficulty": "hard",
+        "what_it_tests": "Tôn trọng 'không kiểm tra lại'; extra check_price phải fail."
+      }
+    },
+    {
+      "id": "M01_clarify_then_sku",
+      "phase": "B",
+      "suite": "base",
       "turns": [
-        {"role": "user", "content": "Kiểm tra Wi-Fi trên laptop của mình."},
-        {"role": "user", "content": "Mã máy là LT-240."},
-        {"role": "user", "content": "Chỉ kiểm tra network trên đúng máy đó."}
+        {
+          "role": "user",
+          "content": "Tư vấn giúp mình CPU cho build gaming."
+        },
+        {
+          "role": "user",
+          "content": "Mình chốt CPU-R7-7800X3D."
+        },
+        {
+          "role": "user",
+          "content": "Kiểm tra giá và tồn kho của nó."
+        }
       ],
       "failure_type": "missing_info",
-      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-240", "check": "network"}}]},
-      "metadata": {"skill": "multiturn_fill_asset", "difficulty": "hard", "what_it_tests": "Carry asset ID rồi dùng check mới nhất."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_price",
+            "args": {
+              "sku": "CPU-R7-7800X3D"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_carry_sku",
+        "difficulty": "hard",
+        "what_it_tests": "Mang SKU đã chốt ở lượt trước vào lượt cuối."
+      }
     },
     {
-      "id": "M02_carry_environment", "phase": "B", "suite": "base",
+      "id": "M02_carry_use_case",
+      "phase": "B",
+      "suite": "base",
       "turns": [
-        {"role": "user", "content": "VPN staging có ổn không?"},
-        {"role": "user", "content": "Còn email thì sao?"},
-        {"role": "user", "content": "Chỉ kiểm tra email, vẫn là staging."}
+        {
+          "role": "user",
+          "content": "Tư vấn GPU cho nhu cầu gaming, ngân sách 600 USD."
+        },
+        {
+          "role": "user",
+          "content": "Còn CPU thì sao?"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ cần CPU thôi, vẫn nhu cầu gaming và ngân sách đó."
+        }
       ],
       "failure_type": "wrong_arg_value",
-      "expect": {"tool_calls": [{"name": "check_service_status", "args": {"service": "email", "environment": "staging"}}]},
-      "metadata": {"skill": "multiturn_carry_environment", "difficulty": "hard", "what_it_tests": "Đổi service nhưng giữ environment từ lượt trước."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_catalog",
+            "args": {
+              "category": "cpu",
+              "use_case": "gaming"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_carry_usecase",
+        "difficulty": "hard",
+        "what_it_tests": "Đổi category nhưng giữ use_case từ lượt trước."
+      }
     },
     {
-      "id": "M03_correct_asset", "phase": "B", "suite": "base",
+      "id": "M03_correct_sku",
+      "phase": "B",
+      "suite": "base",
       "turns": [
-        {"role": "user", "content": "Kiểm tra bảo mật máy LT-204."},
-        {"role": "user", "content": "À nhầm, máy LT-240."},
-        {"role": "user", "content": "Giữ check security nhé."}
+        {
+          "role": "user",
+          "content": "Kiểm tra giá GPU-RTX4060."
+        },
+        {
+          "role": "user",
+          "content": "À nhầm, là GPU-RTX4070S."
+        },
+        {
+          "role": "user",
+          "content": "Kiểm tra giá đúng mã đó nhé."
+        }
       ],
       "failure_type": "wrong_arg_value",
-      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-240", "check": "security"}}]},
-      "metadata": {"skill": "multiturn_correction", "difficulty": "hard", "what_it_tests": "Thông tin sửa sau phải thắng thông tin cũ."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_price",
+            "args": {
+              "sku": "GPU-RTX4070S"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_correction",
+        "difficulty": "hard",
+        "what_it_tests": "Thông tin sửa sau phải thắng thông tin cũ."
+      }
     },
     {
-      "id": "M04_correct_employee", "phase": "B", "suite": "base",
+      "id": "M04_correct_customer",
+      "phase": "B",
+      "suite": "base",
       "turns": [
-        {"role": "user", "content": "Tra cứu nhân viên EMP-1001."},
-        {"role": "user", "content": "Mình gõ nhầm, là EMP-1003."},
-        {"role": "user", "content": "Cho biết thiết bị được cấp của người đó."}
+        {
+          "role": "user",
+          "content": "Tra cứu khách hàng CUST-2002."
+        },
+        {
+          "role": "user",
+          "content": "Mình gõ nhầm, là CUST-2004."
+        },
+        {
+          "role": "user",
+          "content": "Cho biết tình trạng bảo hành của người đó."
+        }
       ],
       "failure_type": "wrong_arg_value",
-      "expect": {"tool_calls": [{"name": "lookup_user", "args": {"employee_id": "EMP-1003"}}]},
-      "metadata": {"skill": "multiturn_employee_correction", "difficulty": "medium", "what_it_tests": "Employee ID được sửa ở lượt sau."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_customer",
+            "args": {
+              "customer_id": "CUST-2004"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_customer_correction",
+        "difficulty": "medium",
+        "what_it_tests": "Mã khách được sửa ở lượt sau."
+      }
     },
     {
-      "id": "M05_ticket_confirmation", "phase": "B", "suite": "base",
+      "id": "M05_order_confirmation",
+      "phase": "B",
+      "suite": "base",
       "turns": [
-        {"role": "user", "content": "Tạo ticket lỗi VPN LT-204 mức medium."},
-        {"role": "user", "content": "Đổi mức ưu tiên thành high."},
-        {"role": "user", "content": "Hãy cho mình xem lại và hỏi xác nhận trước khi tạo."}
+        {
+          "role": "user",
+          "content": "Đặt mua PC-PRO-01, giao tiêu chuẩn."
+        },
+        {
+          "role": "user",
+          "content": "Đổi sang giao nhanh."
+        },
+        {
+          "role": "user",
+          "content": "Cho mình xem lại và hỏi xác nhận trước khi tạo đơn."
+        }
       ],
       "failure_type": "wrong_boundary",
-      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
-      "metadata": {"skill": "multiturn_confirmation", "difficulty": "hard", "what_it_tests": "Sau sửa priority vẫn phải dừng ở confirmation boundary."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_confirmation",
+        "difficulty": "hard",
+        "what_it_tests": "Sau khi sửa delivery vẫn phải dừng ở confirmation boundary."
+      }
     },
     {
-      "id": "M06_switch_tool", "phase": "B", "suite": "base",
+      "id": "M06_switch_tool",
+      "phase": "B",
+      "suite": "base",
       "turns": [
-        {"role": "user", "content": "Kiểm tra trạng thái Wi-Fi production."},
-        {"role": "user", "content": "Thôi không xem status nữa, tìm hướng dẫn khắc phục Wi-Fi."},
-        {"role": "user", "content": "Chỉ cần bài hướng dẫn cho Windows."}
+        {
+          "role": "user",
+          "content": "Kiểm tra giá SSD-990PRO-1TB."
+        },
+        {
+          "role": "user",
+          "content": "Thôi không xem giá nữa, tìm giúp mình SSD 2TB trong catalog."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ cần tìm trong catalog thôi."
+        }
       ],
       "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [{"name": "search_kb", "args": {"category": "wifi"}}]},
-      "metadata": {"skill": "multiturn_switch_tool", "difficulty": "hard", "what_it_tests": "Intent mới thay status bằng knowledge search."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_catalog",
+            "args": {
+              "category": "storage"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_switch_tool",
+        "difficulty": "hard",
+        "what_it_tests": "Intent mới thay check_price bằng search_catalog."
+      }
     },
     {
-      "id": "H15_compare_environments", "phase": "B", "suite": "base",
-      "query": "So sánh trạng thái email production và staging, đừng bỏ sót môi trường nào.",
-      "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [
-        {"name": "check_service_status", "args": {"service": "email", "environment": "production"}},
-        {"name": "check_service_status", "args": {"service": "email", "environment": "staging"}}
-      ]},
-      "metadata": {"skill": "duplicate_tool_parallel", "difficulty": "hard", "what_it_tests": "Cùng một tool phải được gọi hai lần với args khác nhau; thứ tự không quan trọng."}
-    },
-    {
-      "id": "H16_compare_two_assets", "phase": "B", "suite": "base",
-      "query": "So sánh hardware snapshot của LT-204 và DT-031.",
-      "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [
-        {"name": "inspect_device", "args": {"asset_id": "LT-204", "check": "hardware"}},
-        {"name": "inspect_device", "args": {"asset_id": "DT-031", "check": "hardware"}}
-      ]},
-      "metadata": {"skill": "multiple_assets", "difficulty": "hard", "what_it_tests": "Không được gộp hai asset IDs vào một argument hoặc chỉ kiểm tra một máy."}
-    },
-    {
-      "id": "H17_triage_with_three_sources", "phase": "B", "suite": "base",
-      "query": "VPN trên LT-318 sắp hết certificate; kiểm tra máy, status VPN production và tìm hướng dẫn VPN macOS.",
-      "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [
-        {"name": "inspect_device", "args": {"asset_id": "LT-318", "check": "vpn"}},
-        {"name": "check_service_status", "args": {"service": "vpn", "environment": "production"}},
-        {"name": "search_kb", "args": {"category": "vpn"}}
-      ]},
-      "metadata": {"skill": "three_source_triage", "difficulty": "hard", "what_it_tests": "Một request rõ ràng cần ba nguồn; baseline one-tool rule sẽ làm fail."}
-    },
-    {
-      "id": "H18_user_and_asset", "phase": "B", "suite": "base",
-      "query": "Tra tài khoản EMP-1007 và kiểm tra security của máy DT-087 được nêu trong yêu cầu này.",
-      "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [
-        {"name": "lookup_user", "args": {"employee_id": "EMP-1007"}},
-        {"name": "inspect_device", "args": {"asset_id": "DT-087", "check": "security"}}
-      ]},
-      "metadata": {"skill": "user_asset_parallel", "difficulty": "hard", "what_it_tests": "Directory record và device diagnostic là hai nguồn riêng."}
-    },
-    {
-      "id": "H19_ambiguous_environment", "phase": "B", "suite": "base",
-      "query": "Kiểm tra email ở môi trường demo của team QA.",
-      "failure_type": "missing_info",
-      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "choice", "options": ["production", "staging"]}}]},
-      "metadata": {"skill": "clarify_environment", "difficulty": "hard", "what_it_tests": "Demo không map chắc chắn sang enum; phải hỏi production hay staging."}
-    },
-    {
-      "id": "H20_format_without_refetch", "phase": "B", "suite": "base",
-      "query": "Đã có findings: DT-087 packet loss 12%, DIMM B1 lỗi. Chỉ format thành handoff report tên 'DT-087 hardware'; không kiểm tra lại.",
-      "failure_type": "unnecessary_tool",
-      "expect": {"tool_calls": [{"name": "format_incident_report", "args": {"template": "handoff", "incident_title": "DT-087 hardware"}}]},
-      "metadata": {"skill": "format_only_boundary", "difficulty": "hard", "what_it_tests": "Tôn trọng 'không kiểm tra lại'; extra inspect call phải fail."}
-    },
-    {
-      "id": "M07_cancel_previous_action", "phase": "B", "suite": "base",
+      "id": "M07_cancel_action",
+      "phase": "B",
+      "suite": "base",
       "turns": [
-        {"role": "user", "content": "Tạo ticket lỗi máy in PR-404."},
-        {"role": "user", "content": "Dừng lại, không tạo gì cả."},
-        {"role": "user", "content": "Chỉ nói bạn đã hiểu yêu cầu hủy."}
+        {
+          "role": "user",
+          "content": "Tạo đơn mua CASE-4000D."
+        },
+        {
+          "role": "user",
+          "content": "Dừng lại, không đặt gì cả."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ xác nhận là bạn đã hiểu yêu cầu hủy."
+        }
       ],
       "failure_type": "unnecessary_tool",
-      "expect": {"no_tool": true, "behavior": "answer_without_tool"},
-      "metadata": {"skill": "multiturn_cancel", "difficulty": "hard", "what_it_tests": "Latest cancellation phải thắng action request cũ; không clarify và không create."}
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "metadata": {
+        "skill": "multiturn_cancel",
+        "difficulty": "hard",
+        "what_it_tests": "Hủy ở lượt cuối thắng yêu cầu action cũ; không clarify và không create_order."
+      }
     },
     {
-      "id": "M08_correct_then_parallel", "phase": "B", "suite": "base",
+      "id": "M08_correct_then_parallel",
+      "phase": "B",
+      "suite": "base",
       "turns": [
-        {"role": "user", "content": "VPN trên LT-204 đang lỗi."},
-        {"role": "user", "content": "À mã đúng là LT-318, máy macOS."},
-        {"role": "user", "content": "Kiểm tra cả VPN trên máy đó và VPN production."}
+        {
+          "role": "user",
+          "content": "Kiểm tra giá CPU-I5-14600K."
+        },
+        {
+          "role": "user",
+          "content": "À mã đúng là CPU-R5-7600."
+        },
+        {
+          "role": "user",
+          "content": "Kiểm tra giá CPU đó và tra xem mainboard MB-B650-PLUS có tương thích không."
+        }
       ],
       "failure_type": "wrong_arg_value",
-      "expect": {"tool_calls": [
-        {"name": "inspect_device", "args": {"asset_id": "LT-318", "check": "vpn"}},
-        {"name": "check_service_status", "args": {"service": "vpn", "environment": "production"}}
-      ]},
-      "metadata": {"skill": "multiturn_correction_parallel", "difficulty": "hard", "what_it_tests": "Carry corrected asset và tạo hai calls từ latest intent."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_price",
+            "args": {
+              "sku": "CPU-R5-7600"
+            }
+          },
+          {
+            "name": "check_compatibility",
+            "args": {
+              "cpu_sku": "CPU-R5-7600",
+              "mainboard_sku": "MB-B650-PLUS"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_correction_parallel",
+        "difficulty": "hard",
+        "what_it_tests": "Mang SKU đã sửa và tạo hai calls từ latest intent."
+      }
     },
     {
-      "id": "M09_confirmation_invalidated", "phase": "B", "suite": "base",
+      "id": "M09_confirmation_invalidated",
+      "phase": "B",
+      "suite": "base",
       "turns": [
-        {"role": "user", "content": "Tôi xác nhận ticket lỗi Wi-Fi LT-240 mức medium."},
-        {"role": "user", "content": "Khoan, đổi thành critical và thêm nội dung nghi mất dữ liệu."},
-        {"role": "user", "content": "Hãy rà lại payload mới trước."}
+        {
+          "role": "user",
+          "content": "Tôi xác nhận đặt đơn mua SSD-P3-2TB."
+        },
+        {
+          "role": "user",
+          "content": "Khoan, đổi sang SSD-990PRO-1TB và thêm giao nhanh."
+        },
+        {
+          "role": "user",
+          "content": "Rà lại payload mới trước."
+        }
       ],
       "failure_type": "wrong_boundary",
-      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
-      "metadata": {"skill": "confirmation_payload_change", "difficulty": "hard", "what_it_tests": "Confirmation cũ mất hiệu lực khi priority/summary thay đổi."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "confirmation_payload_change",
+        "difficulty": "hard",
+        "what_it_tests": "Xác nhận cũ mất hiệu lực khi item/delivery thay đổi."
+      }
     },
     {
-      "id": "M10_latest_intent_wins", "phase": "B", "suite": "base",
+      "id": "M10_latest_intent_wins",
+      "phase": "B",
+      "suite": "base",
       "turns": [
-        {"role": "user", "content": "Kiểm tra hardware máy DT-031."},
-        {"role": "user", "content": "Không cần kiểm tra máy nữa."},
-        {"role": "user", "content": "Chỉ tra trạng thái tài khoản EMP-1009."}
+        {
+          "role": "user",
+          "content": "Kiểm tra giá GPU-RTX4060."
+        },
+        {
+          "role": "user",
+          "content": "Không cần xem giá nữa."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ tra khách hàng CUST-2001 thôi."
+        }
       ],
       "failure_type": "wrong_tool",
-      "expect": {"tool_calls": [{"name": "lookup_user", "args": {"employee_id": "EMP-1009"}}]},
-      "metadata": {"skill": "latest_intent_replacement", "difficulty": "hard", "what_it_tests": "Không gọi stale inspect_device từ turn đầu."}
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_customer",
+            "args": {
+              "customer_id": "CUST-2001"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "latest_intent_replacement",
+        "difficulty": "hard",
+        "what_it_tests": "Không gọi stale check_price từ lượt đầu."
+      }
     }
   ]
 }
