@@ -50,16 +50,42 @@ total_cases`, và tool result error đã được review thủ công.
 
 | Version | Prompt/tool change | Hypothesis | Metric | Before | After | Run file |
 |---|---|---|---|---:|---:|---|
-| v0 | baseline |  |  |  |  |  |
-| v1 |  |  |  |  |  |  |
+| v0 | baseline (starter chưa sửa) | — | case_accuracy | — | 0.70 (21/30) | [v0 run](../runs/v0_B_base_openrouter_20260915T183850004285.json) |
+| v1 | Prompt: thêm Missing Information + Write Actions rules. Tools: sửa description clarify + create_ticket | Thêm quy tắc clarify (thiếu ID → hỏi lại) và confirmation (create_ticket → phải yes/no trước) sẽ sửa 6 cases missing_info + wrong_boundary | case_accuracy | 0.70 | 0.8333 (25/30) | [v1 run](../runs/v1_B_base_openrouter_20260915T185803162016.json) |
 | v2 |  |  |  |  |  |  |
 | v3 |  |  |  |  |  |  |
 
+### v0 → v1: Chi tiết thay đổi
+
+**Đã sửa (6 cases FAIL → PASS):**
+
+| Case | Loại lỗi v0 | v0 đã làm sai | v1 đã sửa đúng |
+|------|------------|---------------|----------------|
+| H10_missing_asset | missing_info | Bịa asset_id="laptop" | Gọi clarify(text) hỏi mã tài sản |
+| H11_missing_employee | missing_info | Nhét employee_id="Sales" | Gọi clarify(text) hỏi mã nhân viên |
+| H19_ambiguous_environment | missing_info | Đoán environment=staging | Gọi clarify(choice) hỏi production/staging |
+| H12_confirm_before_ticket | wrong_boundary | Tạo ticket(confirmed=true) ngay | Gọi clarify(yes_no) hỏi xác nhận trước |
+| M05_ticket_confirmation | wrong_boundary | Gọi cả create_ticket + clarify | Chỉ gọi clarify(yes_no) |
+| M09_confirmation_invalidated | wrong_boundary | Gọi inspect_device lạc hướng | Gọi clarify(yes_no) hỏi xác nhận lại |
+
+**Regression (2 cases PASS → FAIL):**
+
+| Case | Lỗi mới | Nguyên nhân có thể |
+|------|---------|-------------------|
+| H02_device_routing | check: expected "all", got None | Agent không truyền check="all" khi user nói "kiểm tra tổng thể" — prompt mới khiến agent thận trọng hơn với args |
+| M06_switch_tool | category: expected "wifi", got "all" | Agent dùng category mặc định "all" thay vì "wifi" — chưa có quy tắc trích xuất category cụ thể |
+
 ## B2. Failure analysis
 
-| Case ID | Failure type | Actual calls | What failed | Fix |
+Phân tích dựa trên v0 run (9 cases FAIL) và v1 run (5 cases FAIL):
+
+| Case ID | Failure type | Actual calls (v1) | What failed | Planned fix |
 |---|---|---|---|---|
-|  |  |  |  |  |
+| H02_device_routing | wrong_tool (regression) | inspect_device(asset_id="LT-204") — thiếu check="all" | Agent không truyền check khi user nói "tổng thể" | v2: thêm rule "nếu không chỉ rõ loại kiểm tra → dùng check=all" |
+| H04_user_routing | wrong_tool | lookup_user(EMP-1003) + inspect_device(LT-1003) | Gọi thêm inspect_device không cần thiết, bịa asset_id từ employee_id | v2: thêm rule "lookup_user đã trả info thiết bị, không cần gọi inspect thêm" |
+| H13_parallel_status_and_device | wrong_tool | check_service_status ✔ + inspect_device(LT-204) — thiếu check="vpn" | Đúng routing nhưng thiếu check arg cụ thể | v2: thêm rule trích check type từ ngữ cảnh |
+| M06_switch_tool | wrong_tool (regression) | search_kb(query="Wi-Fi", category="all") | category="all" thay vì "wifi" | v2: thêm rule trích category cụ thể từ ngữ cảnh |
+| H17_triage_with_three_sources | wrong_tool | 3 tools đúng nhưng thiếu check="vpn" + category="vpn" | Không trích args cụ thể từ context VPN | v2: thêm rule trích args cụ thể |
 
 ## B3. Team eval cases
 
