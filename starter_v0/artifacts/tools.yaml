@@ -8,12 +8,12 @@
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
-    description: "Ask the user for a missing required value and stop. Use when the user did not give a valid inventory ID, employee ID, or production/staging environment. Do not call inspect_device, lookup_user, or check_service_status in the same turn."
+    description: "Ask the user one question and stop. text = missing inventory ID or employee ID. choice + options [production, staging] = environment not clearly production/staging. yes_no = user asked to create a ticket but has not confirmed the CURRENT draft, including when they changed summary/priority/asset_id after an earlier confirmation or said to reuse that old confirmation / not ask again. Put the updated summary/priority/asset_id in question. A short issue phrase such as 'lỗi VPN' is already a valid summary — do not use text to request a longer summary. Do not call inspect_device, lookup_user, check_service_status, or create_ticket in the same turn."
     parameters:
       type: object
       properties:
-        question: {type: string, default: "", description: "Short question asking for the missing value"}
-        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "text = need an ID or free answer; yes_no = confirmation; choice = pick from options"}
+        question: {type: string, default: "", description: "The question. For ticket confirmation, include the draft summary, priority, and asset_id and ask the user to confirm."}
+        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "text = missing inventory/employee ID only; yes_no = confirm a ticket draft (use this for create-ticket requests); choice = pick from options"}
         options: {type: array, default: [], items: {type: string}, description: "Required when response_type is choice, for example production and staging"}
       required: [question, response_type]
 
@@ -37,7 +37,7 @@ tools:
       required: [service]
 
   - name: inspect_device
-    description: "Look up one company device by its inventory ID and return stored diagnostics. Call only when the user already provided an ID such as LT-204 or DT-031. If they referred to a laptop/computer without that ID, call clarify instead. Never put a device type, English word, or employee ID into asset_id."
+    description: "Look up one company device by its inventory ID and return stored diagnostics. Call only when the user already provided an ID such as LT-204 or DT-031. If they asked for a person's assigned devices, use lookup_user instead. Never put a device type, English word, or employee ID into asset_id. Never invent LT-/DT- from an EMP- ID."
     parameters:
       type: object
       properties:
@@ -46,7 +46,7 @@ tools:
       required: [asset_id]
 
   - name: lookup_user
-    description: "Tra cứu hồ sơ nhân viên trong directory bằng employee ID. Dùng cho yêu cầu về tài khoản, hồ sơ hoặc thiết bị được cấp của nhân viên; employee ID thường có dạng EMP-1234. Kết quả đã có assigned_assets, vì vậy không gọi inspect_device trừ khi người dùng yêu cầu chẩn đoán một asset cụ thể. Không dùng tool này để kiểm tra trạng thái hoặc chẩn đoán thiết bị."
+    description: "Tra cứu hồ sơ nhân viên trong directory bằng employee ID. Dùng khi hỏi tài khoản, hồ sơ, thiết bị được cấp, hoặc quyền truy cập CỦA MỘT NGƯỜI (ví dụ 'xem thiết bị và quyền truy cập của người đó'). Employee ID dạng EMP-1234; nếu mã đã có ở lượt trước thì dùng lại. Chỉ gọi lookup_user — không gọi inspect_device, không gọi policy (quyền của người đó không phải chính sách công ty), không bịa asset ID từ EMP-ID."
     parameters:
       type: object
       properties:
@@ -86,22 +86,22 @@ tools:
       required: [manufacturer, model, query_type]
 
   - name: policy
-    description: "Tìm trong chính sách IT nội bộ."
+    description: "Tìm trong chính sách IT nội bộ khi user hỏi chính sách/quy định (không dùng khi hỏi quyền truy cập của một nhân viên cụ thể — lúc đó dùng lookup_user). Không dùng cho trạng thái dịch vụ live hay KB how-to. Chọn policy_area cụ thể: quyền truy cập remote/VPN/part-time/MFA/mở khóa tài khoản → access_control; đưa password/token vào transcript → data_privacy; ticket → ticketing; ưu tiên sự cố → incident_response; đổi cấu hình dịch vụ → service_operations. Không để all khi chủ đề đã khớp một nhóm."
     parameters:
       type: object
       properties:
         query: {type: string, default: "", description: "Nội dung cần tìm"}
-        policy_area: {type: string, enum: [all, access_control, data_privacy, external_tools, incident_response, service_operations, ticketing], default: "all", description: "Nhóm chính sách"}
+        policy_area: {type: string, enum: [all, access_control, data_privacy, external_tools, incident_response, service_operations, ticketing], default: "all", description: "Nhóm chính sách. MFA / mở khóa tài khoản / quyền truy cập remote/VPN/part-time = access_control. Đưa password/token vào transcript = data_privacy. Chỉ dùng all khi chủ đề không khớp nhóm nào."}
         top_k: {type: integer, default: 3, description: "Số mục"}
       required: [query]
 
   - name: create_ticket
-    description: "Tạo một ticket hỗ trợ. TICKET BOUNDARY: CHỈ ĐƯỢC GỌI công cụ này sau khi người dùng ĐÃ XÁC NHẬN RÕ RÀNG (đồng ý tạo). Tuyệt đối KHÔNG tự động gọi nếu người dùng chưa đồng ý hoặc đã hủy."
+    description: "Tạo một ticket hỗ trợ. 'Tạo ticket ...' là yêu cầu soạn, KHÔNG phải xác nhận. Chỉ gọi khi lượt user MỚI NHẤT xác nhận rõ payload HIỆN TẠI (ví dụ 'tôi xác nhận', 'thông tin đúng rồi, tôi xác nhận tạo'). Xác nhận ở lượt trước mất hiệu lực nếu summary/priority/asset_id đã đổi. Câu như 'dùng confirmation ở lượt đầu', 'chạy luôn', 'đừng hỏi lại' KHÔNG phải xác nhận của payload mới — lúc đó gọi clarify với response_type=yes_no, tuyệt đối không create_ticket. Không gọi nếu user hủy."
     parameters:
       type: object
       properties:
         summary: {type: string, default: "", description: "Tóm tắt sự cố"}
         priority: {type: string, enum: [low, medium, high, critical], default: "medium", description: "Mức ưu tiên"}
         asset_id: {type: string, default: "", description: "Mã tài sản nếu có"}
-        confirmed: {type: boolean, default: false, description: "BẮT BUỘC phải là true. Chỉ gọi tool khi bạn có thể set giá trị này là true dựa trên sự đồng ý của người dùng."}
+        confirmed: {type: boolean, default: false, description: "Chỉ true khi lượt user mới nhất xác nhận đúng payload hiện tại. Xác nhận cũ, 'đừng hỏi lại', hoặc 'dùng confirmation lượt đầu' không được set true."}
       required: [summary, confirmed]

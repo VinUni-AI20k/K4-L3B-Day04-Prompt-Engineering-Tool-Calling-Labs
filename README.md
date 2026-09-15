@@ -77,6 +77,25 @@ python run_eval.py --provider openrouter --version v0 --suite base --eval-cases 
 
 Thay `openrouter` bằng `openai`, `anthropic` hoặc `gemini` khi dùng provider khác. Không commit `.env`.
 
+## UI chat (bắt buộc)
+
+UI web dùng lại agent loop của `chat.py`. Màn hình hiện **artifact version**, tin nhắn user/agent, **tên tool + args**, **kết quả hoặc lỗi** (không ẩn), và trạng thái hỏi lại / chờ xác nhận / lỗi provider. Mỗi lượt được ghi transcript JSON.
+
+```powershell
+cd starter_v0
+python ui.py --provider openrouter --version v3
+```
+
+Mở `http://127.0.0.1:8501`. CLI vẫn dùng được: `python chat.py --provider openrouter --version v3`.
+
+Ghi 4 transcript demo (yêu cầu bình thường, thiếu thông tin, nhiều lượt hủy, tạo ticket sau xác nhận):
+
+```powershell
+python scripts/record_demo_transcripts.py --provider openrouter --version v3
+```
+
+File nằm ở `starter_v0/transcripts/`. Kiểm tra không có key/mật khẩu trước khi commit.
+
 ## Tài liệu cần đọc
 
 | File | Dùng khi |
