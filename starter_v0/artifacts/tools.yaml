@@ -46,11 +46,11 @@ tools:
       required: [asset_id]
 
   - name: lookup_user
-    description: "Tra cứu người dùng trong danh bạ hỗ trợ."
+    description: "Tra cứu hồ sơ nhân viên trong directory bằng employee ID. Dùng cho yêu cầu về tài khoản, hồ sơ hoặc thiết bị được cấp của nhân viên; employee ID thường có dạng EMP-1234. Kết quả đã có assigned_assets, vì vậy không gọi inspect_device trừ khi người dùng yêu cầu chẩn đoán một asset cụ thể. Không dùng tool này để kiểm tra trạng thái hoặc chẩn đoán thiết bị."
     parameters:
       type: object
       properties:
-        employee_id: {type: string, description: "Mã nhân viên"}
+        employee_id: {type: string, description: "Mã nhân viên trong yêu cầu, ví dụ EMP-1003; truyền đúng mã người dùng cung cấp, không tự đoán"}
       required: [employee_id]
 
   - name: format_incident_report
