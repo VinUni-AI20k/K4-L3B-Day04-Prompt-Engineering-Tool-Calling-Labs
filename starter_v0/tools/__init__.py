@@ -5,11 +5,17 @@ from typing import Any
 
 import yaml
 
+from .cancel_mission.tool import cancel_mission
 from .clarify.tool import ask_user
 from .check_service_status.tool import check_service_status
 from .create_ticket.tool import create_ticket
+from .dispatch_mission.tool import dispatch_mission
 from .format_incident_report.tool import format_incident_report
+from .get_location_info.tool import get_location_info
+from .get_robot_status.tool import get_robot_status
+from .get_route_info.tool import get_route_info
 from .inspect_device.tool import inspect_device
+from .list_robots.tool import list_robots
 from .lookup_user.tool import lookup_user
 from .policy.tool import search_company_policy
 from .search_kb.tool import search_kb
@@ -30,6 +36,13 @@ TOOL_FUNCTIONS = {
     "format_incident_report": format_incident_report,
     "policy": search_company_policy,
     "create_ticket": create_ticket,
+    # Hospital AMR Operations Assistant — see docs/AMR_TOOL_CONTRACT.md.
+    "get_robot_status": get_robot_status,
+    "list_robots": list_robots,
+    "get_location_info": get_location_info,
+    "get_route_info": get_route_info,
+    "dispatch_mission": dispatch_mission,
+    "cancel_mission": cancel_mission,
 }
 
 
