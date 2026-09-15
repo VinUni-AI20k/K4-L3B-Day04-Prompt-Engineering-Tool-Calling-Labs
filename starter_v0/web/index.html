@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f8fc" />
+    <title>Northstar Helpdesk</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Điều hướng chính">
+        <div class="brand">
+          <div class="brand-mark">N</div>
+          <div>
+            <strong>northstar</strong>
+            <span>IT service desk</span>
+          </div>
+        </div>
+
+        <div class="workspace-switcher">
+          <span class="avatar avatar-small">AL</span>
+          <div>
+            <b>Alex Lam</b>
+            <span>Employee workspace</span>
+          </div>
+          <button class="icon-button" aria-label="Mở tùy chọn workspace">⌄</button>
+        </div>
+
+        <nav class="nav-section">
+          <p class="nav-label">Workspace</p>
+          <button class="nav-item active" data-view="chat"><span class="nav-icon">✦</span>Trợ lý AI</button>
+          <button class="nav-item" data-view="tickets"><span class="nav-icon">▤</span>Tickets <em>3</em></button>
+          <button class="nav-item" data-view="assets"><span class="nav-icon">▣</span>Thiết bị</button>
+          <button class="nav-item" data-view="knowledge"><span class="nav-icon">⊞</span>Knowledge base</button>
+        </nav>
+
+        <nav class="nav-section">
+          <p class="nav-label">Recent conversations</p>
+          <button class="conversation-link selected">VPN production status</button>
+          <button class="conversation-link">Laptop LT-204 check</button>
+          <button class="conversation-link">Email access issue</button>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="support-card">
+            <span class="support-icon">?</span>
+            <div><b>Cần hỗ trợ thêm?</b><span>Liên hệ IT Operations</span></div>
+          </div>
+          <button class="nav-item"><span class="nav-icon">⚙</span>Cài đặt</button>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div class="breadcrumbs"><span>Workspace</span><b>/</b><strong>AI assistant</strong></div>
+          <div class="topbar-actions">
+            <span class="status-pill"><i></i>All systems operational</span>
+            <button class="theme-toggle" id="themeToggle" type="button" aria-label="Bật dark mode" aria-pressed="false">
+              <span class="theme-icon sun-icon">☼</span><span class="theme-icon moon-icon">☾</span>
+            </button>
+            <button class="icon-button notification" aria-label="Thông báo">♢<i></i></button>
+            <span class="avatar">AL</span>
+          </div>
+        </header>
+
+        <section class="content-grid">
+          <div class="chat-column">
+            <div class="page-heading">
+              <div>
+                <p class="eyebrow">AI SERVICE DESK</p>
+                <h1>Xin chào, Alex <span>👋</span></h1>
+                <p class="muted">Bạn cần hỗ trợ điều gì hôm nay?</p>
+              </div>
+              <button class="new-chat-button" id="newChatButton"><span>＋</span> Cuộc hội thoại mới</button>
+            </div>
+
+            <div class="quick-actions">
+              <button data-prompt="Kiểm tra trạng thái VPN production hiện tại"><span class="action-icon purple">◉</span><b>Kiểm tra dịch vụ</b><small>VPN, email, Wi-Fi...</small><span class="arrow">→</span></button>
+              <button data-prompt="Kiểm tra tổng thể laptop LT-204"><span class="action-icon blue">▣</span><b>Kiểm tra thiết bị</b><small>Chẩn đoán asset của bạn</small><span class="arrow">→</span></button>
+              <button data-prompt="Tìm hướng dẫn đặt lại mật khẩu SSO"><span class="action-icon orange">✧</span><b>Tìm hướng dẫn</b><small>Knowledge base nội bộ</small><span class="arrow">→</span></button>
+            </div>
+
+            <div class="chat-card">
+              <div class="chat-card-header">
+                <div class="assistant-identity">
+                  <div class="assistant-avatar">✦</div>
+                  <div><b>Northstar Assistant</b><span><i></i> Online · v0</span></div>
+                </div>
+                <button class="icon-button" aria-label="Tùy chọn hội thoại">•••</button>
+              </div>
+
+              <div class="messages" id="messages">
+                <div class="message-row assistant-row">
+                  <div class="message-avatar">✦</div>
+                  <div class="message-content">
+                    <span class="message-author">Northstar Assistant <time>10:42 AM</time></span>
+                    <div class="bubble assistant-bubble">
+                      Chào Alex! Mình có thể giúp bạn kiểm tra dịch vụ, chẩn đoán thiết bị, tìm hướng dẫn nội bộ hoặc tạo ticket hỗ trợ. Bạn muốn bắt đầu từ đâu?
+                    </div>
+                  </div>
+                </div>
+
+                <div class="message-row user-row">
+                  <div class="message-content">
+                    <span class="message-author">Bạn <time>10:43 AM</time></span>
+                    <div class="bubble user-bubble">Kiểm tra trạng thái VPN production hiện tại</div>
+                  </div>
+                  <div class="message-avatar user-avatar">AL</div>
+                </div>
+
+                <div class="tool-event" data-collapsible>
+                  <button class="tool-event-header">
+                    <span class="tool-status">✓</span><span class="tool-name">check_service_status</span>
+                    <span class="tool-meta">completed · 0.4s</span><span class="chevron">⌄</span>
+                  </button>
+                  <div class="tool-event-body">
+                    <div><label>INPUT</label><code>{ "service": "vpn", "environment": "production" }</code></div>
+                    <div><label>RESULT</label><code class="success-code">{ "status": "operational", "uptime": "99.98%" }</code></div>
+                  </div>
+                </div>
+
+                <div class="message-row assistant-row">
+                  <div class="message-avatar">✦</div>
+                  <div class="message-content">
+                    <span class="message-author">Northstar Assistant <time>10:43 AM</time></span>
+                    <div class="bubble assistant-bubble">
+                      <span class="success-dot"></span> VPN production đang hoạt động bình thường.
+                      <div class="result-grid">
+                        <div><small>STATUS</small><b class="green-text">Operational</b></div>
+                        <div><small>UPTIME</small><b>99.98%</b></div>
+                        <div><small>LAST CHECK</small><b>Vừa xong</b></div>
+                      </div>
+                      Không ghi nhận sự cố nào trong hệ thống. Bạn có muốn mình kiểm tra kết nối VPN trên thiết bị cụ thể không?
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="composer-wrap">
+                <form class="composer" id="chatForm">
+                  <button type="button" class="attach-button" aria-label="Đính kèm tệp">＋</button>
+                  <input id="messageInput" autocomplete="off" placeholder="Mô tả vấn đề của bạn..." />
+                  <span class="shortcut">⌘ ↵</span>
+                  <button class="send-button" type="submit" aria-label="Gửi tin nhắn">↑</button>
+                </form>
+                <p class="composer-note">AI có thể mắc lỗi. Hãy kiểm tra lại thông tin quan trọng trước khi thực hiện hành động.</p>
+              </div>
+            </div>
+          </div>
+
+          <aside class="details-column">
+            <div class="detail-card session-card">
+              <div class="detail-heading"><span>SESSION DETAILS</span><button class="icon-button">•••</button></div>
+              <div class="session-title"><span class="session-icon">◒</span><div><b>VPN production status</b><span>Started today at 10:42 AM</span></div></div>
+              <div class="detail-divider"></div>
+              <div class="detail-row"><span>Version</span><b class="version-badge">v0</b></div>
+              <div class="detail-row"><span>Provider</span><b>OpenRouter</b></div>
+              <div class="detail-row"><span>Model</span><b>GPT-4o mini</b></div>
+              <div class="detail-row"><span>Messages</span><b id="messageCount">4</b></div>
+            </div>
+
+            <div class="detail-card tools-card">
+              <div class="detail-heading"><span>TOOL ACTIVITY</span><span class="live-label"><i></i> LIVE</span></div>
+              <div class="activity-item"><span class="activity-check">✓</span><div><b>check_service_status</b><span>VPN · production</span></div><time>10:43</time></div>
+              <div class="activity-item muted-activity"><span class="activity-check">✓</span><div><b>clarify</b><span>No clarification needed</span></div><time>—</time></div>
+              <button class="view-all-button">Xem toàn bộ activity <span>→</span></button>
+            </div>
+
+            <div class="detail-card tip-card">
+              <div class="tip-icon">✦</div>
+              <div><b>Mẹo sử dụng</b><p>Nêu rõ mã thiết bị hoặc tên dịch vụ để nhận được kết quả chính xác hơn.</p></div>
+              <button class="close-tip" aria-label="Đóng mẹo">×</button>
+            </div>
+          </aside>
+        </section>
+      </main>
+    </div>
+    <script src="./app.js"></script>
+  </body>
+</html>
