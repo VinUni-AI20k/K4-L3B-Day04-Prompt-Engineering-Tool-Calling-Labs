@@ -40,6 +40,7 @@
 ### Lâm Quang Anh Quân — 2A202602467
 
 - Phần việc và file/commit/PR:
+-
 - Quyết định, khó khăn và cách xử lý:
 - Điều đã học:
 - AI/công cụ đã dùng và cách kiểm tra:
