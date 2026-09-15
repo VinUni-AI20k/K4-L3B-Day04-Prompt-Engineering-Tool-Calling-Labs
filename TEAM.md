@@ -30,7 +30,5 @@ Sao chép mục này cho từng thành viên.
 ### Họ và tên — MSSV
 
 - Phần việc và file/commit/PR:
-- Quyết định, khó khăn và cách xử lý:
-- Điều đã học:
-- AI/công cụ đã dùng và cách kiểm tra:
-- Thời điểm đã tự nộp URL repo chung trên VLearn:
+- Bằng chứng kỹ thuật tự đánh giá:
+- Điều đã học được:
