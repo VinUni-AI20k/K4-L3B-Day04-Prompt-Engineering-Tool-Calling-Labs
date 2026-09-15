@@ -4,9 +4,9 @@
 
 ## Thông tin bài nộp
 
-- Tên nhóm:
-- Người đại diện / MSSV:
-- Tên repo: `K4-L3-DAY04-HoVaTen-MSSV-PromptEngineeringToolCalling`
+- Tên nhóm: Phan-Danh-Dat-2A202602627
+- Người đại diện / MSSV: Phan-Danh-Dat-2A202602627
+- Tên repo: `K4-L3-DAY04-Phan-Danh-Dat-2A202602627-PromptEngineeringToolCalling`
 - URL repo, nhánh nộp, commit chốt:
 - Deadline áp dụng và link thông báo đổi hạn nếu có:
 
