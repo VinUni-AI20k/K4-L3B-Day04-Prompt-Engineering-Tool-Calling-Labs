@@ -79,8 +79,8 @@ tools:
     parameters:
       type: object
       properties:
-        manufacturer: {type: string, description: "Hãng sản xuất công khai, ví dụ Lenovo"}
-        model: {type: string, description: "Tên model công khai, ví dụ ThinkPad T14 Gen 4"}
+        manufacturer: {type: string, description: "Tên hãng sản xuất công khai (ví dụ Lenovo). TUYỆT ĐỐI KHÔNG chứa Asset ID, Employee ID hay mã máy nội bộ."}
+        model: {type: string, description: "Tên model công khai (ví dụ ThinkPad T14 Gen 4). KHÔNG chứa mã định danh nội bộ, mã serial hay Asset ID."}
         query_type: {type: string, enum: [specs, drivers, support, compatibility], default: "support", description: "Loại thông tin cần tìm"}
         max_results: {type: integer, default: 3, description: "Số kết quả, tối đa 5"}
       required: [manufacturer, model, query_type]
@@ -96,12 +96,12 @@ tools:
       required: [query]
 
   - name: create_ticket
-    description: "Tạo một ticket hỗ trợ."
+    description: "Tạo một ticket hỗ trợ. TICKET BOUNDARY: CHỈ ĐƯỢC GỌI công cụ này sau khi người dùng ĐÃ XÁC NHẬN RÕ RÀNG (đồng ý tạo). Tuyệt đối KHÔNG tự động gọi nếu người dùng chưa đồng ý hoặc đã hủy."
     parameters:
       type: object
       properties:
         summary: {type: string, default: "", description: "Tóm tắt sự cố"}
         priority: {type: string, enum: [low, medium, high, critical], default: "medium", description: "Mức ưu tiên"}
         asset_id: {type: string, default: "", description: "Mã tài sản nếu có"}
-        confirmed: {type: boolean, default: false, description: "Đã được người dùng xác nhận"}
-      required: [summary]
+        confirmed: {type: boolean, default: false, description: "BẮT BUỘC phải là true. Chỉ gọi tool khi bạn có thể set giá trị này là true dựa trên sự đồng ý của người dùng."}
+      required: [summary, confirmed]
