@@ -1,0 +1,458 @@
+{
+  "run_id": "v3_B_group_gemini_20260915T202647553238",
+  "version": "v3",
+  "artifact_version": "v3+pa504ecaa29bb+te219aca7001e",
+  "prompt_hash": "a504ecaa29bb35458edf0c6352f9db3668fd5a3f726d85e8a9480c6cec3a3fd2",
+  "tools_hash": "e219aca7001e07e1924c377f443288f8fdd6637e90ebe8d3f57b8a1338d2db9e",
+  "phase": "B",
+  "suite": "group",
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "system_prompt": "C:\\Users\\ACER\\Documents\\Vin_AI\\K4-L3B-DAY04-TranNgocKhanh-2A202602923-PromptEngineeringToolCalling\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "C:\\Users\\ACER\\Documents\\Vin_AI\\K4-L3B-DAY04-TranNgocKhanh-2A202602923-PromptEngineeringToolCalling\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day04_v3_helpdesk_group",
+  "dataset_role": "group",
+  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
+  "generated_at": "2026-09-15T20:26:47",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 0,
+    "provider_error_cases": 10,
+    "passed_cases": 0,
+    "case_accuracy": 0.0,
+    "failure_counts": {},
+    "observed_mismatch_counts": {}
+  },
+  "results": [
+    {
+      "id": "G01_policy_password_in_ticket",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Câu hỏi về dữ liệu nhạy cảm trong ticket phải tra data privacy policy, không tạo ticket."
+      },
+      "input": "Theo policy nội bộ, có được ghi password hoặc token vào ticket hỗ trợ không?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "policy",
+            "args": {
+              "policy_area": "data_privacy"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: GEMINI_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G02_meeting_room_triage",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Triage phòng họp cần cả diagnostic của asset và knowledge base phù hợp."
+      },
+      "input": "Phòng họp RM-501 mất microphone; kiểm tra hardware của phòng và tìm hướng dẫn xử lý thiết bị phòng họp.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "RM-501",
+              "check": "hardware"
+            }
+          },
+          {
+            "name": "search_kb",
+            "args": {
+              "category": "meeting_room"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: GEMINI_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G03_public_hp_driver_search",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Chỉ dùng public manufacturer/model cho external search, không cần asset ID."
+      },
+      "input": "Tìm trang driver chính hãng cho HP EliteDesk 800 G9.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_device_info",
+            "args": {
+              "manufacturer": "HP",
+              "model": "EliteDesk 800 G9",
+              "query_type": "drivers"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: GEMINI_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G04_printer_status_and_device",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Phân biệt lỗi dịch vụ dùng chung với kết nối của máy in cụ thể."
+      },
+      "input": "Máy in PR-404 không nhận lệnh in. Kiểm tra printing production và network của máy in.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "printing",
+              "environment": "production"
+            }
+          },
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "PR-404",
+              "check": "network"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: GEMINI_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G05_missing_external_product_identity",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "External search cần manufacturer và model công khai; không được đoán hoặc gửi dữ liệu nội bộ ra web."
+      },
+      "input": "Tìm driver chính hãng trên web cho laptop của mình.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: GEMINI_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G06_multiturn_switch_environment",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Environment được sửa ở lượt sau phải ghi đè giá trị cũ."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Kiểm tra Wi-Fi staging."
+        },
+        {
+          "role": "user",
+          "content": "Không, môi trường cần xem là production."
+        },
+        {
+          "role": "user",
+          "content": "Kiểm tra lại đúng trạng thái Wi-Fi ở môi trường đó."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "wifi",
+              "environment": "production"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: GEMINI_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G07_multiturn_asset_then_policy",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Intent cuối thay thế yêu cầu inspect asset ở lượt đầu."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Laptop LT-411 có endpoint agent stale, tôi nên làm gì?"
+        },
+        {
+          "role": "user",
+          "content": "Đừng kiểm tra máy nữa, chỉ tra quy định về xử lý sự cố bảo mật."
+        },
+        {
+          "role": "user",
+          "content": "Cho mình policy incident response phù hợp."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "policy",
+            "args": {
+              "policy_area": "incident_response"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: GEMINI_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G08_multiturn_confirm_ticket_after_revision",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Agent giữ bản ticket đã sửa và chỉ thực hiện write action sau confirmation rõ ràng."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Soạn ticket cho printer PR-404 bị offline, priority medium."
+        },
+        {
+          "role": "user",
+          "content": "Đổi priority thành high, chỉ ghi tình trạng network offline."
+        },
+        {
+          "role": "user",
+          "content": "Thông tin trên là chính xác, tôi xác nhận tạo ticket."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "create_ticket",
+            "args": {
+              "asset_id": "PR-404",
+              "priority": "high",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: GEMINI_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G09_multiturn_cancel_external_search",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Hủy ở lượt mới nhất phải chặn external tool call còn treo từ lượt cũ."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm driver Dell Latitude 7440 trên web."
+        },
+        {
+          "role": "user",
+          "content": "Dừng việc tìm web, tôi không muốn gọi dịch vụ bên ngoài."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ xác nhận rằng bạn sẽ không tìm kiếm nữa."
+        }
+      ],
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: GEMINI_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G10_multiturn_correct_user_then_lookup",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Employee ID được hiệu chỉnh ở lượt sau phải là giá trị được gọi tool."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Kiểm tra trạng thái tài khoản của EMP-1009."
+        },
+        {
+          "role": "user",
+          "content": "Mã đúng là EMP-1010, không phải EMP-1009."
+        },
+        {
+          "role": "user",
+          "content": "Tra cứu tài khoản của nhân viên đúng đó."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_user",
+            "args": {
+              "employee_id": "EMP-1010"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: Missing API key env var: GEMINI_API_KEY"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false
+      },
+      "tool_results": []
+    }
+  ]
+}
