@@ -11,6 +11,7 @@
 - Thành viên và INDIVIDUAL: [TEAM.md](../../TEAM.md)
 - Members:
   - Trần Ngọc Khánh — 2A202602923 (Prompt & Iteration Lead)
+  - Nguyễn Hữu Thành — 2A202602807 (Data & Safety Lead)
   - Phùng Đức Đăng — 2A202602956 (UI, Bonus & Integration Lead)
 - Provider/model: OpenAI `gpt-4o-mini` (base eval v0–v3) & 9Router OpenRouter (`ag/gemini-3-flash` cho Web UI & demo transcripts)
 
