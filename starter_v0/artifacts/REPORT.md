@@ -21,7 +21,7 @@ Trợ lý ảo đóng vai trò nhân viên IT Service Desk nội bộ, hỗ tr�
 
 **Link dùng thử:**
 
-> Chạy trực tiếp qua Terminal (CLI): `python chat.py --provider openai --version v3`
+> URL: [Chưa có link public, hiện đang chạy giao diện local]
 
 
 ## A2. Tool agent có
@@ -140,7 +140,7 @@ Hoàn thành mục nhận xét chung trong [TEAM.md](../../TEAM.md). Dẫn tới
 
 Mỗi người tự viết và commit mục INDIVIDUAL của mình trong [TEAM.md](../../TEAM.md), nêu phần việc, bằng chứng kỹ thuật và điều đã học. Không yêu cầu chép lại cùng nội dung ở đây. Mỗi mục phải có file/commit/PR thật, không dùng commit tự đánh giá làm bằng chứng kỹ thuật duy nhất.
 
-> Link các mục INDIVIDUAL:
+> Link các mục INDIVIDUAL: 
 
 ## C3. Final checkout
 
