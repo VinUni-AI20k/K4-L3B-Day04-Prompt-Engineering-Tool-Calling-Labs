@@ -1,10 +1,16 @@
-# starter_v0 — intentionally incomplete first-draft declarations.
+# starter_v0 (LUANDEPTRAI Travel domain) — intentionally incomplete first-draft
+# declarations. Tool names and parameter schemas are kept identical to the
+# original IT helpdesk starter so the existing tools/__init__.py and tool.py
+# implementations keep working unchanged; only the descriptions/wording were
+# adapted to LUANDEPTRAI Travel's operations-support context.
+#
 # Students improve routing guidance, argument conventions, missing-information
 # handling, and confirmation boundaries through v1/v2/v3.
 #
-# Keep built-in names and supplied evaluation cases unchanged.
-# Improve descriptions and compatible schemas. Declare team-built bonus tools
-# here and in tools/__init__.py, then test them with team-authored cases.
+# Keep built-in names and the team's own evaluation cases consistent with this
+# schema. Improve descriptions and compatible schemas. Declare team-built
+# bonus tools here and in tools/__init__.py, then test them with team-authored
+# cases.
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
@@ -18,35 +24,35 @@ tools:
       required: [question]
 
   - name: search_kb
-    description: "Tìm hướng dẫn hỗ trợ kỹ thuật."
+    description: "Tìm hướng dẫn vận hành nội bộ của LUANDEPTRAI Travel (đặt vé, tài khoản, kết nối, thiết bị quầy vé...)."
     parameters:
       type: object
       properties:
         query: {type: string, default: "", description: "Nội dung cần tìm"}
-        category: {type: string, enum: [all, vpn, email, wifi, printing, account, security, hardware, software, meeting_room], default: "all", description: "Nhóm hướng dẫn"}
+        category: {type: string, enum: [all, vpn, email, wifi, printing, account, security, hardware, software, meeting_room], default: "all", description: "Nhóm hướng dẫn vận hành nội bộ"}
         top_k: {type: integer, default: 3, description: "Số kết quả"}
       required: [query]
 
   - name: check_service_status
-    description: "Kiểm tra trạng thái một dịch vụ."
+    description: "Kiểm tra trạng thái một dịch vụ vận hành dùng chung của LUANDEPTRAI Travel (hệ thống đặt vé, email xác nhận, đăng nhập, wifi quầy vé, in vé)."
     parameters:
       type: object
       properties:
-        service: {type: string, enum: [vpn, email, sso, wifi, printing], description: "Tên dịch vụ"}
+        service: {type: string, enum: [vpn, email, sso, wifi, printing], description: "Tên dịch vụ vận hành dùng chung"}
         environment: {type: string, enum: [production, staging], default: "production", description: "Môi trường"}
       required: [service]
 
   - name: inspect_device
-    description: "Kiểm tra thông tin và chẩn đoán thiết bị."
+    description: "Kiểm tra thông tin và chẩn đoán thiết bị của nhân viên hoặc quầy vé LUANDEPTRAI Travel (laptop, máy in vé, thiết bị di động...)."
     parameters:
       type: object
       properties:
-        asset_id: {type: string, description: "Mã tài sản"}
+        asset_id: {type: string, description: "Mã tài sản/thiết bị"}
         check: {type: string, enum: [all, network, vpn, security, hardware, software], default: "all", description: "Nhóm kiểm tra"}
       required: [asset_id]
 
   - name: lookup_user
-    description: "Tra cứu người dùng trong danh bạ hỗ trợ."
+    description: "Tra cứu nhân viên LUANDEPTRAI Travel trong danh bạ hỗ trợ nội bộ."
     parameters:
       type: object
       properties:
@@ -54,7 +60,7 @@ tools:
       required: [employee_id]
 
   - name: format_incident_report
-    description: "Trình bày các kết quả đã có thành báo cáo."
+    description: "Trình bày các kết quả đã có thành báo cáo sự cố vận hành."
     parameters:
       type: object
       properties:
@@ -70,12 +76,12 @@ tools:
               source: {type: string}
               status: {type: string}
         template: {type: string, enum: [brief, technical, handoff], default: "brief", description: "Mẫu báo cáo"}
-        incident_title: {type: string, default: "IT incident", description: "Tiêu đề"}
+        incident_title: {type: string, default: "LUANDEPTRAI Travel incident", description: "Tiêu đề"}
       required: [findings, template]
 
   # ---------------- Optional/advanced tools ----------------
   - name: search_device_info
-    description: "Tìm thông tin công khai về một model thiết bị trên web. Chỉ truyền hãng, model và loại thông tin; không truyền asset ID, employee ID hoặc dữ liệu nội bộ."
+    description: "Tìm thông tin công khai về một model thiết bị (laptop, máy in vé...) trên web. Chỉ truyền hãng, model và loại thông tin; không truyền asset ID, employee ID hoặc dữ liệu nội bộ."
     parameters:
       type: object
       properties:
@@ -86,7 +92,7 @@ tools:
       required: [manufacturer, model, query_type]
 
   - name: policy
-    description: "Tìm trong chính sách IT nội bộ."
+    description: "Tìm trong chính sách nội bộ của LUANDEPTRAI Travel."
     parameters:
       type: object
       properties:
@@ -96,7 +102,7 @@ tools:
       required: [query]
 
   - name: create_ticket
-    description: "Tạo một ticket hỗ trợ."
+    description: "Tạo một ticket hỗ trợ vận hành nội bộ cho LUANDEPTRAI Travel."
     parameters:
       type: object
       properties:
