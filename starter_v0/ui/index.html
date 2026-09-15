@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Northstar Labs — Helpdesk Agent</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">NL</div>
+        <div>
+          <div class="brand-title">Northstar Helpdesk</div>
+          <div class="brand-sub">Day04 · Trợ lý AI</div>
+        </div>
+      </div>
+
+      <div class="meta-card" id="meta-card">
+        <div class="meta-row"><span>Version</span><strong id="meta-version">–</strong></div>
+        <div class="meta-row"><span>Artifact</span><code id="meta-artifact">–</code></div>
+        <div class="meta-row"><span>Provider</span><strong id="meta-provider">–</strong></div>
+        <div class="meta-row"><span>Model</span><strong id="meta-model">–</strong></div>
+        <div class="meta-row"><span>Transcript</span><code id="meta-transcript">–</code></div>
+      </div>
+
+      <button class="btn-reset" id="btn-reset">↺ Hội thoại mới</button>
+
+      <div class="tools-section">
+        <div class="tools-title">Tool agent có</div>
+        <ul class="tools-list" id="tools-list"></ul>
+      </div>
+    </aside>
+
+    <main class="main">
+      <nav class="tabs">
+        <button class="tab active" data-tab="chat">Chat trực tiếp</button>
+        <button class="tab" data-tab="transcripts">Transcript đã lưu</button>
+        <button class="tab" data-tab="evals">Kết quả Eval (v0–v3)</button>
+      </nav>
+
+      <section class="panel" id="panel-chat">
+        <div class="chat-scroll" id="chat-scroll">
+          <div class="empty-state" id="chat-empty">
+            Bắt đầu hội thoại — thử: "VPN của tôi không kết nối được".
+          </div>
+        </div>
+        <form class="chat-input-row" id="chat-form">
+          <input id="chat-input" type="text" autocomplete="off" placeholder="Nhập yêu cầu hỗ trợ IT..." />
+          <button type="submit">Gửi</button>
+        </form>
+      </section>
+
+      <section class="panel hidden" id="panel-transcripts">
+        <div class="split">
+          <div class="list-col" id="transcript-list"></div>
+          <div class="detail-col" id="transcript-detail">
+            <div class="empty-state">Chọn một transcript để xem lại hội thoại.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel hidden" id="panel-evals">
+        <div class="split">
+          <div class="list-col" id="eval-list"></div>
+          <div class="detail-col" id="eval-detail">
+            <div class="empty-state">Chọn một run để xem chi tiết từng case.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
