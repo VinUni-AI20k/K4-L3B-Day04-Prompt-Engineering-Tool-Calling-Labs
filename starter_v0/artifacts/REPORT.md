@@ -1,45 +1,54 @@
 # Day 04 Lab v3 Report — Trợ lý AI của nhóm
 
-- Lĩnh vực tự chọn:
-- Nhiệm vụ và luồng cơ bản đã chốt trước v0:
-- Đường dẫn bộ 30 câu cơ bản và 12 câu an toàn; commit chốt bộ trước v0:
-- Chức năng mở rộng ngoài luồng cơ bản (nếu có; tối đa 10 trong tổng 100 điểm):
+- Lĩnh vực tự chọn: IT Helpdesk (Northstar Labs Service Desk)
+- Nhiệm vụ và luồng cơ bản đã chốt trước v0: Tiếp nhận yêu cầu kỹ thuật nội bộ, tra cứu tài liệu KB, kiểm tra trạng thái dịch vụ/thiết bị, tra cứu danh bạ nhân viên, hỏi làm rõ khi thiếu thông tin, và xin xác nhận trước khi tạo ticket.
+- Đường dẫn bộ 30 câu cơ bản và 12 câu an toàn; commit chốt bộ trước v0: `starter_v0/data/eval_base.json`, `starter_v0/data/eval_adversarial.json` (commit: `311580e`)
+- Chức năng mở rộng ngoài luồng cơ bản (nếu có; tối đa 10 trong tổng 100 điểm): Chưa có / Đang phát triển
 
 ## Team
 
-- Team:
+- Team: Phan-Danh-Dat-2A202602627
 - Thành viên và INDIVIDUAL: [TEAM.md](../../TEAM.md)
-- Members:
-- Provider/model:
+- Members: Phan Danh Đạt (2A202602627), Trần Gia Khánh (2A202602689), Tô Huy Thông (2A202602608), Nguyễn Đình Anh (2A202602573)
+- Provider/model: `openrouter` / `openai/gpt-4o-mini`
 
 # PHẦN A — Giới thiệu agent
 
 ## A1. Agent này làm được gì
 
-> Viết 1–2 câu mô tả capability và giới hạn của agent.
+Trợ lý IT Helpdesk hỗ trợ nhân viên Northstar Labs chẩn đoán thiết bị, tra cứu trạng thái hạ tầng dịch vụ (VPN, Email, SSO...), tìm kiếm cẩm nang kỹ thuật, và tạo ticket hỗ trợ. Giới hạn: Không hỗ trợ các tác vụ ngoài phạm vi IT nội bộ, không tự tiện suy đoán mã định danh khi thiếu, và luôn yêu cầu người dùng xác nhận trước khi thực hiện hành động ghi dữ liệu (tạo ticket).
 
 **Link dùng thử:**
 
-> URL:
+> Chạy trực tiếp qua CLI chat: `python chat.py --provider openrouter --version v1`
 
 ## A2. Tool agent có
 
 | Tool | Chức năng | Core / optional / team-built |
 |---|---|---|
-| clarify | Hỏi bổ sung hoặc xác nhận | core |
-|  |  |  |
+| clarify | Hỏi bổ sung thông tin khi thiếu ID hoặc xin xác nhận hành động | core |
+| search_kb | Tìm kiếm hướng dẫn kỹ thuật trong cơ sở tri thức nội bộ | core |
+| check_service_status | Kiểm tra trạng thái hoạt động của các dịch vụ nội bộ (VPN, Email, SSO...) | core |
+| inspect_device | Kiểm tra thông tin cấu hình và chẩn đoán lỗi phần cứng/mạng của thiết bị | core |
+| lookup_user | Tra cứu thông tin nhân viên, phòng ban và tài sản được cấp phát | core |
+| format_incident_report | Định dạng các bằng chứng kỹ thuật đã thu thập thành báo cáo sự cố | core |
+| create_ticket | Tạo ticket sự cố lên hệ thống sau khi người dùng đã xác nhận | optional |
+| read_policy | Đọc các chính sách tuân thủ IT và bảo mật của công ty | optional |
+| search_device_info | Tìm kiếm thông số thiết bị trên web ngoài (Tavily Search) | optional |
 
 ## A3. Câu hỏi mẫu
 
-1.
-2.
-3.
+1. Dịch vụ VPN môi trường production hiện có hoạt động bình thường không?
+2. Máy laptop của tôi bị lỗi không vào được mạng, hãy kiểm tra giúp tôi. (Agent sẽ hỏi lại mã asset_id)
+3. Hãy tạo ticket báo lỗi màn hình chớp nháy cho máy DT-087. (Agent sẽ tóm tắt và hỏi xác nhận có tạo ticket không)
 
 ## A4. Kịch bản demo đã rehearse
 
 | Scenario | Tool trace cần thấy | Cải thiện version | Fallback run/transcript |
 |---|---|---|---|
-|  |  |  |  |
+| Thiếu mã định danh thiết bị | `clarify(response_type="text")` | v1 sửa dứt điểm lỗi tự đoán asset_id (H10) | `runs/v1_B_base_openrouter_20260915T191743440879.json` |
+| Môi trường mơ hồ (demo/test) | `clarify(response_type="choice", options=['production', 'staging'])` | v1 sửa dứt điểm lỗi tự map môi trường (H19) | `runs/v1_B_base_openrouter_20260915T191743440879.json` |
+| Yêu cầu tạo ticket sự cố | `clarify(response_type="yes_no")` xin xác nhận trước khi gọi `create_ticket` | v2 xử lý boundary tạo ticket (H12, M05) | Transcripts test trực tiếp trên CLI |
 
 # PHẦN B — Chi tiết và evidence
 
@@ -50,8 +59,8 @@ total_cases`, và tool result error đã được review thủ công.
 
 | Version | Prompt/tool change | Hypothesis | Metric | Before | After | Run file |
 |---|---|---|---|---:|---:|---|
-| v0 | baseline |  |  |  |  |  |
-| v1 |  |  |  |  |  |  |
+| v0 | baseline | Đo hành vi khởi đầu trước khi sửa prompt và tools | case_accuracy | | 0.70 | starter_v0/runs/v0_B_base_openrouter_20260915T184058272822.json |
+| v1 | clarify schema + rules | Thêm quy tắc clarify bắt buộc response_type và options giúp xử lý thiếu ID và ambiguous environment | case_accuracy | 0.70 | 0.73 | starter_v0/runs/v1_B_base_openrouter_20260915T191743440879.json |
 | v2 |  |  |  |  |  |  |
 | v3 |  |  |  |  |  |  |
 

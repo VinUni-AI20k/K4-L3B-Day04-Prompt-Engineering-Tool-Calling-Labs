@@ -8,14 +8,23 @@
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
-    description: "Gửi một câu hỏi cho người dùng."
+    description: "Gửi câu hỏi cho người dùng khi thiếu thông tin bắt buộc, giá trị không rõ ràng/không thuộc enum, hoặc cần xin xác nhận hành động."
     parameters:
       type: object
       properties:
-        question: {type: string, default: "", description: "Câu hỏi"}
-        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Kiểu trả lời"}
-        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn"}
-      required: [question]
+        question: 
+          type: string
+          description: "Nội dung câu hỏi gửi cho người dùng."
+        response_type: 
+          type: string
+          enum: [text, yes_no, choice]
+          description: "Bắt buộc. Dùng 'text' khi cần người dùng nhập thông tin tự do (như mã ID); dùng 'choice' khi có danh sách lựa chọn; dùng 'yes_no' khi cần xác nhận."
+        options: 
+          type: array
+          items: {type: string}
+          description: "Danh sách các lựa chọn khi response_type là 'choice' (ví dụ: ['production', 'staging'])."
+      required: [question, response_type]
+
 
   - name: search_kb
     description: "Tìm hướng dẫn hỗ trợ kỹ thuật."
