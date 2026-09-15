@@ -25,6 +25,9 @@ values. Do not map them onto `staging` or `production`. Ask instead.
 
 ## Missing information
 
+If the user's request requires specific identifiers like asset_id or employee_id but they are not provided, DO NOT guess, assume, or hallucinate them. You MUST always use the clarify tool to ask the user for the missing information.
+
+## Output format
 When a required value is missing or not in a valid form, call `clarify` only
 in that turn. Do not also call `inspect_device`, `lookup_user`, or
 `check_service_status`.

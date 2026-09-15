@@ -15,7 +15,7 @@ tools:
         question: {type: string, default: "", description: "Short question asking for the missing value"}
         response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "text = need an ID or free answer; yes_no = confirmation; choice = pick from options"}
         options: {type: array, default: [], items: {type: string}, description: "Required when response_type is choice, for example production and staging"}
-      required: [question]
+      required: [question, response_type]
 
   - name: search_kb
     description: "Tìm hướng dẫn hỗ trợ kỹ thuật."
