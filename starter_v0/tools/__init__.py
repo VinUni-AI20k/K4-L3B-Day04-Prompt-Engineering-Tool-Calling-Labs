@@ -8,6 +8,7 @@ import yaml
 from .clarify.tool import ask_user
 from .check_station_status.tool import check_station_status
 from .create_reservation.tool import create_reservation
+from .cancel_reservation.tool import cancel_reservation
 from .find_charging_offers.tool import find_charging_offers
 from .lookup_vehicle.tool import lookup_vehicle
 from .check_service_status.tool import check_service_status
@@ -43,6 +44,7 @@ TOOL_FUNCTIONS = {
     "check_station_status": check_station_status,
     "find_charging_offers": find_charging_offers,
     "create_reservation": create_reservation,
+    "cancel_reservation": cancel_reservation,
 }
 
 

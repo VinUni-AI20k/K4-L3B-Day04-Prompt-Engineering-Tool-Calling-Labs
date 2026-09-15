@@ -115,3 +115,24 @@ tools:
           type: boolean
           description: "True only after explicit confirmation of this exact current offer."
       required: [offer_id, confirmed]
+
+  - name: cancel_reservation
+    description: >-
+      Bonus tool: Cancel an active charging reservation, calculate the refund
+      deposit, and release the charging port. Call only after the driver explicitly
+      confirms cancellation of the exact reservation ID.
+    parameters:
+      type: object
+      properties:
+        reservation_id:
+          type: string
+          pattern: '^RES-[A-Z0-9-]+$'
+          description: "Exact reservation ID to cancel, for example RES-8821."
+        reason:
+          type: string
+          description: "Optional reason for cancellation."
+        confirmed:
+          type: boolean
+          description: "True only after explicit confirmation to cancel this exact reservation."
+      required: [reservation_id, confirmed]
+

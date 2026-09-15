@@ -7,7 +7,7 @@
 - Ranh giới: AI không tự quyết định tính khả thi và không bịa trạm, connector, route, thời gian, công suất, giá, offer hoặc verdict. Tool error hay thiếu route evidence không được diễn giải thành “không khả thi”.
 - Đường dẫn bộ 30 câu cơ bản chốt trước v0: `data/eval_smartcharging_base.json` (20 single-turn + 10 multi-turn). Commit chốt: `bc9612b`
 - Dữ liệu giả lập: `smartcharging_data/network.json`.
-- Chức năng mở rộng ngoài luồng cơ bản: Không thực hiện trong phạm vi v0.
+- Chức năng mở rộng ngoài luồng cơ bản: Xây dựng tool bonus `cancel_reservation` (hủy lịch giữ chỗ, hoàn 100% cọc và giải phóng cổng sạc) có guardrail xác nhận an toàn hai bước.
 
 ## Team
 
@@ -37,6 +37,7 @@ tính tính khả thi; offer chưa phải lịch giữ chỗ và reservation c�
 | check_station_status | Đọc snapshot trạng thái/cổng/công suất/giá của một trạm | core, domain-built |
 | find_charging_offers | Tối ưu và verify Top-K offer từ dữ liệu giả lập | core, domain-built |
 | create_reservation | Tái kiểm tra và tạo lịch sau xác nhận | core, domain-built action |
+| cancel_reservation | Hủy lịch sạc, hoàn cọc và giải phóng cổng sau xác nhận | bonus, team-built action |
 
 ## A3. Câu hỏi mẫu
 
@@ -120,13 +121,13 @@ File kết quả: `runs/v2_B_adversarial_openai_20260915T220623974346.json`.
 ## B5. Optional và bonus tool evidence
 
 Phần này chỉ điền khi nhóm có sử dụng optional tool hoặc tự xây bonus tool.
-Nhóm tập trung hoàn thiện pipeline chính của hệ thống SmartCharging đạt 100% độ chính xác cho cả bộ cơ bản và bộ mở rộng 10 case của nhóm. Toàn bộ 5 công cụ phục vụ luồng nghiệp vụ thuộc phần chung 90 điểm.
+Nhóm đã xây dựng thành công 01 chức năng mở rộng ngoài luồng cơ bản: **`cancel_reservation`** (Hủy lịch giữ chỗ đã đặt, tính toán chính sách hoàn tiền cọc 50.000 VNĐ và giải phóng cổng sạc trên trạm).
 
 | Category | Evidence file | What worked | Risk / guardrail |
 |---|---|---|---|
-| Optional built-in | N/A | Không sử dụng optional helpdesk tools | N/A |
+| Optional built-in | N/A | Không sử dụng optional helpdesk tools để giữ tính nhất quán domain | N/A |
 | External search + privacy boundary | N/A | Không dùng tìm kiếm ngoài để tránh rò rỉ thông tin xe | Bảo vệ dữ liệu xe nội bộ |
-| Bonus: tool mới do nhóm tự xây | N/A | Tập trung hoàn thiện xuất sắc luồng cơ bản | Đã có guardrail hai bước cho create_reservation |
+| Bonus: tool mới do nhóm tự xây | `runs/v2_B_extension_openai_20260915T223211350811.json` và `transcripts/transcript_bonus_cancel_reservation.md` | Tool `cancel_reservation` cho phép hủy lịch đặt chỗ, kiểm tra quyền sở hữu của tài xế (`DRV-1001`), hoàn 100% tiền cọc (50.000 VNĐ) và giải phóng cổng sạc. Đạt 3/3 PASS (100%) trên bộ extension eval. | Thao tác hủy là hành vi ghi (write action), có nguy cơ hủy nhầm. Guardrail: bắt buộc phải có bước xác nhận rõ ràng (`confirmed=true`), nếu người dùng chỉ mới yêu cầu thì agent gọi `clarify(response_type="yes_no")` để hỏi xác nhận trước. |
 
 ## B6. Safety review
 
