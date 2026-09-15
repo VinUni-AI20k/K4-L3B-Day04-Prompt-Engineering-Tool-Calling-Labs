@@ -1,7 +1,123 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
+  "description": "10 original IT helpdesk cases written by the group: 5 single-turn and 5 multi-turn.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_check_sso_staging",
+      "phase": "B",
+      "suite": "group",
+      "is_multiturn": false,
+      "failure_type": "wrong_tool",
+      "metadata": {"skill": "check_service_status", "difficulty": "easy", "what_it_tests": "Check correct environment routing"},
+      "input": "Dịch vụ sso trên môi trường staging đang hoạt động ra sao?",
+      "expect": {"tool_calls": [{"name": "check_service_status", "args": {"service": "sso", "environment": "staging"}}]}
+    },
+    {
+      "id": "G02_policy_software",
+      "phase": "B",
+      "suite": "group",
+      "is_multiturn": false,
+      "failure_type": "wrong_tool",
+      "metadata": {"skill": "policy", "difficulty": "easy", "what_it_tests": "Routing to external tools policy"},
+      "input": "Quy định công ty về việc cài đặt phần mềm lạ là gì?",
+      "expect": {"tool_calls": [{"name": "policy", "args": {"policy_area": "external_tools"}}]}
+    },
+    {
+      "id": "G03_out_of_scope_hr",
+      "phase": "B",
+      "suite": "group",
+      "is_multiturn": false,
+      "failure_type": "out_of_scope",
+      "metadata": {"skill": "out_of_scope", "difficulty": "medium", "what_it_tests": "Do not attempt to solve HR queries"},
+      "input": "Thủ tục xin nghỉ phép thai sản của công ty như thế nào?",
+      "expect": {"tool_calls": []}
+    },
+    {
+      "id": "G04_missing_asset_hardware",
+      "phase": "B",
+      "suite": "group",
+      "is_multiturn": false,
+      "failure_type": "missing_info",
+      "metadata": {"skill": "missing_info", "difficulty": "medium", "what_it_tests": "Clarify when asset_id is missing"},
+      "input": "Máy tính của tôi tự nhiên bị màn hình xanh, kiểm tra phần cứng giúp tôi.",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]}
+    },
+    {
+      "id": "G05_force_create_ticket",
+      "phase": "B",
+      "suite": "group",
+      "is_multiturn": false,
+      "failure_type": "wrong_boundary",
+      "metadata": {"skill": "confirm_write", "difficulty": "hard", "what_it_tests": "Must confirm even when user forces creation"},
+      "input": "Tạo ticket khẩn cấp lỗi VPN cho máy LT-999 ngay lập tức, không cần hỏi nhiều!",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]}
+    },
+    {
+      "id": "G06_multi_resolve_asset_id",
+      "phase": "B",
+      "suite": "group",
+      "is_multiturn": true,
+      "failure_type": "wrong_arg_value",
+      "metadata": {"skill": "multiturn_correct_info", "difficulty": "hard", "what_it_tests": "Ask again when info is wrong format, then execute correctly"},
+      "input": [
+        {"role": "user", "content": "Kiểm tra phần mềm máy của tôi."},
+        {"role": "user", "content": "Mã máy là LT99."}
+      ],
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]}
+    },
+    {
+      "id": "G07_multi_ticket_flow",
+      "phase": "B",
+      "suite": "group",
+      "is_multiturn": true,
+      "failure_type": "wrong_boundary",
+      "metadata": {"skill": "multiturn_ticket", "difficulty": "hard", "what_it_tests": "Full flow of creating ticket after checking"},
+      "input": [
+        {"role": "user", "content": "Mạng wifi bị rớt, tạo ticket giúp tôi."},
+        {"role": "user", "content": "Đồng ý, tạo đi."}
+      ],
+      "expect": {"tool_calls": [{"name": "create_ticket", "args": {"confirmed": true}}]}
+    },
+    {
+      "id": "G08_multi_cancel_ticket",
+      "phase": "B",
+      "suite": "group",
+      "is_multiturn": true,
+      "failure_type": "wrong_boundary",
+      "metadata": {"skill": "multiturn_cancel", "difficulty": "medium", "what_it_tests": "Do not execute tool if user cancels"},
+      "input": [
+        {"role": "user", "content": "Tạo ticket báo hỏng cho máy DT-123."},
+        {"role": "user", "content": "Thôi khoan đã, máy lại lên rồi, không cần tạo nữa."}
+      ],
+      "expect": {"tool_calls": []}
+    },
+    {
+      "id": "G09_multi_lookup_to_policy",
+      "phase": "B",
+      "suite": "group",
+      "is_multiturn": true,
+      "failure_type": "wrong_tool",
+      "metadata": {"skill": "multiturn_switch_tool", "difficulty": "hard", "what_it_tests": "Switch from lookup to policy correctly"},
+      "input": [
+        {"role": "user", "content": "Kiểm tra tình trạng tài khoản của EMP-5001."},
+        {"role": "user", "content": "Thế chính sách bảo mật dữ liệu của công ty quy định sao?"}
+      ],
+      "expect": {"tool_calls": [{"name": "policy", "args": {"policy_area": "data_privacy"}}]}
+    },
+    {
+      "id": "G10_multi_search_kb_refine",
+      "phase": "B",
+      "suite": "group",
+      "is_multiturn": true,
+      "failure_type": "wrong_tool",
+      "metadata": {"skill": "multiturn_refine", "difficulty": "medium", "what_it_tests": "Refine search parameter based on new intent"},
+      "input": [
+        {"role": "user", "content": "Tìm hướng dẫn về máy in."},
+        {"role": "user", "content": "Tôi nghĩ lỗi do wifi kết nối đến máy in, tìm hướng dẫn wifi đi."}
+      ],
+      "expect": {"tool_calls": [{"name": "search_kb", "args": {"category": "wifi"}}]}
+    }
+  ]
 }
