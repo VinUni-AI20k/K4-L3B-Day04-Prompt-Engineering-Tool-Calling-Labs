@@ -34,13 +34,14 @@ body {
     radial-gradient(1200px 800px at 50% 120%, rgba(20, 60, 130, 0.4), transparent 60%),
     linear-gradient(160deg, var(--bg-grad-1), var(--bg-grad-2) 60%, #050a16);
   background-attachment: fixed;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .app {
   display: grid;
   grid-template-columns: 320px 1fr;
-  min-height: 100vh;
+  height: 100vh;
   max-width: 1600px;
   margin: 0 auto;
   font-size: 16px;
@@ -150,7 +151,7 @@ body {
 .badge.optional { background: rgba(251,191,36,0.2); color: #ffd08a; }
 
 /* ---------- Main ---------- */
-.main { display: flex; flex-direction: column; min-width: 0; }
+.main { display: flex; flex-direction: column; min-width: 0; height: 100vh; min-height: 0; }
 
 .tabs {
   display: flex; gap: 6px; padding: 18px 28px 0;
