@@ -19,6 +19,7 @@
 | Mai Huy Hoàng | 2A202602685 | | Technical Leader | |
 | Nguyễn Thị Hải Mi | 2A202602667 | | Teammate | |
 | Trần Nguyễn Trí Dũng | 2A202602784 | | Teammate | |
+| Nguyễn Đức Đông | 2A202602367 | | Teammate | |
 
 
 ## Nhận xét chung
