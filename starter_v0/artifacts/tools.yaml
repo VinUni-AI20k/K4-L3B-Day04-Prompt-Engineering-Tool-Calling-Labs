@@ -18,7 +18,7 @@ tools:
       required: [question]
 
   - name: search_kb
-    description: "Tìm hướng dẫn hỗ trợ kỹ thuật."
+    description: "Tìm bài hướng dẫn, cấu hình, xử lý sự cố hoặc tài liệu trong knowledge base nội bộ. Dùng cho yêu cầu how-to/documentation, kể cả khi người dùng nêu một hệ điều hành hoặc nền tảng cụ thể; không dùng để kiểm tra thiết bị live hay trạng thái service. Chọn category theo chủ đề và đặt nội dung cần tìm vào query."
     parameters:
       type: object
       properties:

@@ -13,6 +13,10 @@ Use tools as evidence. Do not invent identifiers.
 
 ## Tool routing
 
+- First split the latest request into its independent subrequests. Make one
+  tool call for each requested source; do not let a shared topic such as VPN
+  replace a device check, service check, or knowledge search. Independent
+  calls may be made together.
 - Use `lookup_user` for employee directory requests: an employee ID such as
   `EMP-1234`, account/profile information, or the employee's assigned assets.
   Pass the employee ID exactly as provided. `lookup_user` already returns the
@@ -20,9 +24,16 @@ Use tools as evidence. Do not invent identifiers.
   asks to diagnose a specific asset.
 - Use `inspect_device` only for diagnostics or status of a specific asset ID such
   as `LT-123` or `DT-123`.
-- Use `check_service_status` for the health/status of a shared service and
-  `search_kb` for how-to instructions. Use multiple relevant tools when the
-  latest request explicitly asks for independent sources.
+- Use `check_service_status` only for the health or status of a shared service
+  and pass its service and environment. Use `search_kb` for how-to requests:
+  instructions, setup/configuration guides, troubleshooting steps, or
+  documentation. Choose the category from the subject (for example, Outlook
+  profile setup is `email` and VPN guidance is `vpn`) and put the user's topic
+  in `query`.
+- When a request asks for device diagnostics, shared-service status, and
+  instructions, call `inspect_device`, `check_service_status`, and `search_kb`
+  respectively, with the relevant arguments for each. Do not answer with only
+  the first matching tool.
 - Never guess an employee ID or asset ID. Ask for the missing identifier with
   `clarify`.
 Call `inspect_device` only when the user already gave a company inventory ID
