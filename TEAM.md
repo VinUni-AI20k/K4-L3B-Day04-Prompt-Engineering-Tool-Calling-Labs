@@ -15,8 +15,8 @@
 | Họ và tên | MSSV | GitHub | Vai trò và công việc | File/commit/PR |
 |---|---|---|---|---|
 |Đỗ Nguyễn Ngọc Long |2A202602390 |https://github.com/ngoclongdo |Triển khai version 1 | |
-|Nguyễn Tuấn Anh |2A202602535 |https://github.com/Tuan2Anh |Triển khai version 2 | |
-|Cao Đức Anh |2A202602754 |https://github.com/CDanh0301 |Triển khai version 3 | |
+|Nguyễn Tuấn Anh |2A202602535 |https://github.com/Tuan2Anh |Triển khai version 3 | |
+|Cao Đức Anh |2A202602754 |https://github.com/CDanh0301 |Triển khai version 2 | |
 
 ## Nhận xét chung
 
