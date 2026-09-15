@@ -77,6 +77,18 @@ python run_eval.py --provider openrouter --version v0 --suite base --eval-cases 
 
 Thay `openrouter` bằng `openai`, `anthropic` hoặc `gemini` khi dùng provider khác. Không commit `.env`.
 
+### Chạy UI chat và lưu transcript
+
+Sau khi đã điền API key trong `.env`, chạy UI web local bằng artifact version muốn demo:
+
+```powershell
+python ui.py --provider openrouter --version v3
+```
+
+Mở `http://127.0.0.1:8000` trên trình duyệt. UI hiển thị câu trả lời, artifact version, tool call, input, tool result/error và lưu transcript vào thư mục `transcripts/`. Có thể đổi cổng bằng `--port`, ví dụ `--port 8080`.
+
+UI dùng cùng agent loop, `artifacts/system_prompt.md` và `artifacts/tools.yaml` với CLI/eval; đây là giao diện demo, không thay thế lệnh `run_eval.py`.
+
 ## Tài liệu cần đọc
 
 | File | Dùng khi |
