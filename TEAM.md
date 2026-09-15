@@ -67,10 +67,28 @@ Mỗi người tự điền phần của mình (không viết thay người khá
 ### Đặng Quang Hưng — 2A202602719
 
 - Phần việc và file/commit/PR:
+  - Phụ trách **Baseline & Eval infra (v0)** trên branch 0-quanghung.
+  - Cài đặt AI Hook logging (setup_hooks.ps1), chạy preflight smoke-test (scripts/preflight_provider.py) PASS.
+  - Chạy eval v0 bằng Gemini (gemini-3.5-flash-lite), đạt **30/30 measured cases** với **0 provider error** (Case accuracy: **63.33%**, PASS 19/30).
+  - Cải tiến file starter_v0/run_eval.py: bổ sung cơ chế ngắt nghỉ tự động (--batch-size, --batch-delay 90s) và cờ --retry-run-file giúp khắc phục hoàn toàn Rate Limit cho cả nhóm.
+  - Xây dựng báo cáo giả thuyết starter_v0/HYPOTHESES_v0.md (phân loại lỗi: wrong_tool, wrong_arg_value, missing_info, wrong_boundary) để giao cho Hoàng Anh làm v1.
+  - Ghi nhận kết quả vào starter_v0/artifacts/version_log.csv và tạo tài liệu điều phối nhóm TEAM.md.
+  - Files/Commit: HYPOTHESES_v0.md, 
+uns/v0_B_base_gemini_20260915T194456857558.json, rtifacts/version_log.csv, 
+un_eval.py, TEAM.md.
 - Quyết định, khó khăn và cách xử lý:
+  - *Khó khăn*: Gemini Free API liên tục gặp lỗi Rate Limit (HTTP 429 provider_error) khi gửi 30 prompt liên tiếp, khiến nhiều cases không đo lường được.
+  - *Quyết định & Xử lý*: Trực tiếp sửa 
+un_eval.py thêm tính năng batch pause (nghỉ 90s sau mỗi 2-4 cases) và cờ --retry-run-file để chỉ retry lại các case dính lỗi mạng mà không làm mất kết quả cũ. Đợt chạy lại thu được 30/30 measured cases sạch lỗi.
 - Điều đã học:
+  - Nắm vững quy trình dựng Baseline & Infrastructure để đánh giá LLM Agent.
+  - Kỹ năng xử lý nghẽn Rate Limit khi tương tác với các LLM Provider API.
+  - Cách xây dựng Failure Taxonomy và đề xuất Giả thuyết cải tiến cho Prompt Engineering (v1, v2, v3).
 - AI/công cụ đã dùng và cách kiểm tra:
+  - AI Assistant (Antigravity IDE - Gemini), Python, Git (branch 0-quanghung).
+  - Kiểm tra bằng lệnh python scripts/preflight_provider.py và python run_eval.py.
 - Thời điểm đã tự nộp URL repo chung trên VLearn:
+  - Đã tự nộp URL Repo https://github.com/harrynguyen127/K4-L3B-Day04-Enigma trên VLearn lúc 19:30.
 
 ### Nguyễn Hoàng Anh — 2A202602811
 
