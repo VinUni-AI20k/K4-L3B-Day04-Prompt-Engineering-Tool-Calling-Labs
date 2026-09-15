@@ -6,6 +6,16 @@ from typing import Any
 from providers.base import ModelResponse, ToolCall
 
 
+# Models that return 400 when a request carries temperature/top_p/top_k.
+SAMPLING_REJECTED_MODEL_PREFIXES = (
+    "claude-opus-4-7",
+    "claude-opus-4-8",
+    "claude-opus-5",
+    "claude-sonnet-5",
+    "claude-fable-",
+    "claude-mythos-",
+)
+
 def _to_anthropic_tools(tools: list[dict[str, Any]] | None) -> list[dict[str, Any]]:
     converted: list[dict[str, Any]] = []
     for item in tools or []:
@@ -62,12 +72,17 @@ class AnthropicProvider:
             raise RuntimeError(f"Missing API key env var: {self.api_key_env}")
 
         system, chat_messages = _split_system(messages)
+        selected_model = model or self.default_model
         kwargs: dict[str, Any] = {
-            "model": model or self.default_model,
+            "model": selected_model,
             "messages": chat_messages,
             "max_tokens": 1024,
-            "temperature": temperature,
         }
+        # anthropic>=1.0 removed sampling parameters from the create() signature.
+        # Models that still accept them (e.g. Haiku 4.5) get temperature via the
+        # raw request body so eval runs stay repeatable; newer models reject it.
+        if not selected_model.startswith(SAMPLING_REJECTED_MODEL_PREFIXES):
+            kwargs["extra_body"] = {"temperature": temperature}
         if system:
             kwargs["system"] = system
         anthropic_tools = _to_anthropic_tools(tools)
