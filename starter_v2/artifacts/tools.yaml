@@ -18,7 +18,7 @@ tools:
       required: [question, response_type]
 
   - name: search_kb
-    description: "Tìm hướng dẫn hỗ trợ kỹ thuật."
+    description: "Tìm bài hướng dẫn trong knowledge base. Luôn chọn category cụ thể khi chủ đề nhận diện được. Chỉ dùng all khi chủ đề thực sự không xác định."
     parameters:
       type: object
       properties:
