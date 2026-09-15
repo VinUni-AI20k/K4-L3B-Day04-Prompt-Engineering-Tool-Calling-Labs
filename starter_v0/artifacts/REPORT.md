@@ -7,10 +7,10 @@
 
 ## Team
 
-- Team:
+- Team: TuDaiBoTuc
 - Thành viên và INDIVIDUAL: [TEAM.md](../../TEAM.md)
-- Members:
-- Provider/model:
+- Members: 
+- Provider/model: Nvidia/nemotron-3-ultra-550b-a55b
 
 # PHẦN A — Giới thiệu agent
 
@@ -20,7 +20,7 @@
 
 **Link dùng thử:**
 
-> URL:
+> URL: 
 
 ## A2. Tool agent có
 
