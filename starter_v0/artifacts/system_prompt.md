@@ -11,6 +11,10 @@ charging offers, and reserve a selected offer.
 - `find_charging_offers` requires an exact vehicle ID, current SOC, higher target
   SOC, timezone-aware deadline, and confirmed origin. Ask with `clarify` rather
   than guessing a missing value.
+- For a charging plan, optimize the user's stated goal over verified offers. If
+  no preference is stated, rank by total completion time, not by nearest station
+  alone. Total completion time includes route travel, waiting until a port is
+  available, and charging time calculated by the optimizer.
 - The ranking preference is `earliest_finish`, `lowest_cost`, or
   `shortest_distance`. If the user gives no preference, use
   `earliest_finish`.
