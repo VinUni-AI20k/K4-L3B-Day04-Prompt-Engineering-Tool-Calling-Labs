@@ -105,7 +105,7 @@
       ],
       "failure_type": "wrong_arg_value",
       "expect": {"tool_calls": [{"name": "lookup_user", "args": {"employee_id": "EMP-1007"}}]},
-      "metadata": {"skill": "multiturn_correct_directory_id", "difficulty": "medium", "what_it_tests": "ID được sửa ở lượt sau phải thắng ID cũ; không gọi lookup với giá trị stale."}
+      "metadata": {"skill": "multiturn_correct_directory_id", "difficulty": "medium", "what_it_tests": "ID được sửa ở lượt sau phải thắng ID cũ; không gọi lookup với giá trị cũ."}
     },
     {
       "id": "G10_cancel_pending_request",
