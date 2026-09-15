@@ -55,11 +55,11 @@ tools:
       required: [asset_id]
 
   - name: lookup_user
-    description: "Tra cứu người dùng trong danh bạ hỗ trợ."
+    description: "Tra cứu thông tin người dùng trong danh bạ bằng mã nhân viên chính thức (ví dụ EMP-1001). KHÔNG truyền tên phòng ban (như 'Sales', 'Marketing') hay tên chung chung vào employee_id. Nếu thiếu mã nhân viên, bắt buộc gọi clarify."
     parameters:
       type: object
       properties:
-        employee_id: {type: string, description: "Mã nhân viên"}
+        employee_id: {type: string, description: "Mã nhân viên (định dạng EMP-xxxx)"}
       required: [employee_id]
 
   - name: format_incident_report
@@ -105,12 +105,12 @@ tools:
       required: [query]
 
   - name: create_ticket
-    description: "Tạo một ticket hỗ trợ."
+    description: "Tạo ticket hỗ trợ kỹ thuật lên hệ thống. CHỈ ĐƯỢC GỌI khi người dùng đã xác nhận đồng ý rõ ràng (confirmed=true) ở lượt trao đổi trước đó với đúng nội dung ticket hiện tại. NẾU NGƯỜI DÙNG CHƯA XÁC NHẬN, YÊU CẦU TẠO LẦN ĐẦU, HOẶC VỪA THAY ĐỔI NỘI DUNG/MỨC ƯU TIÊN: TUYỆT ĐỐI KHÔNG GỌI TOOL NÀY, mà phải gọi tool clarify (với response_type='yes_no') để xin xác nhận."
     parameters:
       type: object
       properties:
         summary: {type: string, default: "", description: "Tóm tắt sự cố"}
         priority: {type: string, enum: [low, medium, high, critical], default: "medium", description: "Mức ưu tiên"}
         asset_id: {type: string, default: "", description: "Mã tài sản nếu có"}
-        confirmed: {type: boolean, default: false, description: "Đã được người dùng xác nhận"}
+        confirmed: {type: boolean, default: false, description: "Đã được người dùng xác nhận rõ ràng"}
       required: [summary]
