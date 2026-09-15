@@ -1,4 +1,25 @@
 tools:
+  - name: clarify
+    description: "Hỏi người dùng để bổ sung hoặc xác nhận thông tin cần thiết trước khi tiếp tục."
+    parameters:
+      type: object
+      properties:
+        question:
+          type: string
+          default: ""
+          description: "Câu hỏi gửi cho người dùng"
+        response_type:
+          type: string
+          enum: [text, yes_no, choice]
+          default: text
+          description: "Kiểu câu trả lời mong đợi"
+        options:
+          type: array
+          default: []
+          items:
+            type: string
+          description: "Các lựa chọn khi response_type là choice"
+      required: [question]
   - name: search_products
     description: "Tìm laptop mock theo từ khóa, hãng, ngân sách và nhu cầu."
     parameters:

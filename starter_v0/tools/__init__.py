@@ -43,6 +43,7 @@ HELPDESK_TOOL_FUNCTIONS = {
 
 # Sales is the active baseline; the IT registry above is retained unchanged.
 SALES_TOOL_FUNCTIONS = {
+    "clarify": ask_user,
     "search_products": search_products, "get_product_details": get_product_details,
     "check_inventory": check_inventory, "compare_products": compare_products,
     "check_promotion": check_promotion, "search_policy": search_policy,
