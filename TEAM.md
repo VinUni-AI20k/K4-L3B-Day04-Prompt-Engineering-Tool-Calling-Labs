@@ -4,11 +4,11 @@
 
 ## Thông tin bài nộp
 
-- Tên nhóm:
-- Người đại diện / MSSV:
+- Tên nhóm: Tứ Đại Bổ Túc
+- Người đại diện / MSSV: Đỗ Nguyễn Ngọc Long
 - Tên repo: `K4B-DAY4-TUDAIBOTUC`
-- URL repo, nhánh nộp, commit chốt:
-- Deadline áp dụng và link thông báo đổi hạn nếu có:
+- URL repo, nhánh nộp, commit chốt: https://github.com/ngoclongdo/K4B-DAY4-TUDAIBOTUC
+- Deadline áp dụng và link thông báo đổi hạn nếu có: None
 
 ## Thành viên
 
