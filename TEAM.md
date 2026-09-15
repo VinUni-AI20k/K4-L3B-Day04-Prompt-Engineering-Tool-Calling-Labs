@@ -17,6 +17,7 @@
 | Họ và tên | MSSV | GitHub | Vai trò và công việc | File/commit/PR |
 |---|---|---|---|---|
 | Mai Huy Hoàng | 2A202602685 | | Technical Leader | |
+| Nguyễn Thị Hải Mi | 2A202602667 | | Teammate | |
 
 ## Nhận xét chung
 
