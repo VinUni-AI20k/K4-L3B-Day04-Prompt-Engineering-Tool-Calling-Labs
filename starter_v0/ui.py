@@ -36,42 +36,41 @@ HTML = r'''<!doctype html>
   <style>
     :root { --ink:#17222d; --muted:#687684; --line:#dce5e8; --panel:#fff; --accent:#e56b45; --accent-dark:#a6422d; --teal:#146c70; --teal-soft:#e8f4f0; --ok:#287b5a; --bad:#b64242; }
     * { box-sizing:border-box; }
-    body { margin:0; color:var(--ink); background:radial-gradient(circle at 8% 0%,#fff7ed 0 18%,transparent 42%),linear-gradient(135deg,#f3f7f4 0%,#fff 55%,#edf5f4 100%); font:15px/1.5 Georgia, 'Times New Roman', serif; min-height:100vh; }
+    body { margin:0; color:var(--ink); background:radial-gradient(circle at 8% 0%,#fff7ed 0 18%,transparent 42%),linear-gradient(135deg,#f3f7f4 0%,#fff 55%,#edf5f4 100%); font:15px/1.5 'Segoe UI', Arial, sans-serif; min-height:100vh; }
     .shell { width:min(1420px, calc(100% - 40px)); margin:0 auto; padding:32px 0 42px; }
     header { display:flex; justify-content:space-between; align-items:center; gap:28px; border-bottom:1px solid var(--line); padding-bottom:24px; }
-    .eyebrow { color:var(--accent-dark); font:700 12px/1.2 'Trebuchet MS',sans-serif; letter-spacing:1.7px; text-transform:uppercase; }
-    h1 { margin:7px 0 0; font-size:clamp(34px,4.5vw,58px); line-height:.98; font-weight:700; letter-spacing:0; }
+    .eyebrow { color:var(--accent-dark); font:700 clamp(22px,3vw,32px)/1.1 'Segoe UI', Arial, sans-serif; letter-spacing:.1px; }
     .version { border:1px solid #efb19d; background:rgba(255,244,238,.86); padding:15px 17px; min-width:275px; box-shadow:8px 8px 0 rgba(229,107,69,.09); }
-    .version strong { display:flex; align-items:center; gap:8px; color:var(--accent-dark); font:700 12px 'Trebuchet MS',sans-serif; letter-spacing:1.2px; text-transform:uppercase; }
+    .version strong { display:flex; align-items:center; gap:8px; color:var(--accent-dark); font:700 12px 'Segoe UI', Arial, sans-serif; letter-spacing:.5px; text-transform:uppercase; }
     .version strong::before { content:''; width:8px; height:8px; border-radius:50%; background:#45a66f; box-shadow:0 0 0 4px rgba(69,166,111,.14); }
     .version code { display:block; margin-top:5px; overflow-wrap:anywhere; color:#713b2c; font:12px Consolas,monospace; }
     .layout { display:grid; grid-template-columns:minmax(0,1.08fr) minmax(360px,.92fr); gap:22px; margin-top:26px; }
     .panel { background:rgba(255,255,255,.8); border:1px solid rgba(185,205,205,.72); box-shadow:0 18px 45px rgba(41,65,67,.09); backdrop-filter:blur(10px); }
     .chat-panel { display:flex; flex-direction:column; min-height:650px; border-top:4px solid var(--accent); }
     .trace-panel { min-height:650px; overflow:auto; border-top:4px solid var(--teal); }
-    .panel-head { display:flex; justify-content:space-between; gap:12px; align-items:center; padding:16px 20px; border-bottom:1px solid var(--line); font:700 13px 'Trebuchet MS',sans-serif; letter-spacing:.3px; }
+    .panel-head { display:flex; justify-content:space-between; gap:12px; align-items:center; padding:16px 20px; border-bottom:1px solid var(--line); font:700 13px 'Segoe UI', Arial, sans-serif; letter-spacing:.2px; }
     .panel-head span { color:var(--muted); font-weight:400; }
     #messages { flex:1; overflow:auto; padding:24px; }
     .message { max-width:88%; margin:0 0 17px; animation:rise .25s ease-out; }
     .message.user { margin-left:auto; }
-    .message .label { color:var(--muted); font:700 11px 'Trebuchet MS',sans-serif; letter-spacing:1px; text-transform:uppercase; margin-bottom:5px; }
+    .message .label { color:var(--muted); font:700 11px 'Segoe UI', Arial, sans-serif; letter-spacing:.8px; text-transform:uppercase; margin-bottom:5px; }
     .bubble { padding:14px 16px; white-space:pre-wrap; border:1px solid var(--line); background:#fff; box-shadow:0 5px 14px rgba(41,65,67,.04); }
     .user .bubble { background:#fff0e9; border-color:#f2c7b8; }
     .assistant .bubble { background:#edf7f4; border-color:#c8e2d8; }
-    .empty { color:var(--muted); text-align:center; padding:100px 25px; font-style:italic; }
+    .empty { color:var(--muted); opacity:.62; text-align:center; padding:100px 25px; font:400 14px/1.5 'Segoe UI', Arial, sans-serif; }
     form { border-top:1px solid var(--line); padding:18px; display:flex; gap:10px; background:rgba(248,251,249,.8); }
-    textarea { resize:vertical; min-height:56px; max-height:160px; flex:1; border:1px solid #bfcfd1; padding:13px 14px; color:var(--ink); background:#fff; font:15px Georgia,serif; outline:none; }
+    textarea { resize:vertical; min-height:56px; max-height:160px; flex:1; border:1px solid #bfcfd1; padding:13px 14px; color:var(--ink); background:#fff; font:15px 'Segoe UI', Arial, sans-serif; outline:none; }
     textarea:focus { border-color:var(--teal); box-shadow:0 0 0 3px rgba(20,108,112,.1); }
-    button { border:0; background:var(--accent); color:#fff; min-width:72px; padding:0 18px; cursor:pointer; font:700 13px 'Trebuchet MS',sans-serif; box-shadow:4px 4px 0 rgba(166,66,45,.18); }
+    button { border:0; background:var(--accent); color:#fff; min-width:72px; padding:0 18px; cursor:pointer; font:700 13px 'Segoe UI', Arial, sans-serif; box-shadow:4px 4px 0 rgba(166,66,45,.18); }
     button:hover { background:var(--accent-dark); } button:disabled { opacity:.55; cursor:wait; }
     #trace { padding:18px 20px; }
     .trace-turn { border-left:3px solid var(--teal); margin:0 0 18px; padding-left:14px; }
-    .trace-title { display:flex; justify-content:space-between; color:var(--teal); font:700 12px 'Trebuchet MS',sans-serif; }
+    .trace-title { display:flex; justify-content:space-between; color:var(--teal); font:700 12px 'Segoe UI', Arial, sans-serif; }
     .trace-status { color:var(--ok); } .trace-status.bad { color:var(--bad); }
     details { margin-top:10px; border:1px solid var(--line); background:#fbfcfc; }
-    summary { cursor:pointer; padding:9px 11px; font:700 12px 'Trebuchet MS',sans-serif; }
+    summary { cursor:pointer; padding:9px 11px; font:700 12px 'Segoe UI', Arial, sans-serif; }
     pre { margin:0; padding:11px; border-top:1px solid var(--line); overflow:auto; white-space:pre-wrap; word-break:break-word; background:#17222d; color:#dce9e5; font:12px/1.45 Consolas,monospace; }
-    .trace-hint { color:var(--muted); font:12px 'Trebuchet MS',sans-serif; padding:14px 20px 0; }
+    .trace-hint { display:none; }
     @keyframes rise { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
     @media (max-width: 860px) { .shell{width:min(100% - 20px,680px);padding-top:18px} header{display:block}.version{margin-top:18px}.layout{grid-template-columns:1fr}.chat-panel,.trace-panel{min-height:520px} }
   </style>
@@ -79,21 +78,22 @@ HTML = r'''<!doctype html>
 <body>
   <main class="shell">
     <header>
-    <div><div class="eyebrow">Nova Laptop / Agent Console</div><h1>Chọn đúng máy.<br>Thấy rõ từng bước.</h1></div>
+    <div><div class="eyebrow">Nova Laptop Agent</div></div>
       <div class="version"><strong>Đang chạy</strong><code id="artifact">loading...</code><span id="provider"></span></div>
     </header>
     <section class="layout">
-    <div class="panel chat-panel"><div class="panel-head">Conversation <span id="turn-count">0 turns</span></div><div id="messages"><div class="empty">Hãy bắt đầu bằng một yêu cầu mua laptop.</div></div><form id="composer"><textarea id="prompt" placeholder="Lọc laptop Acer dùng thiết kế, tối đa 26 triệu..." required></textarea><button id="send" type="submit">Gửi</button></form></div>
-    <aside class="panel trace-panel"><div class="panel-head">Execution trace <span>live</span></div><div class="trace-hint">Tool calls và kết quả local được ghi theo từng lượt.</div><div id="trace"><div class="empty">Chưa có tool trace.</div></div></aside>
+    <div class="panel chat-panel"><div class="panel-head">Conversation <span id="turn-count">0 turns</span></div><div id="messages"><div class="empty">Nhập yêu cầu để bắt đầu cuộc trò chuyện</div></div><form id="composer"><textarea id="prompt" placeholder="Lọc laptop Acer dùng thiết kế, tối đa 26 triệu..." required></textarea><button id="send" type="submit">Gửi</button></form></div>
+    <aside class="panel trace-panel"><div class="panel-head">Execution trace <span>live</span></div><div class="trace-hint"></div><div id="trace"><div class="empty">Thông tin tool sẽ xuất hiện ở đây</div></div></aside>
     </section>
   </main>
 <script>
 const messages = document.querySelector('#messages'), trace = document.querySelector('#trace'), promptBox = document.querySelector('#prompt'), send = document.querySelector('#send');
 const pretty = value => JSON.stringify(value, null, 2);
+function displayReply(text) { if (!text) return ''; try { const candidate=text.trim().replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,''); const payload=JSON.parse(candidate); return typeof payload.reply==='string' && payload.reply.trim() ? payload.reply.trim() : text; } catch(error) { return text; } }
 function addMessage(kind, text) { const wrap=document.createElement('div'); wrap.className='message '+kind; wrap.innerHTML='<div class="label">'+(kind==='user'?'You':'Agent')+'</div><div class="bubble"></div>'; wrap.querySelector('.bubble').textContent=text||'(no text)'; const empty=messages.querySelector('.empty'); if(empty) empty.remove(); messages.appendChild(wrap); messages.scrollTop=messages.scrollHeight; }
 function addTrace(turn) { const empty=trace.querySelector('.empty'); if(empty) empty.remove(); const box=document.createElement('section'); box.className='trace-turn'; const status=turn.status==='provider_error'?'bad':''; let html='<div class="trace-title"><span>TURN '+turn.turn_index+' · '+turn.status+'</span><span class="trace-status '+status+'">'+(turn.status==='answered'?'observed':'inspect')+'</span></div>'; if(turn.error) html+='<details open><summary>ERROR</summary><pre></pre></details>'; (turn.tool_events||[]).forEach((event,index)=>{ html+='<details open><summary>TOOL '+(index+1)+' · '+event.tool+'</summary><pre></pre><pre></pre></details>'; }); box.innerHTML=html; const pres=box.querySelectorAll('pre'); let i=0; if(turn.error) pres[i++].textContent=turn.error; (turn.tool_events||[]).forEach(event=>{pres[i++].textContent='INPUT\n'+pretty(event.args||{}); pres[i++].textContent='RESULT\n'+pretty(event.result);}); trace.prepend(box); }
 async function load() { const r=await fetch('/api/state'); const data=await r.json(); document.querySelector('#artifact').textContent=data.artifact_version; document.querySelector('#provider').textContent=data.provider+' / '+(data.model||'default'); }
-document.querySelector('#composer').addEventListener('submit', async event => { event.preventDefault(); const text=promptBox.value.trim(); if(!text)return; addMessage('user',text); promptBox.value=''; send.disabled=true; send.textContent='...'; try { const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text})}); const data=await r.json(); if(!r.ok) throw new Error(data.error||'Request failed'); addMessage('assistant',data.turn.assistant_text||data.turn.error); addTrace(data.turn); document.querySelector('#turn-count').textContent=data.turn_count+' turns'; } catch(error) { addMessage('assistant','UI error: '+error.message); } finally { send.disabled=false; send.textContent='Gửi'; promptBox.focus(); } });
+document.querySelector('#composer').addEventListener('submit', async event => { event.preventDefault(); const text=promptBox.value.trim(); if(!text)return; addMessage('user',text); promptBox.value=''; send.disabled=true; send.textContent='...'; try { const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text})}); const data=await r.json(); if(!r.ok) throw new Error(data.error||'Request failed'); addMessage('assistant',displayReply(data.turn.assistant_text||data.turn.error)); addTrace(data.turn); document.querySelector('#turn-count').textContent=data.turn_count+' turns'; } catch(error) { addMessage('assistant','UI error: '+error.message); } finally { send.disabled=false; send.textContent='Gửi'; promptBox.focus(); } });
 load();
 </script>
 </body></html>'''

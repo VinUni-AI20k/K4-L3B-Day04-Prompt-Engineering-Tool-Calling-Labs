@@ -35,6 +35,23 @@ def json_text(value: Any, *, max_chars: int | None = None) -> str:
     return text
 
 
+def display_reply(text: str | None) -> str:
+    """Show the user-facing reply while retaining the model's raw JSON trace."""
+    if not text:
+        return ""
+    candidate = text.strip()
+    if candidate.startswith("```") and candidate.endswith("```"):
+        candidate = candidate[3:-3].strip()
+        if candidate.lower().startswith("json"):
+            candidate = candidate[4:].strip()
+    try:
+        payload = json.loads(candidate)
+    except json.JSONDecodeError:
+        return text
+    reply = payload.get("reply") if isinstance(payload, dict) else None
+    return reply.strip() if isinstance(reply, str) and reply.strip() else text
+
+
 def trim_history(history: list[dict[str, str]], window: int) -> list[dict[str, str]]:
     if window <= 0:
         return []
@@ -233,7 +250,7 @@ def main() -> None:
             )
             turn_record.update(result)
             assistant_text = result["assistant_text"]
-            print(f"\nAgent> {assistant_text}")
+            print(f"\nAgent> {display_reply(assistant_text)}")
             history.append({"role": "user", "content": user_text})
             history.append({"role": "assistant", "content": assistant_text})
         except Exception as exc:
