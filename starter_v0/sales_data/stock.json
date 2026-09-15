@@ -1,0 +1,77 @@
+{
+  "snapshot_at": "2026-09-14T09:00:00+07:00",
+  "source": "Fictional Northstar Electronics inventory",
+  "status_rules": {
+    "in_stock": "qty_available >= 6",
+    "low_stock": "1 <= qty_available <= 5",
+    "incoming": "qty_available == 0 and restock_date is set",
+    "out_of_stock": "qty_available == 0 and no restock_date"
+  },
+  "warehouses": [
+    {"warehouse": "hcm", "name": "Kho TP. Hồ Chí Minh", "city": "Ho Chi Minh City"},
+    {"warehouse": "hanoi", "name": "Kho Hà Nội", "city": "Ha Noi"},
+    {"warehouse": "danang", "name": "Kho Đà Nẵng", "city": "Da Nang"},
+    {"warehouse": "online", "name": "Kho thương mại điện tử", "city": "Ho Chi Minh City"}
+  ],
+  "stock": [
+    {"sku": "SKU-1001", "warehouse": "hcm", "qty_available": 3, "status": "low_stock", "restock_date": null, "last_updated": "2026-09-14T08:40:00+07:00"},
+    {"sku": "SKU-1001", "warehouse": "hanoi", "qty_available": 8, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:35:00+07:00"},
+    {"sku": "SKU-1001", "warehouse": "danang", "qty_available": 2, "status": "low_stock", "restock_date": null, "last_updated": "2026-09-14T08:30:00+07:00"},
+    {"sku": "SKU-1001", "warehouse": "online", "qty_available": 15, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:55:00+07:00"},
+
+    {"sku": "SKU-1002", "warehouse": "hcm", "qty_available": 6, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:40:00+07:00"},
+    {"sku": "SKU-1002", "warehouse": "hanoi", "qty_available": 4, "status": "low_stock", "restock_date": null, "last_updated": "2026-09-14T08:35:00+07:00"},
+    {"sku": "SKU-1002", "warehouse": "danang", "qty_available": 0, "status": "incoming", "restock_date": "2026-09-18", "last_updated": "2026-09-14T08:30:00+07:00"},
+    {"sku": "SKU-1002", "warehouse": "online", "qty_available": 20, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:55:00+07:00"},
+
+    {"sku": "SKU-1003", "warehouse": "hcm", "qty_available": 12, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:40:00+07:00"},
+    {"sku": "SKU-1003", "warehouse": "hanoi", "qty_available": 7, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:35:00+07:00"},
+    {"sku": "SKU-1003", "warehouse": "danang", "qty_available": 5, "status": "low_stock", "restock_date": null, "last_updated": "2026-09-14T08:30:00+07:00"},
+    {"sku": "SKU-1003", "warehouse": "online", "qty_available": 30, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:55:00+07:00"},
+
+    {"sku": "SKU-1004", "warehouse": "hcm", "qty_available": 14, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:40:00+07:00"},
+    {"sku": "SKU-1004", "warehouse": "hanoi", "qty_available": 0, "status": "incoming", "restock_date": "2026-09-20", "last_updated": "2026-09-14T08:35:00+07:00"},
+    {"sku": "SKU-1004", "warehouse": "danang", "qty_available": 3, "status": "low_stock", "restock_date": null, "last_updated": "2026-09-14T08:30:00+07:00"},
+    {"sku": "SKU-1004", "warehouse": "online", "qty_available": 0, "status": "out_of_stock", "restock_date": null, "last_updated": "2026-09-14T08:55:00+07:00"},
+
+    {"sku": "SKU-1005", "warehouse": "hcm", "qty_available": 9, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:40:00+07:00"},
+    {"sku": "SKU-1005", "warehouse": "hanoi", "qty_available": 6, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:35:00+07:00"},
+    {"sku": "SKU-1005", "warehouse": "danang", "qty_available": 1, "status": "low_stock", "restock_date": null, "last_updated": "2026-09-14T08:30:00+07:00"},
+    {"sku": "SKU-1005", "warehouse": "online", "qty_available": 11, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:55:00+07:00"},
+
+    {"sku": "SKU-1006", "warehouse": "hcm", "qty_available": 25, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:40:00+07:00"},
+    {"sku": "SKU-1006", "warehouse": "hanoi", "qty_available": 18, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:35:00+07:00"},
+    {"sku": "SKU-1006", "warehouse": "danang", "qty_available": 10, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:30:00+07:00"},
+    {"sku": "SKU-1006", "warehouse": "online", "qty_available": 40, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:55:00+07:00"},
+
+    {"sku": "SKU-1007", "warehouse": "hcm", "qty_available": 7, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:40:00+07:00"},
+    {"sku": "SKU-1007", "warehouse": "hanoi", "qty_available": 0, "status": "out_of_stock", "restock_date": null, "last_updated": "2026-09-14T08:35:00+07:00"},
+    {"sku": "SKU-1007", "warehouse": "danang", "qty_available": 4, "status": "low_stock", "restock_date": null, "last_updated": "2026-09-14T08:30:00+07:00"},
+    {"sku": "SKU-1007", "warehouse": "online", "qty_available": 22, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:55:00+07:00"},
+
+    {"sku": "SKU-1008", "warehouse": "hcm", "qty_available": 30, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:40:00+07:00"},
+    {"sku": "SKU-1008", "warehouse": "hanoi", "qty_available": 12, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:35:00+07:00"},
+    {"sku": "SKU-1008", "warehouse": "danang", "qty_available": 9, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:30:00+07:00"},
+    {"sku": "SKU-1008", "warehouse": "online", "qty_available": 0, "status": "incoming", "restock_date": "2026-09-16", "last_updated": "2026-09-14T08:55:00+07:00"},
+
+    {"sku": "SKU-1009", "warehouse": "hcm", "qty_available": 5, "status": "low_stock", "restock_date": null, "last_updated": "2026-09-14T08:40:00+07:00"},
+    {"sku": "SKU-1009", "warehouse": "hanoi", "qty_available": 3, "status": "low_stock", "restock_date": null, "last_updated": "2026-09-14T08:35:00+07:00"},
+    {"sku": "SKU-1009", "warehouse": "danang", "qty_available": 0, "status": "incoming", "restock_date": "2026-09-22", "last_updated": "2026-09-14T08:30:00+07:00"},
+    {"sku": "SKU-1009", "warehouse": "online", "qty_available": 8, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:55:00+07:00"},
+
+    {"sku": "SKU-1010", "warehouse": "hcm", "qty_available": 40, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:40:00+07:00"},
+    {"sku": "SKU-1010", "warehouse": "hanoi", "qty_available": 35, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:35:00+07:00"},
+    {"sku": "SKU-1010", "warehouse": "danang", "qty_available": 20, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:30:00+07:00"},
+    {"sku": "SKU-1010", "warehouse": "online", "qty_available": 60, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:55:00+07:00"},
+
+    {"sku": "SKU-1011", "warehouse": "hcm", "qty_available": 4, "status": "low_stock", "restock_date": null, "last_updated": "2026-09-14T08:40:00+07:00"},
+    {"sku": "SKU-1011", "warehouse": "hanoi", "qty_available": 6, "status": "in_stock", "restock_date": null, "last_updated": "2026-09-14T08:35:00+07:00"},
+    {"sku": "SKU-1011", "warehouse": "danang", "qty_available": 0, "status": "out_of_stock", "restock_date": null, "last_updated": "2026-09-14T08:30:00+07:00"},
+    {"sku": "SKU-1011", "warehouse": "online", "qty_available": 5, "status": "low_stock", "restock_date": null, "last_updated": "2026-09-14T08:55:00+07:00"},
+
+    {"sku": "SKU-1012", "warehouse": "hcm", "qty_available": 0, "status": "out_of_stock", "restock_date": null, "last_updated": "2026-09-14T08:40:00+07:00"},
+    {"sku": "SKU-1012", "warehouse": "hanoi", "qty_available": 0, "status": "out_of_stock", "restock_date": null, "last_updated": "2026-09-14T08:35:00+07:00"},
+    {"sku": "SKU-1012", "warehouse": "danang", "qty_available": 0, "status": "out_of_stock", "restock_date": null, "last_updated": "2026-09-14T08:30:00+07:00"},
+    {"sku": "SKU-1012", "warehouse": "online", "qty_available": 2, "status": "low_stock", "restock_date": null, "last_updated": "2026-09-14T08:55:00+07:00"}
+  ]
+}
