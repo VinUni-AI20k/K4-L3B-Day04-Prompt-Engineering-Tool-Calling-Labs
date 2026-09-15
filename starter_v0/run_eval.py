@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import time
 import re
 from datetime import datetime
 from pathlib import Path
@@ -270,6 +271,8 @@ def main() -> None:
     parser.add_argument("--tools", type=Path, default=ARTIFACTS_DIR / "tools.yaml")
     parser.add_argument("--eval-cases", type=Path, default=DATA_DIR / "eval_base.json")
     parser.add_argument("--runs-dir", type=Path, default=ROOT / "runs")
+    parser.add_argument("--batch-size", type=int, default=4, help="Number of cases per batch before pausing")
+    parser.add_argument("--batch-delay", type=int, default=90, help="Pause duration in seconds between batches")
     args = parser.parse_args()
 
     system_prompt = args.system_prompt.read_text(encoding="utf-8")
@@ -286,7 +289,10 @@ def main() -> None:
     openai_tools = to_openai_tools(tool_declarations)
 
     results: list[dict[str, Any]] = []
-    for case in cases:
+    for idx, case in enumerate(cases):
+        if idx > 0 and args.batch_size > 0 and idx % args.batch_size == 0:
+            print(f"\n[Rate-Limit Protection] Waiting {args.batch_delay}s after running {idx} cases...\n", flush=True)
+            time.sleep(args.batch_delay)
         print(f"Running {case['id']}...", flush=True)
         agent = HelpdeskAgent(provider, system_prompt=system_prompt, tools=openai_tools, model=args.model)
         try:
