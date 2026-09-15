@@ -79,7 +79,7 @@ un_eval.py, TEAM.md.
 - Quyết định, khó khăn và cách xử lý:
   - *Khó khăn*: Gemini Free API liên tục gặp lỗi Rate Limit (HTTP 429 provider_error) khi gửi 30 prompt liên tiếp, khiến nhiều cases không đo lường được.
   - *Quyết định & Xử lý*: Trực tiếp sửa 
-un_eval.py thêm tính năng batch pause (nghỉ 90s sau mỗi 2-4 cases) và cờ --retry-run-file để chỉ retry lại các case dính lỗi mạng mà không làm mất kết quả cũ. Đợt chạy lại thu được 30/30 measured cases sạch lỗi.
+un_eval.py thêm tính năng batch pause (nghỉ 90s sau mỗi 2-4 cases) và cờ --retry-run-file để chỉ retry lại các case dính lỗi mạng mà không làm mất kết quả cũ. Đợt chạy lại thu được 21/30 measured cases sạch lỗi.
 - Điều đã học:
   - Nắm vững quy trình dựng Baseline & Infrastructure để đánh giá LLM Agent.
   - Kỹ năng xử lý nghẽn Rate Limit khi tương tác với các LLM Provider API.
@@ -88,7 +88,7 @@ un_eval.py thêm tính năng batch pause (nghỉ 90s sau mỗi 2-4 cases) và c�
   - AI Assistant (Antigravity IDE - Gemini), Python, Git (branch 0-quanghung).
   - Kiểm tra bằng lệnh python scripts/preflight_provider.py và python run_eval.py.
 - Thời điểm đã tự nộp URL repo chung trên VLearn:
-  - Đã tự nộp URL Repo https://github.com/harrynguyen127/K4-L3B-Day04-Enigma trên VLearn lúc 19:30.
+  - Đã tự nộp URL Repo https://github.com/harrynguyen127/K4-L3B-Day04-Enigma trên VLearn lúc 20:10.
 
 ### Nguyễn Hoàng Anh — 2A202602811
 
