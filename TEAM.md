@@ -15,7 +15,7 @@
 | Họ và tên | MSSV | GitHub | Vai trò và công việc | File/commit/PR |
 |---|---|---|---|---|
 | Đàm Việt Hưng | 2A202602600 | https://github.com/viethwngg/K4-L3-DAY04-3-nguoi-PromptEngineeringToolCalling | Xây dựng dữ liệu test nhóm; soạn file eval_group.json; làm 10 case nhóm | `data/eval_group.json` và commit 10 case nhóm |
-
+| Lê Trung Kiên | 2A202602748 | https://github.com/viethwngg/K4-L3-DAY04-3-nguoi-PromptEngineeringToolCalling | làm 3 version và chạy version log | `data/eval_group.json` và commit 10 case nhóm |
 ## Nhận xét chung
 
 - Kết quả và bằng chứng:
