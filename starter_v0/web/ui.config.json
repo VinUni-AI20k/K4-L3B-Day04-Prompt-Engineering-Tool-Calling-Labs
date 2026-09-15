@@ -1,0 +1,54 @@
+{
+  "_comment": "Cấu hình hiển thị của web UI. Đổi lĩnh vực hoặc đổi bộ tool chỉ cần sửa file này, không cần sửa app.js. Tool không khai báo ở tool_meta vẫn hiện được với mô tả lấy từ tools.yaml.",
+  "brand": {
+    "short": "NS",
+    "name": "Northstar PC",
+    "tagline": "Trợ lý tư vấn linh kiện, báo giá và đặt mua PC"
+  },
+  "prompt_groups": [
+    {
+      "label": "Tư vấn & giá",
+      "items": [
+        "Mình có 20 triệu, muốn chơi game 1440p thì nên lấy bộ nào?",
+        "Giá hiện tại của CPU-AMD-7800X3D là bao nhiêu, còn hàng không?",
+        "PC Gaming Titan có cấu hình gì, giá bao nhiêu?",
+        "Cho mình xem các CPU phù hợp chơi game."
+      ]
+    },
+    {
+      "label": "Tương thích & báo giá",
+      "items": [
+        "CPU-AMD-7800X3D lắp được với mainboard MB-ASUS-B760M-D4 không?",
+        "Lập báo giá cho bộ PREBUILT-GAMING-MID giúp mình.",
+        "Chính sách đổi trả của shop thế nào?"
+      ]
+    },
+    {
+      "label": "Thiếu thông tin / xác nhận",
+      "items": [
+        "Kiểm tra giá giúp mình.",
+        "Đặt mua bộ đó cho mình nhé.",
+        "Thôi mình đổi ý, hủy đơn vừa nãy.",
+        "Bạn có thể làm được những gì?"
+      ]
+    }
+  ],
+  "tool_meta": {
+    "clarify": { "label": "Hỏi lại khách", "tone": "ask" },
+    "search_catalog": { "label": "Tra danh mục", "tone": "read" },
+    "check_price": { "label": "Giá & tồn kho", "tone": "read" },
+    "check_compatibility": { "label": "Kiểm tra tương thích", "tone": "read" },
+    "lookup_customer": { "label": "Hồ sơ khách hàng", "tone": "sensitive" },
+    "format_quote": { "label": "Lập báo giá", "tone": "compose" },
+    "policy": { "label": "Chính sách cửa hàng", "tone": "read" },
+    "create_order": { "label": "Tạo đơn hàng", "tone": "write" },
+    "search_product_info": { "label": "Tra cứu web công khai", "tone": "external" },
+    "check_service_status": { "label": "Trạng thái dịch vụ", "tone": "read" },
+    "search_kb": { "label": "Tra cứu hướng dẫn", "tone": "read" },
+    "inspect_device": { "label": "Kiểm tra thiết bị", "tone": "read" },
+    "lookup_user": { "label": "Tra cứu nhân sự", "tone": "sensitive" },
+    "format_incident_report": { "label": "Lập báo cáo", "tone": "compose" },
+    "search_device_info": { "label": "Tra cứu web công khai", "tone": "external" },
+    "create_ticket": { "label": "Tạo ticket", "tone": "write" }
+  }
+}

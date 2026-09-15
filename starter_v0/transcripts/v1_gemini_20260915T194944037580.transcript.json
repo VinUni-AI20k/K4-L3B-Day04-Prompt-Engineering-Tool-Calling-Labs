@@ -1,0 +1,1296 @@
+{
+  "transcript_id": "v1_gemini_20260915T194944037580",
+  "version": "v1",
+  "artifact_version": "v1+p780f449f31e2+t2dceebbcb5d8",
+  "prompt_hash": "780f449f31e20f07f4fcf91a33cb0fcad50c993896457c3fb6f47555fa7c8856",
+  "tools_hash": "2dceebbcb5d8e6decb07aa1a03ecec69a6a39959f969df97abbb168024694b93",
+  "interface": "web_ui",
+  "provider": "gemini",
+  "model": "gemini-3.1-flash-lite",
+  "system_prompt": "D:\\AI in Action\\Lesson\\9.15.2026\\Lab4\\K4-L3B-Day04-67\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "D:\\AI in Action\\Lesson\\9.15.2026\\Lab4\\K4-L3B-Day04-67\\starter_v0\\artifacts\\tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-09-15T19:49:44",
+  "updated_at": "2026-09-15T19:52:14",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-09-15T19:49:46",
+      "user": "Mình có 20 triệu, muốn chơi game 1440p thì nên lấy bộ nào?",
+      "status": "answered",
+      "assistant_text": "{\n  \"intent\": \"product_advice\",\n  \"action\": \"answered\",\n  \"reply\": \"Với ngân sách 20 triệu, để chơi game 1440p (2K) ổn định, mình gợi ý bạn tập trung vào card đồ họa RTX 4070 SUPER. Tuy nhiên, riêng card này đã chiếm khoảng 17 triệu, nên sẽ khó để lắp trọn bộ PC mới với 3 triệu còn lại. Bạn có muốn mình thử phối một cấu hình tiết kiệm hơn với RTX 4060 (chơi tốt 1080p, 1440p ở mức trung bình) hay bạn có thể nâng ngân sách lên để tối ưu cho 1440p không?\",\n  \"evidence_ids\": [\n    \"GPU-RTX-4070-SUPER\",\n    \"GPU-RTX-4060\"\n  ]\n}",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "search_catalog",
+              "args": {
+                "budget_max": 20000000,
+                "use_case": "gaming"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "search_catalog",
+              "args": {
+                "budget_max": 20000000,
+                "use_case": "gaming"
+              },
+              "result": {
+                "tool": "search_catalog",
+                "total_found": 21,
+                "items": [
+                  {
+                    "sku": "CPU-INTEL-13400F",
+                    "name": "Intel Core i5-13400F (Up to 4.6GHz, 10 Cores 16 Threads)",
+                    "category": "cpu",
+                    "socket": "LGA1700",
+                    "ram_type": [
+                      "DDR4",
+                      "DDR5"
+                    ],
+                    "wattage": 65,
+                    "price": 4890000,
+                    "stock": 15,
+                    "use_case": [
+                      "gaming",
+                      "office"
+                    ],
+                    "description": "CPU tầm trung đa năng, hiệu năng gaming và đồ họa ổn định, socket LGA1700."
+                  },
+                  {
+                    "sku": "CPU-INTEL-14700K",
+                    "name": "Intel Core i7-14700K (Up to 5.6GHz, 20 Cores 28 Threads)",
+                    "category": "cpu",
+                    "socket": "LGA1700",
+                    "ram_type": [
+                      "DDR4",
+                      "DDR5"
+                    ],
+                    "wattage": 125,
+                    "price": 10500000,
+                    "stock": 8,
+                    "use_case": [
+                      "gaming",
+                      "workstation"
+                    ],
+                    "description": "CPU cao cấp cho đồ họa, render 3D và gaming nặng, cần tản nhiệt tốt."
+                  },
+                  {
+                    "sku": "CPU-AMD-7600",
+                    "name": "AMD Ryzen 5 7600 (Up to 5.1GHz, 6 Cores 12 Threads)",
+                    "category": "cpu",
+                    "socket": "AM5",
+                    "ram_type": [
+                      "DDR5"
+                    ],
+                    "wattage": 65,
+                    "price": 5290000,
+                    "stock": 12,
+                    "use_case": [
+                      "gaming",
+                      "office"
+                    ],
+                    "description": "CPU thế hệ mới socket AM5, hỗ trợ RAM DDR5 và PCIe 5.0."
+                  },
+                  {
+                    "sku": "CPU-AMD-7800X3D",
+                    "name": "AMD Ryzen 7 7800X3D (Up to 5.0GHz, 8 Cores 16 Threads, 3D V-Cache)",
+                    "category": "cpu",
+                    "socket": "AM5",
+                    "ram_type": [
+                      "DDR5"
+                    ],
+                    "wattage": 120,
+                    "price": 10990000,
+                    "stock": 6,
+                    "use_case": [
+                      "gaming"
+                    ],
+                    "description": "Vua gaming với bộ nhớ đệm 3D V-Cache 96MB, tối ưu FPS cực cao."
+                  },
+                  {
+                    "sku": "MB-ASUS-B760M-D4",
+                    "name": "Mainboard ASUS PRIME B760M-A D4",
+                    "category": "mainboard",
+                    "socket": "LGA1700",
+                    "ram_type": [
+                      "DDR4"
+                    ],
+                    "wattage": 25,
+                    "price": 2990000,
+                    "stock": 10,
+                    "use_case": [
+                      "gaming",
+                      "office"
+                    ],
+                    "description": "Bo mạch chủ Intel B760 socket LGA1700, hỗ trợ RAM DDR4 tiết kiệm chi phí."
+                  },
+                  {
+                    "sku": "MB-MSI-B760M-D5",
+                    "name": "Mainboard MSI MAG B760M MORTAR WIFI DDR5",
+                    "category": "mainboard",
+                    "socket": "LGA1700",
+                    "ram_type": [
+                      "DDR5"
+                    ],
+                    "wattage": 30,
+                    "price": 4290000,
+                    "stock": 7,
+                    "use_case": [
+                      "gaming",
+                      "workstation"
+                    ],
+                    "description": "Bo mạch chủ LGA1700 cao cấp, VRM khỏe, hỗ trợ RAM DDR5 và Wifi 6E."
+                  },
+                  {
+                    "sku": "MB-GIGA-B650M-D5",
+                    "name": "Mainboard Gigabyte B650M GAMING X AX DDR5",
+                    "category": "mainboard",
+                    "socket": "AM5",
+                    "ram_type": [
+                      "DDR5"
+                    ],
+                    "wattage": 30,
+                    "price": 3990000,
+                    "stock": 9,
+                    "use_case": [
+                      "gaming",
+                      "workstation"
+                    ],
+                    "description": "Bo mạch chủ AM5 cho Ryzen 7000/8000/9000 series, hỗ trợ DDR5."
+                  },
+                  {
+                    "sku": "MB-ASROCK-A620M",
+                    "name": "Mainboard ASRock A620M-HDV/M.2 DDR5",
+                    "category": "mainboard",
+                    "socket": "AM5",
+                    "ram_type": [
+                      "DDR5"
+                    ],
+                    "wattage": 20,
+                    "price": 2290000,
+                    "stock": 14,
+                    "use_case": [
+                      "office",
+                      "gaming"
+                    ],
+                    "description": "Bo mạch chủ AM5 phân khúc phổ thông cho CPU Ryzen 65W."
+                  },
+                  {
+                    "sku": "GPU-RTX-4060",
+                    "name": "VGA ASUS Dual GeForce RTX 4060 EVO OC 8GB",
+                    "category": "gpu",
+                    "wattage": 115,
+                    "price": 7990000,
+                    "stock": 18,
+                    "use_case": [
+                      "gaming",
+                      "office"
+                    ],
+                    "description": "Card đồ họa chơi mượt mọi game 1080p Ultra, hỗ trợ DLSS 3 và Ray Tracing."
+                  },
+                  {
+                    "sku": "GPU-RTX-4070-SUPER",
+                    "name": "VGA MSI GeForce RTX 4070 SUPER 12G VENTUS 2X OC",
+                    "category": "gpu",
+                    "wattage": 220,
+                    "price": 16990000,
+                    "stock": 6,
+                    "use_case": [
+                      "gaming",
+                      "workstation"
+                    ],
+                    "description": "Card đồ họa chuyên trị game 2K/4K và làm đồ họa dựng video Premiere/After Effects."
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "{\n  \"intent\": \"product_advice\",\n  \"action\": \"answered\",\n  \"reply\": \"Với ngân sách 20 triệu, để chơi game 1440p (2K) ổn định, mình gợi ý bạn tập trung vào card đồ họa RTX 4070 SUPER. Tuy nhiên, riêng card này đã chiếm khoảng 17 triệu, nên sẽ khó để lắp trọn bộ PC mới với 3 triệu còn lại. Bạn có muốn mình thử phối một cấu hình tiết kiệm hơn với RTX 4060 (chơi tốt 1080p, 1440p ở mức trung bình) hay bạn có thể nâng ngân sách lên để tối ưu cho 1440p không?\",\n  \"evidence_ids\": [\n    \"GPU-RTX-4070-SUPER\",\n    \"GPU-RTX-4060\"\n  ]\n}",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "search_catalog",
+          "args": {
+            "budget_max": 20000000,
+            "use_case": "gaming"
+          },
+          "result": {
+            "tool": "search_catalog",
+            "total_found": 21,
+            "items": [
+              {
+                "sku": "CPU-INTEL-13400F",
+                "name": "Intel Core i5-13400F (Up to 4.6GHz, 10 Cores 16 Threads)",
+                "category": "cpu",
+                "socket": "LGA1700",
+                "ram_type": [
+                  "DDR4",
+                  "DDR5"
+                ],
+                "wattage": 65,
+                "price": 4890000,
+                "stock": 15,
+                "use_case": [
+                  "gaming",
+                  "office"
+                ],
+                "description": "CPU tầm trung đa năng, hiệu năng gaming và đồ họa ổn định, socket LGA1700."
+              },
+              {
+                "sku": "CPU-INTEL-14700K",
+                "name": "Intel Core i7-14700K (Up to 5.6GHz, 20 Cores 28 Threads)",
+                "category": "cpu",
+                "socket": "LGA1700",
+                "ram_type": [
+                  "DDR4",
+                  "DDR5"
+                ],
+                "wattage": 125,
+                "price": 10500000,
+                "stock": 8,
+                "use_case": [
+                  "gaming",
+                  "workstation"
+                ],
+                "description": "CPU cao cấp cho đồ họa, render 3D và gaming nặng, cần tản nhiệt tốt."
+              },
+              {
+                "sku": "CPU-AMD-7600",
+                "name": "AMD Ryzen 5 7600 (Up to 5.1GHz, 6 Cores 12 Threads)",
+                "category": "cpu",
+                "socket": "AM5",
+                "ram_type": [
+                  "DDR5"
+                ],
+                "wattage": 65,
+                "price": 5290000,
+                "stock": 12,
+                "use_case": [
+                  "gaming",
+                  "office"
+                ],
+                "description": "CPU thế hệ mới socket AM5, hỗ trợ RAM DDR5 và PCIe 5.0."
+              },
+              {
+                "sku": "CPU-AMD-7800X3D",
+                "name": "AMD Ryzen 7 7800X3D (Up to 5.0GHz, 8 Cores 16 Threads, 3D V-Cache)",
+                "category": "cpu",
+                "socket": "AM5",
+                "ram_type": [
+                  "DDR5"
+                ],
+                "wattage": 120,
+                "price": 10990000,
+                "stock": 6,
+                "use_case": [
+                  "gaming"
+                ],
+                "description": "Vua gaming với bộ nhớ đệm 3D V-Cache 96MB, tối ưu FPS cực cao."
+              },
+              {
+                "sku": "MB-ASUS-B760M-D4",
+                "name": "Mainboard ASUS PRIME B760M-A D4",
+                "category": "mainboard",
+                "socket": "LGA1700",
+                "ram_type": [
+                  "DDR4"
+                ],
+                "wattage": 25,
+                "price": 2990000,
+                "stock": 10,
+                "use_case": [
+                  "gaming",
+                  "office"
+                ],
+                "description": "Bo mạch chủ Intel B760 socket LGA1700, hỗ trợ RAM DDR4 tiết kiệm chi phí."
+              },
+              {
+                "sku": "MB-MSI-B760M-D5",
+                "name": "Mainboard MSI MAG B760M MORTAR WIFI DDR5",
+                "category": "mainboard",
+                "socket": "LGA1700",
+                "ram_type": [
+                  "DDR5"
+                ],
+                "wattage": 30,
+                "price": 4290000,
+                "stock": 7,
+                "use_case": [
+                  "gaming",
+                  "workstation"
+                ],
+                "description": "Bo mạch chủ LGA1700 cao cấp, VRM khỏe, hỗ trợ RAM DDR5 và Wifi 6E."
+              },
+              {
+                "sku": "MB-GIGA-B650M-D5",
+                "name": "Mainboard Gigabyte B650M GAMING X AX DDR5",
+                "category": "mainboard",
+                "socket": "AM5",
+                "ram_type": [
+                  "DDR5"
+                ],
+                "wattage": 30,
+                "price": 3990000,
+                "stock": 9,
+                "use_case": [
+                  "gaming",
+                  "workstation"
+                ],
+                "description": "Bo mạch chủ AM5 cho Ryzen 7000/8000/9000 series, hỗ trợ DDR5."
+              },
+              {
+                "sku": "MB-ASROCK-A620M",
+                "name": "Mainboard ASRock A620M-HDV/M.2 DDR5",
+                "category": "mainboard",
+                "socket": "AM5",
+                "ram_type": [
+                  "DDR5"
+                ],
+                "wattage": 20,
+                "price": 2290000,
+                "stock": 14,
+                "use_case": [
+                  "office",
+                  "gaming"
+                ],
+                "description": "Bo mạch chủ AM5 phân khúc phổ thông cho CPU Ryzen 65W."
+              },
+              {
+                "sku": "GPU-RTX-4060",
+                "name": "VGA ASUS Dual GeForce RTX 4060 EVO OC 8GB",
+                "category": "gpu",
+                "wattage": 115,
+                "price": 7990000,
+                "stock": 18,
+                "use_case": [
+                  "gaming",
+                  "office"
+                ],
+                "description": "Card đồ họa chơi mượt mọi game 1080p Ultra, hỗ trợ DLSS 3 và Ray Tracing."
+              },
+              {
+                "sku": "GPU-RTX-4070-SUPER",
+                "name": "VGA MSI GeForce RTX 4070 SUPER 12G VENTUS 2X OC",
+                "category": "gpu",
+                "wattage": 220,
+                "price": 16990000,
+                "stock": 6,
+                "use_case": [
+                  "gaming",
+                  "workstation"
+                ],
+                "description": "Card đồ họa chuyên trị game 2K/4K và làm đồ họa dựng video Premiere/After Effects."
+              }
+            ]
+          }
+        }
+      ],
+      "latency_ms": 8113,
+      "ended_at": "2026-09-15T19:49:54"
+    },
+    {
+      "turn_index": 2,
+      "started_at": "2026-09-15T19:50:39",
+      "user": "có nhưng đừng đặt cho tôi xem cấu hình và giá bộ bạn giới thiệu",
+      "status": "answered",
+      "assistant_text": "{\n  \"intent\": \"product_advice\",\n  \"action\": \"answered\",\n  \"reply\": \"Với ngân sách 20 triệu, mình tìm được bộ PC Gaming Dragon (i5-13400F | RTX 4060 | 16GB DDR4 | 500GB SSD | 650W) với giá 17.490.000 VNĐ. Bộ này hiện còn hàng và đáp ứng tốt nhu cầu chơi game của bạn. Bạn có muốn mình lập bảng báo giá chi tiết cho cấu hình này không?\",\n  \"evidence_ids\": [\n    \"PREBUILT-GAMING-MID\"\n  ]\n}",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "search_catalog",
+              "args": {
+                "category": "prebuilt",
+                "use_case": "gaming",
+                "budget_max": 20000000
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "search_catalog",
+              "args": {
+                "category": "prebuilt",
+                "use_case": "gaming",
+                "budget_max": 20000000
+              },
+              "result": {
+                "tool": "search_catalog",
+                "total_found": 1,
+                "items": [
+                  {
+                    "sku": "PREBUILT-GAMING-MID",
+                    "name": "PC Gaming Dragon (i5-13400F | RTX 4060 | 16GB DDR4 | 500GB SSD | 650W)",
+                    "category": "prebuilt",
+                    "use_case": [
+                      "gaming"
+                    ],
+                    "price": 17490000,
+                    "stock": 5,
+                    "description": "Dàn PC Gaming cân tốt GTA V, Valorant, CS2, Cyberpunk 2077 ở thiết lập cao."
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "{\n  \"intent\": \"product_advice\",\n  \"action\": \"answered\",\n  \"reply\": \"Với ngân sách 20 triệu, mình tìm được bộ PC Gaming Dragon (i5-13400F | RTX 4060 | 16GB DDR4 | 500GB SSD | 650W) với giá 17.490.000 VNĐ. Bộ này hiện còn hàng và đáp ứng tốt nhu cầu chơi game của bạn. Bạn có muốn mình lập bảng báo giá chi tiết cho cấu hình này không?\",\n  \"evidence_ids\": [\n    \"PREBUILT-GAMING-MID\"\n  ]\n}",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "search_catalog",
+          "args": {
+            "category": "prebuilt",
+            "use_case": "gaming",
+            "budget_max": 20000000
+          },
+          "result": {
+            "tool": "search_catalog",
+            "total_found": 1,
+            "items": [
+              {
+                "sku": "PREBUILT-GAMING-MID",
+                "name": "PC Gaming Dragon (i5-13400F | RTX 4060 | 16GB DDR4 | 500GB SSD | 650W)",
+                "category": "prebuilt",
+                "use_case": [
+                  "gaming"
+                ],
+                "price": 17490000,
+                "stock": 5,
+                "description": "Dàn PC Gaming cân tốt GTA V, Valorant, CS2, Cyberpunk 2077 ở thiết lập cao."
+              }
+            ]
+          }
+        }
+      ],
+      "latency_ms": 5135,
+      "ended_at": "2026-09-15T19:50:44"
+    },
+    {
+      "turn_index": 3,
+      "started_at": "2026-09-15T19:51:12",
+      "user": "có hỗ trợ build con mới không",
+      "status": "answered",
+      "assistant_text": "{\n  \"intent\": \"product_advice\",\n  \"action\": \"answered\",\n  \"reply\": \"Có, Northstar PC hoàn toàn hỗ trợ bạn tự chọn linh kiện để lắp ráp một bộ máy mới theo ý muốn. Bạn đã có danh sách linh kiện cụ thể nào chưa, hay muốn mình tư vấn từng món để tối ưu cho ngân sách 20 triệu?\",\n  \"evidence_ids\": []\n}",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "{\n  \"intent\": \"product_advice\",\n  \"action\": \"answered\",\n  \"reply\": \"Có, Northstar PC hoàn toàn hỗ trợ bạn tự chọn linh kiện để lắp ráp một bộ máy mới theo ý muốn. Bạn đã có danh sách linh kiện cụ thể nào chưa, hay muốn mình tư vấn từng món để tối ưu cho ngân sách 20 triệu?\",\n  \"evidence_ids\": []\n}",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "latency_ms": 2878,
+      "ended_at": "2026-09-15T19:51:15"
+    },
+    {
+      "turn_index": 4,
+      "started_at": "2026-09-15T19:51:28",
+      "user": "từng món tối ưu cho 50 củ",
+      "status": "answered",
+      "assistant_text": "{\n  \"intent\": \"product_advice\",\n  \"action\": \"answered\",\n  \"reply\": \"Với ngân sách 50 triệu, mình gợi ý cấu hình tối ưu cho gaming 1440p/4K như sau:\\n\\n- **CPU:** AMD Ryzen 7 7800X3D (Vua gaming) - 10.990.000đ\\n- **Mainboard:** Gigabyte B650M GAMING X AX DDR5 - 3.990.000đ\\n- **GPU:** MSI GeForce RTX 4070 SUPER 12G VENTUS 2X OC - 16.990.000đ\\n\\nTổng 3 linh kiện chính này là 31.970.000đ. Bạn còn khoảng 18 triệu để chọn RAM, SSD, Nguồn, Tản nhiệt và Vỏ case. Bạn có muốn mình tư vấn thêm các linh kiện còn lại để hoàn thiện bộ máy không?\",\n  \"evidence_ids\": [\n    \"CPU-AMD-7800X3D\",\n    \"MB-GIGA-B650M-D5\",\n    \"GPU-RTX-4070-SUPER\"\n  ]\n}",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "search_catalog",
+              "args": {
+                "budget_max": 50000000,
+                "use_case": "gaming"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "search_catalog",
+              "args": {
+                "budget_max": 50000000,
+                "use_case": "gaming"
+              },
+              "result": {
+                "tool": "search_catalog",
+                "total_found": 23,
+                "items": [
+                  {
+                    "sku": "CPU-INTEL-13400F",
+                    "name": "Intel Core i5-13400F (Up to 4.6GHz, 10 Cores 16 Threads)",
+                    "category": "cpu",
+                    "socket": "LGA1700",
+                    "ram_type": [
+                      "DDR4",
+                      "DDR5"
+                    ],
+                    "wattage": 65,
+                    "price": 4890000,
+                    "stock": 15,
+                    "use_case": [
+                      "gaming",
+                      "office"
+                    ],
+                    "description": "CPU tầm trung đa năng, hiệu năng gaming và đồ họa ổn định, socket LGA1700."
+                  },
+                  {
+                    "sku": "CPU-INTEL-14700K",
+                    "name": "Intel Core i7-14700K (Up to 5.6GHz, 20 Cores 28 Threads)",
+                    "category": "cpu",
+                    "socket": "LGA1700",
+                    "ram_type": [
+                      "DDR4",
+                      "DDR5"
+                    ],
+                    "wattage": 125,
+                    "price": 10500000,
+                    "stock": 8,
+                    "use_case": [
+                      "gaming",
+                      "workstation"
+                    ],
+                    "description": "CPU cao cấp cho đồ họa, render 3D và gaming nặng, cần tản nhiệt tốt."
+                  },
+                  {
+                    "sku": "CPU-AMD-7600",
+                    "name": "AMD Ryzen 5 7600 (Up to 5.1GHz, 6 Cores 12 Threads)",
+                    "category": "cpu",
+                    "socket": "AM5",
+                    "ram_type": [
+                      "DDR5"
+                    ],
+                    "wattage": 65,
+                    "price": 5290000,
+                    "stock": 12,
+                    "use_case": [
+                      "gaming",
+                      "office"
+                    ],
+                    "description": "CPU thế hệ mới socket AM5, hỗ trợ RAM DDR5 và PCIe 5.0."
+                  },
+                  {
+                    "sku": "CPU-AMD-7800X3D",
+                    "name": "AMD Ryzen 7 7800X3D (Up to 5.0GHz, 8 Cores 16 Threads, 3D V-Cache)",
+                    "category": "cpu",
+                    "socket": "AM5",
+                    "ram_type": [
+                      "DDR5"
+                    ],
+                    "wattage": 120,
+                    "price": 10990000,
+                    "stock": 6,
+                    "use_case": [
+                      "gaming"
+                    ],
+                    "description": "Vua gaming với bộ nhớ đệm 3D V-Cache 96MB, tối ưu FPS cực cao."
+                  },
+                  {
+                    "sku": "MB-ASUS-B760M-D4",
+                    "name": "Mainboard ASUS PRIME B760M-A D4",
+                    "category": "mainboard",
+                    "socket": "LGA1700",
+                    "ram_type": [
+                      "DDR4"
+                    ],
+                    "wattage": 25,
+                    "price": 2990000,
+                    "stock": 10,
+                    "use_case": [
+                      "gaming",
+                      "office"
+                    ],
+                    "description": "Bo mạch chủ Intel B760 socket LGA1700, hỗ trợ RAM DDR4 tiết kiệm chi phí."
+                  },
+                  {
+                    "sku": "MB-MSI-B760M-D5",
+                    "name": "Mainboard MSI MAG B760M MORTAR WIFI DDR5",
+                    "category": "mainboard",
+                    "socket": "LGA1700",
+                    "ram_type": [
+                      "DDR5"
+                    ],
+                    "wattage": 30,
+                    "price": 4290000,
+                    "stock": 7,
+                    "use_case": [
+                      "gaming",
+                      "workstation"
+                    ],
+                    "description": "Bo mạch chủ LGA1700 cao cấp, VRM khỏe, hỗ trợ RAM DDR5 và Wifi 6E."
+                  },
+                  {
+                    "sku": "MB-GIGA-B650M-D5",
+                    "name": "Mainboard Gigabyte B650M GAMING X AX DDR5",
+                    "category": "mainboard",
+                    "socket": "AM5",
+                    "ram_type": [
+                      "DDR5"
+                    ],
+                    "wattage": 30,
+                    "price": 3990000,
+                    "stock": 9,
+                    "use_case": [
+                      "gaming",
+                      "workstation"
+                    ],
+                    "description": "Bo mạch chủ AM5 cho Ryzen 7000/8000/9000 series, hỗ trợ DDR5."
+                  },
+                  {
+                    "sku": "MB-ASROCK-A620M",
+                    "name": "Mainboard ASRock A620M-HDV/M.2 DDR5",
+                    "category": "mainboard",
+                    "socket": "AM5",
+                    "ram_type": [
+                      "DDR5"
+                    ],
+                    "wattage": 20,
+                    "price": 2290000,
+                    "stock": 14,
+                    "use_case": [
+                      "office",
+                      "gaming"
+                    ],
+                    "description": "Bo mạch chủ AM5 phân khúc phổ thông cho CPU Ryzen 65W."
+                  },
+                  {
+                    "sku": "GPU-RTX-4060",
+                    "name": "VGA ASUS Dual GeForce RTX 4060 EVO OC 8GB",
+                    "category": "gpu",
+                    "wattage": 115,
+                    "price": 7990000,
+                    "stock": 18,
+                    "use_case": [
+                      "gaming",
+                      "office"
+                    ],
+                    "description": "Card đồ họa chơi mượt mọi game 1080p Ultra, hỗ trợ DLSS 3 và Ray Tracing."
+                  },
+                  {
+                    "sku": "GPU-RTX-4070-SUPER",
+                    "name": "VGA MSI GeForce RTX 4070 SUPER 12G VENTUS 2X OC",
+                    "category": "gpu",
+                    "wattage": 220,
+                    "price": 16990000,
+                    "stock": 6,
+                    "use_case": [
+                      "gaming",
+                      "workstation"
+                    ],
+                    "description": "Card đồ họa chuyên trị game 2K/4K và làm đồ họa dựng video Premiere/After Effects."
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "{\n  \"intent\": \"product_advice\",\n  \"action\": \"answered\",\n  \"reply\": \"Với ngân sách 50 triệu, mình gợi ý cấu hình tối ưu cho gaming 1440p/4K như sau:\\n\\n- **CPU:** AMD Ryzen 7 7800X3D (Vua gaming) - 10.990.000đ\\n- **Mainboard:** Gigabyte B650M GAMING X AX DDR5 - 3.990.000đ\\n- **GPU:** MSI GeForce RTX 4070 SUPER 12G VENTUS 2X OC - 16.990.000đ\\n\\nTổng 3 linh kiện chính này là 31.970.000đ. Bạn còn khoảng 18 triệu để chọn RAM, SSD, Nguồn, Tản nhiệt và Vỏ case. Bạn có muốn mình tư vấn thêm các linh kiện còn lại để hoàn thiện bộ máy không?\",\n  \"evidence_ids\": [\n    \"CPU-AMD-7800X3D\",\n    \"MB-GIGA-B650M-D5\",\n    \"GPU-RTX-4070-SUPER\"\n  ]\n}",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "search_catalog",
+          "args": {
+            "budget_max": 50000000,
+            "use_case": "gaming"
+          },
+          "result": {
+            "tool": "search_catalog",
+            "total_found": 23,
+            "items": [
+              {
+                "sku": "CPU-INTEL-13400F",
+                "name": "Intel Core i5-13400F (Up to 4.6GHz, 10 Cores 16 Threads)",
+                "category": "cpu",
+                "socket": "LGA1700",
+                "ram_type": [
+                  "DDR4",
+                  "DDR5"
+                ],
+                "wattage": 65,
+                "price": 4890000,
+                "stock": 15,
+                "use_case": [
+                  "gaming",
+                  "office"
+                ],
+                "description": "CPU tầm trung đa năng, hiệu năng gaming và đồ họa ổn định, socket LGA1700."
+              },
+              {
+                "sku": "CPU-INTEL-14700K",
+                "name": "Intel Core i7-14700K (Up to 5.6GHz, 20 Cores 28 Threads)",
+                "category": "cpu",
+                "socket": "LGA1700",
+                "ram_type": [
+                  "DDR4",
+                  "DDR5"
+                ],
+                "wattage": 125,
+                "price": 10500000,
+                "stock": 8,
+                "use_case": [
+                  "gaming",
+                  "workstation"
+                ],
+                "description": "CPU cao cấp cho đồ họa, render 3D và gaming nặng, cần tản nhiệt tốt."
+              },
+              {
+                "sku": "CPU-AMD-7600",
+                "name": "AMD Ryzen 5 7600 (Up to 5.1GHz, 6 Cores 12 Threads)",
+                "category": "cpu",
+                "socket": "AM5",
+                "ram_type": [
+                  "DDR5"
+                ],
+                "wattage": 65,
+                "price": 5290000,
+                "stock": 12,
+                "use_case": [
+                  "gaming",
+                  "office"
+                ],
+                "description": "CPU thế hệ mới socket AM5, hỗ trợ RAM DDR5 và PCIe 5.0."
+              },
+              {
+                "sku": "CPU-AMD-7800X3D",
+                "name": "AMD Ryzen 7 7800X3D (Up to 5.0GHz, 8 Cores 16 Threads, 3D V-Cache)",
+                "category": "cpu",
+                "socket": "AM5",
+                "ram_type": [
+                  "DDR5"
+                ],
+                "wattage": 120,
+                "price": 10990000,
+                "stock": 6,
+                "use_case": [
+                  "gaming"
+                ],
+                "description": "Vua gaming với bộ nhớ đệm 3D V-Cache 96MB, tối ưu FPS cực cao."
+              },
+              {
+                "sku": "MB-ASUS-B760M-D4",
+                "name": "Mainboard ASUS PRIME B760M-A D4",
+                "category": "mainboard",
+                "socket": "LGA1700",
+                "ram_type": [
+                  "DDR4"
+                ],
+                "wattage": 25,
+                "price": 2990000,
+                "stock": 10,
+                "use_case": [
+                  "gaming",
+                  "office"
+                ],
+                "description": "Bo mạch chủ Intel B760 socket LGA1700, hỗ trợ RAM DDR4 tiết kiệm chi phí."
+              },
+              {
+                "sku": "MB-MSI-B760M-D5",
+                "name": "Mainboard MSI MAG B760M MORTAR WIFI DDR5",
+                "category": "mainboard",
+                "socket": "LGA1700",
+                "ram_type": [
+                  "DDR5"
+                ],
+                "wattage": 30,
+                "price": 4290000,
+                "stock": 7,
+                "use_case": [
+                  "gaming",
+                  "workstation"
+                ],
+                "description": "Bo mạch chủ LGA1700 cao cấp, VRM khỏe, hỗ trợ RAM DDR5 và Wifi 6E."
+              },
+              {
+                "sku": "MB-GIGA-B650M-D5",
+                "name": "Mainboard Gigabyte B650M GAMING X AX DDR5",
+                "category": "mainboard",
+                "socket": "AM5",
+                "ram_type": [
+                  "DDR5"
+                ],
+                "wattage": 30,
+                "price": 3990000,
+                "stock": 9,
+                "use_case": [
+                  "gaming",
+                  "workstation"
+                ],
+                "description": "Bo mạch chủ AM5 cho Ryzen 7000/8000/9000 series, hỗ trợ DDR5."
+              },
+              {
+                "sku": "MB-ASROCK-A620M",
+                "name": "Mainboard ASRock A620M-HDV/M.2 DDR5",
+                "category": "mainboard",
+                "socket": "AM5",
+                "ram_type": [
+                  "DDR5"
+                ],
+                "wattage": 20,
+                "price": 2290000,
+                "stock": 14,
+                "use_case": [
+                  "office",
+                  "gaming"
+                ],
+                "description": "Bo mạch chủ AM5 phân khúc phổ thông cho CPU Ryzen 65W."
+              },
+              {
+                "sku": "GPU-RTX-4060",
+                "name": "VGA ASUS Dual GeForce RTX 4060 EVO OC 8GB",
+                "category": "gpu",
+                "wattage": 115,
+                "price": 7990000,
+                "stock": 18,
+                "use_case": [
+                  "gaming",
+                  "office"
+                ],
+                "description": "Card đồ họa chơi mượt mọi game 1080p Ultra, hỗ trợ DLSS 3 và Ray Tracing."
+              },
+              {
+                "sku": "GPU-RTX-4070-SUPER",
+                "name": "VGA MSI GeForce RTX 4070 SUPER 12G VENTUS 2X OC",
+                "category": "gpu",
+                "wattage": 220,
+                "price": 16990000,
+                "stock": 6,
+                "use_case": [
+                  "gaming",
+                  "workstation"
+                ],
+                "description": "Card đồ họa chuyên trị game 2K/4K và làm đồ họa dựng video Premiere/After Effects."
+              }
+            ]
+          }
+        }
+      ],
+      "latency_ms": 5083,
+      "ended_at": "2026-09-15T19:51:33"
+    },
+    {
+      "turn_index": 5,
+      "started_at": "2026-09-15T19:51:49",
+      "user": "ok",
+      "status": "provider_error",
+      "assistant_text": null,
+      "rounds": [],
+      "tool_events": [],
+      "error": "ServerError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}",
+      "latency_ms": 1898,
+      "ended_at": "2026-09-15T19:51:51"
+    },
+    {
+      "turn_index": 6,
+      "started_at": "2026-09-15T19:52:07",
+      "user": "ok",
+      "status": "answered",
+      "assistant_text": "{\n  \"intent\": \"product_advice\",\n  \"action\": \"answered\",\n  \"reply\": \"Để hoàn thiện cấu hình với CPU Ryzen 7 7800X3D (cần RAM DDR5), mình gợi ý các linh kiện tối ưu sau:\\n\\n- **RAM:** Corsair Vengeance 32GB (2x16GB) DDR5 6000MHz - 2.890.000đ\\n- **SSD:** Samsung 980 NVMe M.2 1TB - 1.990.000đ\\n- **Nguồn:** MSI MAG A850GL 850W 80 Plus Gold (chuẩn ATX 3.0 cho RTX 4070) - 2.990.000đ\\n- **Tản nhiệt:** Deepcool LT720 360mm AIO - 2.990.000đ\\n\\nTổng các linh kiện này là 10.860.000đ. Cộng với 3 linh kiện chính trước đó (31.970.000đ), tổng là 42.830.000đ. Bạn còn dư khoảng 7 triệu để chọn vỏ case và các phụ kiện khác. Bạn có muốn mình kiểm tra tính tương thích của toàn bộ cấu hình này không?\",\n  \"evidence_ids\": [\n    \"RAM-CORSAIR-32GB-D5\",\n    \"SSD-SAMSUNG-980-1TB\",\n    \"PSU-MSI-850W\",\n    \"COOLER-AIO-360\"\n  ]\n}",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "search_catalog",
+              "args": {
+                "category": "ram",
+                "budget_max": 18000000
+              }
+            },
+            {
+              "name": "search_catalog",
+              "args": {
+                "budget_max": 18000000,
+                "category": "storage"
+              }
+            },
+            {
+              "name": "search_catalog",
+              "args": {
+                "category": "psu",
+                "budget_max": 18000000
+              }
+            },
+            {
+              "name": "search_catalog",
+              "args": {
+                "category": "cooler",
+                "budget_max": 18000000
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "search_catalog",
+              "args": {
+                "category": "ram",
+                "budget_max": 18000000
+              },
+              "result": {
+                "tool": "search_catalog",
+                "total_found": 2,
+                "items": [
+                  {
+                    "sku": "RAM-KINGSTON-16GB-D4",
+                    "name": "RAM Kingston Fury Beast 16GB (2x8GB) DDR4 3200MHz",
+                    "category": "ram",
+                    "ram_type": "DDR4",
+                    "wattage": 10,
+                    "price": 950000,
+                    "stock": 30,
+                    "use_case": [
+                      "gaming",
+                      "office"
+                    ],
+                    "description": "Kit RAM DDR4 16GB quốc dân, tản nhiệt nhôm đen bền bỉ."
+                  },
+                  {
+                    "sku": "RAM-CORSAIR-32GB-D5",
+                    "name": "RAM Corsair Vengeance 32GB (2x16GB) DDR5 6000MHz",
+                    "category": "ram",
+                    "ram_type": "DDR5",
+                    "wattage": 15,
+                    "price": 2890000,
+                    "stock": 14,
+                    "use_case": [
+                      "gaming",
+                      "workstation"
+                    ],
+                    "description": "Kit RAM DDR5 32GB bus cao 6000MHz, chuẩn XMP/EXPO."
+                  }
+                ]
+              }
+            },
+            {
+              "tool": "search_catalog",
+              "args": {
+                "budget_max": 18000000,
+                "category": "storage"
+              },
+              "result": {
+                "tool": "search_catalog",
+                "total_found": 2,
+                "items": [
+                  {
+                    "sku": "SSD-SAMSUNG-980-1TB",
+                    "name": "Ổ cứng SSD Samsung 980 NVMe M.2 1TB PCIe 3.0",
+                    "category": "storage",
+                    "wattage": 5,
+                    "price": 1990000,
+                    "stock": 20,
+                    "use_case": [
+                      "gaming",
+                      "office",
+                      "workstation"
+                    ],
+                    "description": "Tốc độ đọc ghi lên tới 3500MB/s, độ bền cao và bảo hành 5 năm."
+                  },
+                  {
+                    "sku": "SSD-KINGSTON-500GB",
+                    "name": "Ổ cứng SSD Kingston NV2 500GB PCIe 4.0 NVMe",
+                    "category": "storage",
+                    "wattage": 5,
+                    "price": 990000,
+                    "stock": 35,
+                    "use_case": [
+                      "office",
+                      "gaming"
+                    ],
+                    "description": "SSD NVMe Gen 4 giá phổ thông cho văn phòng và máy tính cơ bản."
+                  }
+                ]
+              }
+            },
+            {
+              "tool": "search_catalog",
+              "args": {
+                "category": "psu",
+                "budget_max": 18000000
+              },
+              "result": {
+                "tool": "search_catalog",
+                "total_found": 2,
+                "items": [
+                  {
+                    "sku": "PSU-CORSAIR-650W",
+                    "name": "Nguồn Corsair CV650 650W 80 Plus Bronze",
+                    "category": "psu",
+                    "wattage_capacity": 650,
+                    "price": 1490000,
+                    "stock": 16,
+                    "use_case": [
+                      "gaming",
+                      "office"
+                    ],
+                    "description": "Bộ nguồn 650W chuẩn 80 Plus Bronze, phù hợp cấu hình RTX 4060."
+                  },
+                  {
+                    "sku": "PSU-MSI-850W",
+                    "name": "Nguồn MSI MAG A850GL PCIE5 850W 80 Plus Gold",
+                    "category": "psu",
+                    "wattage_capacity": 850,
+                    "price": 2990000,
+                    "stock": 10,
+                    "use_case": [
+                      "workstation",
+                      "gaming"
+                    ],
+                    "description": "Nguồn 850W chuẩn ATX 3.0 PCIe 5.0 cho card đồ họa RTX 4070/4080/4090."
+                  }
+                ]
+              }
+            },
+            {
+              "tool": "search_catalog",
+              "args": {
+                "category": "cooler",
+                "budget_max": 18000000
+              },
+              "result": {
+                "tool": "search_catalog",
+                "total_found": 2,
+                "items": [
+                  {
+                    "sku": "COOLER-CR1000",
+                    "name": "Tản nhiệt khí Jonsbo CR-1000 EVO ARGB",
+                    "category": "cooler",
+                    "socket": [
+                      "LGA1700",
+                      "AM5",
+                      "AM4"
+                    ],
+                    "wattage": 5,
+                    "price": 350000,
+                    "stock": 25,
+                    "use_case": [
+                      "gaming",
+                      "office"
+                    ],
+                    "description": "Tản nhiệt khí 4 ống đồng, đèn LED ARGB, hỗ trợ cả Intel và AMD."
+                  },
+                  {
+                    "sku": "COOLER-AIO-360",
+                    "name": "Tản nhiệt nước Deepcool LT720 360mm AIO",
+                    "category": "cooler",
+                    "socket": [
+                      "LGA1700",
+                      "AM5"
+                    ],
+                    "wattage": 15,
+                    "price": 2990000,
+                    "stock": 8,
+                    "use_case": [
+                      "workstation",
+                      "gaming"
+                    ],
+                    "description": "Tản nước all-in-one hiệu năng giải nhiệt cực cao cho CPU Core i7/i9."
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "{\n  \"intent\": \"product_advice\",\n  \"action\": \"answered\",\n  \"reply\": \"Để hoàn thiện cấu hình với CPU Ryzen 7 7800X3D (cần RAM DDR5), mình gợi ý các linh kiện tối ưu sau:\\n\\n- **RAM:** Corsair Vengeance 32GB (2x16GB) DDR5 6000MHz - 2.890.000đ\\n- **SSD:** Samsung 980 NVMe M.2 1TB - 1.990.000đ\\n- **Nguồn:** MSI MAG A850GL 850W 80 Plus Gold (chuẩn ATX 3.0 cho RTX 4070) - 2.990.000đ\\n- **Tản nhiệt:** Deepcool LT720 360mm AIO - 2.990.000đ\\n\\nTổng các linh kiện này là 10.860.000đ. Cộng với 3 linh kiện chính trước đó (31.970.000đ), tổng là 42.830.000đ. Bạn còn dư khoảng 7 triệu để chọn vỏ case và các phụ kiện khác. Bạn có muốn mình kiểm tra tính tương thích của toàn bộ cấu hình này không?\",\n  \"evidence_ids\": [\n    \"RAM-CORSAIR-32GB-D5\",\n    \"SSD-SAMSUNG-980-1TB\",\n    \"PSU-MSI-850W\",\n    \"COOLER-AIO-360\"\n  ]\n}",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "search_catalog",
+          "args": {
+            "category": "ram",
+            "budget_max": 18000000
+          },
+          "result": {
+            "tool": "search_catalog",
+            "total_found": 2,
+            "items": [
+              {
+                "sku": "RAM-KINGSTON-16GB-D4",
+                "name": "RAM Kingston Fury Beast 16GB (2x8GB) DDR4 3200MHz",
+                "category": "ram",
+                "ram_type": "DDR4",
+                "wattage": 10,
+                "price": 950000,
+                "stock": 30,
+                "use_case": [
+                  "gaming",
+                  "office"
+                ],
+                "description": "Kit RAM DDR4 16GB quốc dân, tản nhiệt nhôm đen bền bỉ."
+              },
+              {
+                "sku": "RAM-CORSAIR-32GB-D5",
+                "name": "RAM Corsair Vengeance 32GB (2x16GB) DDR5 6000MHz",
+                "category": "ram",
+                "ram_type": "DDR5",
+                "wattage": 15,
+                "price": 2890000,
+                "stock": 14,
+                "use_case": [
+                  "gaming",
+                  "workstation"
+                ],
+                "description": "Kit RAM DDR5 32GB bus cao 6000MHz, chuẩn XMP/EXPO."
+              }
+            ]
+          }
+        },
+        {
+          "tool": "search_catalog",
+          "args": {
+            "budget_max": 18000000,
+            "category": "storage"
+          },
+          "result": {
+            "tool": "search_catalog",
+            "total_found": 2,
+            "items": [
+              {
+                "sku": "SSD-SAMSUNG-980-1TB",
+                "name": "Ổ cứng SSD Samsung 980 NVMe M.2 1TB PCIe 3.0",
+                "category": "storage",
+                "wattage": 5,
+                "price": 1990000,
+                "stock": 20,
+                "use_case": [
+                  "gaming",
+                  "office",
+                  "workstation"
+                ],
+                "description": "Tốc độ đọc ghi lên tới 3500MB/s, độ bền cao và bảo hành 5 năm."
+              },
+              {
+                "sku": "SSD-KINGSTON-500GB",
+                "name": "Ổ cứng SSD Kingston NV2 500GB PCIe 4.0 NVMe",
+                "category": "storage",
+                "wattage": 5,
+                "price": 990000,
+                "stock": 35,
+                "use_case": [
+                  "office",
+                  "gaming"
+                ],
+                "description": "SSD NVMe Gen 4 giá phổ thông cho văn phòng và máy tính cơ bản."
+              }
+            ]
+          }
+        },
+        {
+          "tool": "search_catalog",
+          "args": {
+            "category": "psu",
+            "budget_max": 18000000
+          },
+          "result": {
+            "tool": "search_catalog",
+            "total_found": 2,
+            "items": [
+              {
+                "sku": "PSU-CORSAIR-650W",
+                "name": "Nguồn Corsair CV650 650W 80 Plus Bronze",
+                "category": "psu",
+                "wattage_capacity": 650,
+                "price": 1490000,
+                "stock": 16,
+                "use_case": [
+                  "gaming",
+                  "office"
+                ],
+                "description": "Bộ nguồn 650W chuẩn 80 Plus Bronze, phù hợp cấu hình RTX 4060."
+              },
+              {
+                "sku": "PSU-MSI-850W",
+                "name": "Nguồn MSI MAG A850GL PCIE5 850W 80 Plus Gold",
+                "category": "psu",
+                "wattage_capacity": 850,
+                "price": 2990000,
+                "stock": 10,
+                "use_case": [
+                  "workstation",
+                  "gaming"
+                ],
+                "description": "Nguồn 850W chuẩn ATX 3.0 PCIe 5.0 cho card đồ họa RTX 4070/4080/4090."
+              }
+            ]
+          }
+        },
+        {
+          "tool": "search_catalog",
+          "args": {
+            "category": "cooler",
+            "budget_max": 18000000
+          },
+          "result": {
+            "tool": "search_catalog",
+            "total_found": 2,
+            "items": [
+              {
+                "sku": "COOLER-CR1000",
+                "name": "Tản nhiệt khí Jonsbo CR-1000 EVO ARGB",
+                "category": "cooler",
+                "socket": [
+                  "LGA1700",
+                  "AM5",
+                  "AM4"
+                ],
+                "wattage": 5,
+                "price": 350000,
+                "stock": 25,
+                "use_case": [
+                  "gaming",
+                  "office"
+                ],
+                "description": "Tản nhiệt khí 4 ống đồng, đèn LED ARGB, hỗ trợ cả Intel và AMD."
+              },
+              {
+                "sku": "COOLER-AIO-360",
+                "name": "Tản nhiệt nước Deepcool LT720 360mm AIO",
+                "category": "cooler",
+                "socket": [
+                  "LGA1700",
+                  "AM5"
+                ],
+                "wattage": 15,
+                "price": 2990000,
+                "stock": 8,
+                "use_case": [
+                  "workstation",
+                  "gaming"
+                ],
+                "description": "Tản nước all-in-one hiệu năng giải nhiệt cực cao cho CPU Core i7/i9."
+              }
+            ]
+          }
+        }
+      ],
+      "latency_ms": 6510,
+      "ended_at": "2026-09-15T19:52:14"
+    }
+  ]
+}

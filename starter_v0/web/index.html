@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NovaPC Console — Agent Chat</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🖥️</text></svg>" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app"></div>
+
+  <noscript>
+    <div class="boot-error">Ứng dụng cần JavaScript để chạy.</div>
+  </noscript>
+
+  <div id="boot-error" class="boot-error" hidden>
+    <h2>Không tải được Vue</h2>
+    <p>
+      Máy đang không vào được CDN. Tải file
+      <code>vue.global.prod.js</code> (Vue 3) rồi đặt vào
+      <code>starter_v0/web/vendor/vue.global.prod.js</code> và tải lại trang.
+    </p>
+  </div>
+
+  <script>
+    (function () {
+      var sources = [
+        'vendor/vue.global.prod.js',
+        'https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.prod.js',
+        'https://unpkg.com/vue@3.5.13/dist/vue.global.prod.js'
+      ];
+
+      function boot() {
+        var app = document.createElement('script');
+        app.src = 'app.js';
+        document.body.appendChild(app);
+      }
+
+      function fail() {
+        document.getElementById('boot-error').hidden = false;
+      }
+
+      function loadNext() {
+        if (!sources.length) return fail();
+        var el = document.createElement('script');
+        el.src = sources.shift();
+        el.onload = boot;
+        el.onerror = loadNext;
+        document.head.appendChild(el);
+      }
+
+      loadNext();
+    })();
+  </script>
+</body>
+</html>
