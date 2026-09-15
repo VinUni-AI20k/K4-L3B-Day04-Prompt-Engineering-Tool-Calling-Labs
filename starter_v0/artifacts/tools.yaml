@@ -27,7 +27,7 @@ tools:
 
 
   - name: search_kb
-    description: "Tìm hướng dẫn hỗ trợ kỹ thuật."
+    description: "Tìm hướng dẫn hỗ trợ kỹ thuật trong cơ sở tri thức. Lưu ý: dùng category 'email' cho cấu hình email/Outlook; dùng 'vpn' cho VPN; dùng 'wifi' cho Wi-Fi; dùng 'account' cho tài khoản/mật khẩu/MFA."
     parameters:
       type: object
       properties:
@@ -46,16 +46,16 @@ tools:
       required: [service]
 
   - name: inspect_device
-    description: "Kiểm tra thông tin và chẩn đoán thiết bị."
+    description: "Kiểm tra thông tin và chẩn đoán thiết bị bằng mã tài sản (ví dụ LT-204, DT-087). KHÔNG truyền mã nhân viên EMP vào đây. Khi người dùng đề cập đến sự cố cụ thể (như VPN, network, security, hardware), PHẢI truyền đúng giá trị tương ứng vào tham số check, không được bỏ trống."
     parameters:
       type: object
       properties:
         asset_id: {type: string, description: "Mã tài sản"}
-        check: {type: string, enum: [all, network, vpn, security, hardware, software], default: "all", description: "Nhóm kiểm tra"}
+        check: {type: string, enum: [all, network, vpn, security, hardware, software], default: "all", description: "Bắt buộc chọn đúng nhóm kiểm tra phù hợp với sự cố (ví dụ 'vpn' cho lỗi VPN, 'network' cho mạng, 'security' cho bảo mật); chỉ dùng 'all' khi kiểm tra tổng quát."}
       required: [asset_id]
 
   - name: lookup_user
-    description: "Tra cứu thông tin người dùng trong danh bạ bằng mã nhân viên chính thức (ví dụ EMP-1001). KHÔNG truyền tên phòng ban (như 'Sales', 'Marketing') hay tên chung chung vào employee_id. Nếu thiếu mã nhân viên, bắt buộc gọi clarify."
+    description: "Tra cứu thông tin người dùng trong danh bạ bằng mã nhân viên (EMP-xxxx), bao gồm cả thông tin tài khoản và danh sách thiết bị được cấp phát (assigned_assets). Khi tra cứu nhân viên hoặc xem thiết bị họ được cấp, CHỈ gọi tool này; KHÔNG gọi thêm inspect_device khi chưa có mã tài sản cụ thể."
     parameters:
       type: object
       properties:

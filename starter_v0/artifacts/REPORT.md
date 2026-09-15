@@ -61,14 +61,17 @@ total_cases`, và tool result error đã được review thủ công.
 |---|---|---|---|---:|---:|---|
 | v0 | baseline | Đo hành vi khởi đầu trước khi sửa prompt và tools | case_accuracy | | 0.70 | starter_v0/runs/v0_B_base_openrouter_20260915T184058272822.json |
 | v1 | clarify schema + rules | Thêm quy tắc clarify bắt buộc response_type và options giúp xử lý thiếu ID và ambiguous environment | case_accuracy | 0.70 | 0.73 | starter_v0/runs/v1_B_base_openrouter_20260915T191743440879.json |
-| v2 |  |  |  |  |  |  |
-| v3 |  |  |  |  |  |  |
+| v2 | Confirmation boundary + employee rules | Thiết lập ranh giới xác nhận create_ticket và chuẩn hóa định danh nhân viên giúp triệt tiêu wrong_boundary và missing_info | case_accuracy | 0.73 | 0.87 | starter_v0/runs/v2_B_base_openrouter_20260915T200911398061.json |
+| v3 | Tool selection + Parameter precision | Chỉ định category email cho Outlook, cấm inspect_device thừa khi lookup user, ép truyền tham số check | case_accuracy | 0.87 | 1.00 | starter_v0/runs/v3_B_base_openrouter_20260915T202200528955.json |
 
 ## B2. Failure analysis
 
 | Case ID | Failure type | Actual calls | What failed | Fix |
 |---|---|---|---|---|
-|  |  |  |  |  |
+| H10_missing_asset | missing_info | inspect_device | Thiếu asset_id nhưng agent tự tiện gọi inspect_device thay vì hỏi lại | Thêm quy tắc clarify vào prompt, bắt buộc response_type: 'text' trong tools.yaml |
+| H12_confirm_before_ticket | wrong_boundary | create_ticket | Tự ý tạo ticket khi người dùng chưa xác nhận ở lượt trước | Thiết lập Confirmation Boundary trong prompt và tools.yaml, bắt buộc clarify(yes_no) |
+| H04_user_routing | wrong_tool | lookup_user \| inspect_device | Gọi thừa tool inspect_device và truyền mã nhân viên vào asset_id | Sửa mô tả lookup_user đã bao gồm assigned_assets, cấm gọi inspect_device kèm |
+| H13_parallel_status_and_device | wrong_tool | check_service_status \| inspect_device | Tham số check trong inspect_device bị bỏ trống (nhận None) | Hướng dẫn agent bắt buộc truyền check cụ thể ('vpn', 'network') khớp với sự cố |
 
 ## B3. Team eval cases
 
