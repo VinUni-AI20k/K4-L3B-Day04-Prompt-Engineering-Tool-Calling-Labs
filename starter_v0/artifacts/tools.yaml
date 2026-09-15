@@ -1,5 +1,6 @@
 tools:
   - name: clarify
+<<<<<<< HEAD
     description: "Hỏi người dùng để bổ sung hoặc xác nhận thông tin cần thiết trước khi tiếp tục."
     parameters:
       type: object
@@ -22,53 +23,85 @@ tools:
       required: [question]
   - name: search_products
     description: "Tìm laptop mock theo từ khóa, hãng, ngân sách và nhu cầu."
+=======
+    description: "Gửi câu hỏi cho khách hàng khi thiếu thông tin cần thiết (như thiếu chi nhánh khi kiểm tra tồn kho) hoặc để yêu cầu xác nhận trước khi thực hiện hành động tạo đơn hàng."
+>>>>>>> origin/vubaanh_02893
     parameters:
       type: object
       properties:
-        query: {type: string, default: ""}
-        brand: {type: string, enum: [all, lenovo, dell, asus, hp, apple, acer], default: all}
-        max_price_vnd: {type: integer}
-        need: {type: string, enum: [all, study, office, programming, design, gaming], default: all}
+        question: {type: string, default: "", description: "Nội dung câu hỏi gửi cho khách hàng"}
+        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Kiểu phản hồi mong đợi: 'yes_no' khi cần xác nhận, 'choice' khi chọn chi nhánh/sản phẩm, 'text' khi cần thêm chi tiết"}
+        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn gợi ý cho khách hàng (ví dụ danh sách chi nhánh)"}
+      required: [question]
+  - name: search_products
+    description: "Tìm kiếm laptop trong danh mục theo từ khóa, thương hiệu, mức giá tối đa và nhu cầu sử dụng (học tập, văn phòng, lập trình, đồ họa, gaming)."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Từ khóa tìm kiếm tự do"}
+        brand: {type: string, enum: [all, lenovo, dell, asus, hp, apple, acer], default: all, description: "Hãng sản xuất laptop"}
+        max_price_vnd: {type: integer, description: "Ngân sách tối đa tính bằng VND"}
+        need: {type: string, enum: [all, study, office, programming, design, gaming], default: all, description: "Nhu cầu sử dụng chính"}
       required: []
   - name: get_product_details
-    description: "Lấy thông tin và cấu hình laptop mock."
-    parameters: {type: object, properties: {product_id: {type: string}}, required: [product_id]}
-  - name: check_inventory
-    description: "Kiểm tra tồn kho mock theo sản phẩm và chi nhánh."
+    description: "Lấy thông tin chi tiết cấu hình và giá bán của một laptop cụ thể khi đã biết mã sản phẩm (product_id)."
     parameters:
       type: object
       properties:
-        product_id: {type: string}
-        branch: {type: string, enum: [district_1, thu_duc, ha_noi]}
+        product_id: {type: string, description: "Mã sản phẩm chính xác, ví dụ PROD001, PROD002"}
+      required: [product_id]
+  - name: check_inventory
+    description: "Kiểm tra số lượng tồn kho của laptop tại một chi nhánh cụ thể. Cả product_id và branch đều là bắt buộc; không tự đoán branch nếu người dùng chưa nêu."
+    parameters:
+      type: object
+      properties:
+        product_id: {type: string, description: "Mã sản phẩm laptop"}
+        branch: {type: string, enum: [district_1, thu_duc, ha_noi], description: "Chi nhánh kiểm tra: district_1 (Quận 1), thu_duc (Thủ Đức), ha_noi (Hà Nội)"}
       required: [product_id, branch]
   - name: compare_products
-    description: "So sánh các laptop có trong catalog mock."
-    parameters: {type: object, properties: {product_ids: {type: array, minItems: 2, items: {type: string}}}, required: [product_ids]}
-  - name: check_promotion
-    description: "Kiểm tra khuyến mãi mock của sản phẩm."
-    parameters: {type: object, properties: {product_id: {type: string}}, required: [product_id]}
-  - name: search_policy
-    description: "Tìm chính sách bảo hành, đổi trả hoặc giao hàng mock."
+    description: "So sánh cấu hình và giá bán giữa 2 hoặc nhiều laptop trong danh mục."
     parameters:
       type: object
       properties:
-        query: {type: string}
-        category: {type: string, enum: [all, warranty, returns, shipping], default: all}
+        product_ids: {type: array, minItems: 2, items: {type: string}, description: "Danh sách ít nhất 2 mã sản phẩm cần so sánh"}
+      required: [product_ids]
+  - name: check_promotion
+    description: "Kiểm tra các chương trình khuyến mãi, giảm giá, quà tặng đi kèm cho một mã laptop cụ thể."
+    parameters:
+      type: object
+      properties:
+        product_id: {type: string, description: "Mã sản phẩm cần kiểm tra khuyến mãi"}
+      required: [product_id]
+  - name: search_policy
+    description: "Tìm kiếm chính sách bán hàng của cửa hàng Nova Laptop. BẮT BUỘC chọn category tương ứng nếu câu hỏi liên quan: 'warranty' cho bảo hành, 'returns' cho đổi trả/hoàn tiền, 'shipping' cho giao hàng/vận chuyển."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Từ khóa tra cứu chính sách"}
+        category: {type: string, enum: [all, warranty, returns, shipping], default: all, description: "Nhóm chính sách: 'warranty' (bảo hành), 'returns' (đổi trả), 'shipping' (giao hàng), 'all' (chung)"}
       required: [query]
   - name: lookup_customer
-    description: "Tra cứu dữ liệu tối thiểu của khách hàng mock."
-    parameters: {type: object, properties: {customer_id: {type: string}}, required: [customer_id]}
-  - name: get_order_status
-    description: "Tra cứu trạng thái đơn hàng mock."
-    parameters: {type: object, properties: {order_id: {type: string}}, required: [order_id]}
-  - name: create_order
-    description: "Tạo đơn mock sau khi khách hàng xác nhận payload mới nhất."
+    description: "Tra cứu thông tin cơ bản và hạng thành viên của khách hàng qua mã khách hàng (customer_id)."
     parameters:
       type: object
       properties:
-        customer_id: {type: string}
-        product_id: {type: string}
-        quantity: {type: integer, minimum: 1}
-        branch: {type: string, enum: [district_1, thu_duc, ha_noi]}
-        confirmed: {type: boolean, default: false}
+        customer_id: {type: string, description: "Mã khách hàng, ví dụ CUS001"}
+      required: [customer_id]
+  - name: get_order_status
+    description: "Tra cứu trạng thái xử lý và vận chuyển của đơn hàng qua mã đơn hàng (order_id)."
+    parameters:
+      type: object
+      properties:
+        order_id: {type: string, description: "Mã đơn hàng, ví dụ ORD001"}
+      required: [order_id]
+  - name: create_order
+    description: "Tạo đơn hàng đặt mua laptop. Chỉ được thực hiện khi đã có đầy đủ thông tin và khách hàng đã xác nhận đồng ý đặt hàng."
+    parameters:
+      type: object
+      properties:
+        customer_id: {type: string, description: "Mã khách hàng"}
+        product_id: {type: string, description: "Mã sản phẩm đặt mua"}
+        quantity: {type: integer, minimum: 1, description: "Số lượng đặt mua"}
+        branch: {type: string, enum: [district_1, thu_duc, ha_noi], description: "Chi nhánh nhận máy hoặc xử lý"}
+        confirmed: {type: boolean, default: false, description: "Trạng thái xác nhận của khách hàng; đặt true nếu khách đã xác nhận"}
       required: [customer_id, product_id, quantity, branch]

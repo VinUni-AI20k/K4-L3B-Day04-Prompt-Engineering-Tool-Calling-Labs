@@ -12,10 +12,14 @@ from tools import SALES_TOOL_FUNCTIONS, load_tool_declarations
 DECLARATIONS = load_tool_declarations(ROOT / "artifacts" / "tools.yaml")
 
 EXPECTED = {
+<<<<<<< HEAD
     "clarify": (
         {"question", "response_type", "options"},
         {"question"},
     ),
+=======
+    "clarify": ({"question", "response_type", "options"}, {"question"}),
+>>>>>>> origin/vubaanh_02893
     "search_products": ({"query", "brand", "max_price_vnd", "need"}, set()),
     "get_product_details": ({"product_id"}, {"product_id"}),
     "check_inventory": ({"product_id", "branch"}, {"product_id", "branch"}),
@@ -42,10 +46,14 @@ def main() -> None:
         check(set(params["properties"]) == properties and set(params.get("required", [])) == required, f"{name} schema fields match")
 
     happy = {
+<<<<<<< HEAD
         "clarify": {
         "question": "Bạn muốn nhận hàng ở chi nhánh nào?",
         "response_type": "choice",
         "options": ["district_1", "thu_duc", "ha_noi"],},
+=======
+        "clarify": {"question": "Bạn muốn xem máy nào?"},
+>>>>>>> origin/vubaanh_02893
         "search_products": {"need": "gaming", "max_price_vnd": 35000000},
         "get_product_details": {"product_id": "PROD001"},
         "check_inventory": {"product_id": "PROD001", "branch": "district_1"},
@@ -57,6 +65,7 @@ def main() -> None:
         "create_order": {"customer_id": "CUS001", "product_id": "PROD001", "quantity": 1, "branch": "district_1", "confirmed": True},
     }
     errors = {
+        "clarify": {"question": ""},
         "search_products": {"brand": "unknown"}, "get_product_details": {"product_id": "PROD999"},
         "check_inventory": {"product_id": "PROD001", "branch": "unknown"}, "compare_products": {"product_ids": ["PROD001"]},
         "check_promotion": {"product_id": "PROD999"}, "search_policy": {"query": ""},
