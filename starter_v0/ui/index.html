@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Northstar IT Helpdesk</title>
+  <style>
+    :root { color-scheme: light; --ink: #18262b; --muted: #718087; --paper: #eef3f1; --panel: #ffffff; --accent: #d06442; --accent-soft: #f8e5dc; --line: #d8e1de; --dark: #183f46; --success: #287b60; }
+    * { box-sizing: border-box; } body { margin: 0; color: var(--ink); background: linear-gradient(135deg, #eef3f1 0%, #f8f3eb 56%, #f2dfd0 100%); font: 15px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, sans-serif; }
+    main { max-width: 1240px; margin: 0 auto; padding: 34px 24px 60px; } header { display: flex; justify-content: space-between; gap: 24px; align-items: end; padding-bottom: 24px; }
+    h1 { margin: 0; font: 700 clamp(2.2rem, 5vw, 4.5rem)/.92 Georgia, serif; letter-spacing: -.04em; max-width: 650px; } .eyebrow { color: var(--accent); text-transform: uppercase; letter-spacing: .14em; font-size: 11px; font-weight: 800; }
+    .meta { color: var(--muted); font-size: 12px; text-align: right; max-width: 260px; } .layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 18px; margin-top: 10px; }
+    .conversation, aside { background: color-mix(in srgb, var(--panel) 88%, transparent); border: 1px solid rgba(216, 225, 222, .95); box-shadow: 0 18px 50px rgba(26, 57, 61, .08); border-radius: 12px; } .conversation { min-height: 620px; display: flex; flex-direction: column; overflow: hidden; }
+    #messages { flex: 1; padding: 26px; overflow: auto; } .message { max-width: 78%; padding: 15px 17px; margin: 0 0 16px; border: 1px solid var(--line); border-radius: 4px 14px 14px 14px; background: #fbfdfc; white-space: pre-wrap; box-shadow: 0 4px 14px rgba(26, 57, 61, .04); } .message.user { margin-left: auto; border: 0; border-radius: 14px 4px 14px 14px; background: var(--dark); color: white; }
+    .label { display: block; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; } .message.user .label { color: #b9d4d4; } form { display: grid; grid-template-columns: 150px 1fr auto; gap: 9px; border-top: 1px solid var(--line); padding: 16px; background: rgba(255, 255, 255, .72); } input, button { min-height: 46px; border: 1px solid var(--line); border-radius: 7px; padding: 10px 13px; font: inherit; } input:focus { outline: 3px solid var(--accent-soft); border-color: var(--accent); } button { color: white; background: var(--dark); cursor: pointer; font-size: 13px; font-weight: 800; padding-inline: 20px; } button:hover { background: var(--accent); } button:disabled { opacity: .55; cursor: wait; }
+    aside { padding: 22px; align-self: start; max-height: 620px; overflow: auto; } aside h2 { margin: 0; font: 700 1.3rem Georgia, serif; } .trace-intro { margin: 5px 0 18px; color: var(--muted); font-size: 12px; } .trace { border: 1px solid var(--line); border-radius: 9px; padding: 13px; margin: 10px 0; background: #fbfdfc; font-size: 12px; } .trace-head { display: flex; justify-content: space-between; gap: 10px; align-items: center; font-weight: 800; } .trace-kind { color: var(--success); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; } .trace-fields { display: grid; gap: 6px; margin-top: 10px; } .trace-field { display: flex; justify-content: space-between; gap: 12px; border-top: 1px solid #edf1ef; padding-top: 6px; } .trace-field b { color: var(--muted); font-size: 10px; text-transform: uppercase; } .trace-field span { text-align: right; overflow-wrap: anywhere; } .trace-error { color: #a64330; background: #fff0eb; border-radius: 5px; padding: 8px; margin-top: 9px; } .note { color: var(--muted); font-size: 13px; }
+    @media (max-width: 760px) { main { padding: 24px 14px 40px; } header { display: block; } .meta { text-align: left; margin-top: 14px; } .layout { grid-template-columns: 1fr; } form { grid-template-columns: 1fr; } .message { max-width: 94%; } aside { max-height: none; } }
+  </style>
+</head>
+<body>
+<main>
+  <header><div><div class="eyebrow">Northstar Labs / Internal Service Desk</div><h1>IT support, with evidence.</h1></div><div class="meta" id="status">Connecting to Gemini…</div></header>
+  <div class="layout"><section class="conversation"><div id="messages"><p class="note">Enter a fictional user ID and ask about a Northstar IT issue.</p></div><form id="chat-form"><input id="user-id" placeholder="EMP-1001" required><input id="message" placeholder="Check VPN production status…" required><button>Send</button></form></section><aside><h2>Session trace</h2><p class="note">Tool calls, arguments, results and errors appear here. Session messages are persisted when PostgreSQL is configured.</p><div id="trace"></div></aside></div>
+</main>
+<script>
+const messages = document.querySelector('#messages'), trace = document.querySelector('#trace'), status = document.querySelector('#status');
+let sessionId = crypto.randomUUID(); const history = [];
+function addMessage(role, text) { const node = document.createElement('div'); node.className = `message ${role}`; const label = document.createElement('span'); label.className = 'label'; label.textContent = role === 'user' ? 'You' : 'Helpdesk'; const content = document.createTextNode(text); node.append(label, content); messages.appendChild(node); messages.scrollTop = messages.scrollHeight; }
+function displayValue(value) { if (value === null || value === undefined || value === '') return '—'; if (typeof value === 'object') return JSON.stringify(value); return String(value); }
+function addTrace(result) { status.textContent = `${result.model} · ${result.version} · session ${result.session_id.slice(0, 8)}`; result.tool_events.forEach(event => { const node = document.createElement('div'); node.className = 'trace'; const head = document.createElement('div'); head.className = 'trace-head'; const title = document.createElement('span'); title.textContent = event.tool || 'tool'; const kind = document.createElement('span'); kind.className = 'trace-kind'; kind.textContent = event.result?.error ? 'error' : 'completed'; head.append(title, kind); node.append(head); const fields = document.createElement('div'); fields.className = 'trace-fields'; Object.entries(event.args || {}).forEach(([key, value]) => { const row = document.createElement('div'); row.className = 'trace-field'; const label = document.createElement('b'); label.textContent = key; const valueNode = document.createElement('span'); valueNode.textContent = displayValue(value); row.append(label, valueNode); fields.append(row); }); node.append(fields); const resultData = event.result || {}; if (resultData.error) { const error = document.createElement('div'); error.className = 'trace-error'; error.textContent = resultData.message || resultData.error; node.append(error); } else if (event.tool === 'check_service_status' && resultData.status) { const statusRow = document.createElement('div'); statusRow.className = 'trace-field'; statusRow.innerHTML = '<b>status</b>'; const statusValue = document.createElement('span'); statusValue.textContent = resultData.status; statusRow.append(statusValue); fields.append(statusRow); } trace.prepend(node); }); }
+fetch('/health').then(r => r.json()).then(d => status.textContent = `${d.provider} · ${d.version}`).catch(() => status.textContent = 'Offline');
+document.querySelector('#chat-form').addEventListener('submit', async event => {
+  event.preventDefault();
+  const userId = document.querySelector('#user-id').value.trim();
+  const input = document.querySelector('#message');
+  const button = event.target.querySelector('button');
+  const text = input.value.trim();
+  if (!text) return;
+  addMessage('user', text);
+  input.value = '';
+  button.disabled = true;
+  let assistantText = '';
+  let assistantNode;
+  try {
+    const response = await fetch('/v1/chat/stream', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Accept': 'text/event-stream'},
+      body: JSON.stringify({user_id: userId, session_id: sessionId, message: text, history})
+    });
+    if (!response.ok) throw new Error((await response.json()).detail || 'Request failed');
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    while (true) {
+      const {value, done} = await reader.read();
+      buffer += decoder.decode(value || new Uint8Array(), {stream: !done});
+      const frames = buffer.split('\n\n');
+      buffer = frames.pop();
+      for (const frame of frames) {
+        const eventLine = frame.split('\n').find(line => line.startsWith('event: '));
+        const dataLine = frame.split('\n').find(line => line.startsWith('data: '));
+        if (!eventLine || !dataLine) continue;
+        const type = eventLine.slice(7);
+        const data = JSON.parse(dataLine.slice(6));
+        if (type === 'start') {
+          status.textContent = `${data.model} · ${data.artifact_version} · session ${data.session_id.slice(0, 8)}`;
+        } else if (type === 'tool_call' || type === 'tool_result') {
+          addTrace({model: data.model || 'Gemini', version: data.artifact_version || 'stream', session_id: data.session_id || sessionId, tool_events: type === 'tool_result' ? [data] : []});
+        } else if (type === 'token') {
+          assistantText += data.text;
+          if (!assistantNode) { addMessage('assistant', ''); assistantNode = messages.lastElementChild; }
+          assistantNode.lastChild.textContent = assistantText;
+        } else if (type === 'done') {
+          assistantText = data.reply || assistantText;
+          if (!assistantNode) { addMessage('assistant', assistantText); assistantNode = messages.lastElementChild; }
+          assistantNode.lastChild.textContent = assistantText;
+        }
+      }
+      if (done) break;
+    }
+    history.push({role: 'user', content: text}, {role: 'assistant', content: assistantText});
+  } catch (error) {
+    addMessage('assistant', `Error: ${error.message}`);
+  } finally {
+    button.disabled = false;
+    input.focus();
+  }
+});
+</script>
+</body>
+</html>

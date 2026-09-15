@@ -28,9 +28,32 @@ def _to_gemini_contents(messages: list[dict[str, str]]) -> tuple[str | None, lis
         if role == "system":
             system_parts.append(content)
         elif role == "assistant":
-            contents.append({"role": "model", "parts": [{"text": content}]})
+            marker = "TOOL_CALLS_JSON:\n"
+            if marker in content:
+                text, payload = content.split(marker, 1)
+                parts: list[dict[str, Any]] = []
+                if text.strip():
+                    parts.append({"text": text.strip()})
+                for call in json.loads(payload):
+                    parts.append({"function_call": {"name": call["name"], "args": call.get("args", {})}})
+                contents.append({"role": "model", "parts": parts})
+            else:
+                contents.append({"role": "model", "parts": [{"text": content}]})
         elif role == "user":
-            contents.append({"role": "user", "parts": [{"text": content}]})
+            marker = "TOOL_RESULTS_JSON:\n"
+            if marker in content:
+                _, payload = content.split(marker, 1)
+                parts = []
+                for event in json.loads(payload.split("\n\nUse only", 1)[0]):
+                    parts.append({
+                        "function_response": {
+                            "name": event.get("tool", "unknown_tool"),
+                            "response": event.get("result", {}),
+                        },
+                    })
+                contents.append({"role": "user", "parts": parts})
+            else:
+                contents.append({"role": "user", "parts": [{"text": content}]})
     return ("\n\n".join(system_parts) if system_parts else None), contents
 
 
@@ -73,10 +96,10 @@ class GeminiProvider:
         self,
         *,
         api_key_env: str = "GEMINI_API_KEY",
-        default_model: str = "gemini-3.5-flash",
+        default_model: str | None = None,
     ) -> None:
         self.api_key_env = api_key_env
-        self.default_model = default_model
+        self.default_model = default_model or os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
     def complete(
         self,
@@ -104,6 +127,10 @@ class GeminiProvider:
             config_kwargs["system_instruction"] = system_instruction
         if declarations:
             config_kwargs["tools"] = [types.Tool(function_declarations=declarations)]
+            if tool_choice == "required":
+                config_kwargs["tool_config"] = types.ToolConfig(
+                    function_calling_config=types.FunctionCallingConfig(mode="ANY"),
+                )
 
         client = genai.Client(api_key=api_key)
         resp = client.models.generate_content(

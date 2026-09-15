@@ -1,7 +1,72 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
+  "description": "Ten original IT Helpdesk cases authored for this submission: five single-turn and five multi-turn cases.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_wifi_asset_check", "phase": "B", "suite": "group",
+      "query": "Kiểm tra network của máy LT-204.", "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-204", "check": "network"}}]},
+      "metadata": {"turn_type": "single", "what_it_tests": "Network diagnosis routes to the named asset."}
+    },
+    {
+      "id": "G02_email_status_staging", "phase": "B", "suite": "group",
+      "query": "Kiểm tra email ở staging.", "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "check_service_status", "args": {"service": "email", "environment": "staging"}}]},
+      "metadata": {"turn_type": "single", "what_it_tests": "Explicit non-production environment is preserved."}
+    },
+    {
+      "id": "G03_disk_guide", "phase": "B", "suite": "group",
+      "query": "Tìm hướng dẫn kiểm tra disk health cho Windows.", "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_kb", "args": {"category": "hardware"}}]},
+      "metadata": {"turn_type": "single", "what_it_tests": "Troubleshooting guidance uses the KB."}
+    },
+    {
+      "id": "G04_account_policy", "phase": "B", "suite": "group",
+      "query": "Theo policy, password reset cần xác minh danh tính thế nào?", "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "policy", "args": {"policy_area": "access_control"}}]},
+      "metadata": {"turn_type": "single", "what_it_tests": "Access rules use policy retrieval."}
+    },
+    {
+      "id": "G05_meeting_room_audio", "phase": "B", "suite": "group",
+      "query": "Tra hướng dẫn xử lý audio phòng họp không có tiếng.", "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_kb", "args": {"category": "meeting_room"}}]},
+      "metadata": {"turn_type": "single", "what_it_tests": "Meeting-room troubleshooting uses the correct KB category."}
+    },
+    {
+      "id": "G06_correct_asset_then_inspect", "phase": "B", "suite": "group",
+      "turns": [{"role": "user", "content": "Kiểm tra phần cứng laptop của tôi."}, {"role": "user", "content": "Mã tài sản là LT-204."}, {"role": "user", "content": "Kiểm tra hardware nhé."}],
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-204", "check": "hardware"}}]},
+      "metadata": {"turn_type": "multi", "what_it_tests": "A supplied asset ID is carried into the latest request."}
+    },
+    {
+      "id": "G07_cancel_status_check", "phase": "B", "suite": "group",
+      "turns": [{"role": "user", "content": "Kiểm tra status VPN production."}, {"role": "user", "content": "Thôi, không cần kiểm tra nữa."}, {"role": "user", "content": "Chỉ cho biết bạn có thể hỗ trợ gì."}],
+      "failure_type": "unnecessary_tool", "expect": {"no_tool": true},
+      "metadata": {"turn_type": "multi", "what_it_tests": "Cancellation and latest-intent handling."}
+    },
+    {
+      "id": "G08_status_and_kb", "phase": "B", "suite": "group",
+      "turns": [{"role": "user", "content": "VPN của tôi lỗi timeout."}, {"role": "user", "content": "Máy là Windows và tôi muốn xem hướng dẫn."}, {"role": "user", "content": "Kiểm tra VPN production và tìm hướng dẫn VPN Windows."}],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "check_service_status", "args": {"service": "vpn", "environment": "production"}}, {"name": "search_kb", "args": {"category": "vpn"}}]},
+      "metadata": {"turn_type": "multi", "what_it_tests": "Independent status and KB checks are both executed."}
+    },
+    {
+      "id": "G09_user_and_asset", "phase": "B", "suite": "group",
+      "turns": [{"role": "user", "content": "Tra cứu nhân viên EMP-1003."}, {"role": "user", "content": "Đồng thời kiểm tra security máy DT-087."}, {"role": "user", "content": "Làm cả hai việc trên."}],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "lookup_user", "args": {"employee_id": "EMP-1003"}}, {"name": "inspect_device", "args": {"asset_id": "DT-087", "check": "security"}}]},
+      "metadata": {"turn_type": "multi", "what_it_tests": "Two independent internal read-only tools run together."}
+    },
+    {
+      "id": "G10_ticket_confirmation_boundary", "phase": "B", "suite": "group",
+      "turns": [{"role": "user", "content": "Soạn ticket Wi-Fi trên LT-204, priority medium."}, {"role": "user", "content": "Đổi priority thành high."}, {"role": "user", "content": "Tôi xác nhận tạo ticket với thông tin mới."}],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "create_ticket", "args": {"asset_id": "LT-204", "priority": "high", "confirmed": true}}]},
+      "metadata": {"turn_type": "multi", "what_it_tests": "Only the revised ticket payload can be confirmed."}
+    }
+  ]
 }
