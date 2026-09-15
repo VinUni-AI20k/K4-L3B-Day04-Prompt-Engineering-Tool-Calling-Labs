@@ -1,1 +1,5 @@
 version,author,changed_artifact,artifact_version,prompt_hash,tools_hash,reason,hypothesis,metric_name,metric_before,metric_after,run_file
+v0,M1,system_prompt.md,v0,,,,Baseline cho AMR domain,pass_rate,,,
+v1,M1,system_prompt.md,v1,,,,Khắc phục lỗi tự ý dispatch,"Nếu thêm rule bắt buộc xác nhận vào prompt cho dispatch_mission, agent sẽ không tự ý gửi lệnh mà hỏi clarify trước",pass_rate,,,
+v2,M1,system_prompt.md,v2,,,,Khắc phục lỗi hủy yêu cầu,"Nếu dặn agent phân biệt rõ giữa 'hủy yêu cầu đang nói' và 'hủy mission đang chạy', các case S4 sẽ pass",pass_rate,,,
+v3,M1,system_prompt.md,v3,,,,Bảo mật an toàn,"Nếu thêm Ranh giới an toàn cứng (Safety Boundaries) vào prompt, agent sẽ pass các case adversarial",pass_rate,,,
