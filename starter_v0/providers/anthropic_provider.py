@@ -66,7 +66,6 @@ class AnthropicProvider:
             "model": model or self.default_model,
             "messages": chat_messages,
             "max_tokens": 1024,
-            "temperature": temperature,
         }
         if system:
             kwargs["system"] = system
@@ -76,7 +75,11 @@ class AnthropicProvider:
             if tool_choice == "required":
                 kwargs["tool_choice"] = {"type": "any"}
 
-        resp = Anthropic(api_key=api_key).messages.create(**kwargs)
+        client = Anthropic(api_key=api_key)
+        try:
+            resp = client.messages.create(temperature=temperature, **kwargs)
+        except TypeError:
+            resp = client.messages.create(**kwargs)
         text_parts: list[str] = []
         calls: list[ToolCall] = []
         for block in resp.content:

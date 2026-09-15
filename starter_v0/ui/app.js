@@ -100,26 +100,79 @@
     scrollEl.scrollTop = scrollEl.scrollHeight;
   }
 
+  function appendUserMessage(message) {
+    if (emptyEl) emptyEl.remove();
+    const wrap = document.createElement("div");
+    wrap.innerHTML = `<div class="msg user"><div class="bubble">${escapeHtml(message)}</div></div>`;
+    const node = wrap.firstElementChild;
+    scrollEl.appendChild(node);
+    scrollEl.scrollTop = scrollEl.scrollHeight;
+    return node;
+  }
+
+  function appendTypingIndicator() {
+    const wrap = document.createElement("div");
+    wrap.className = "msg assistant";
+    wrap.innerHTML = `<div class="bubble typing-dots"><span></span><span></span><span></span></div>`;
+    scrollEl.appendChild(wrap);
+    scrollEl.scrollTop = scrollEl.scrollHeight;
+    return wrap;
+  }
+
   form.addEventListener("submit", async (ev) => {
     ev.preventDefault();
     const message = input.value.trim();
     if (!message) return;
     input.value = "";
     submitBtn.disabled = true;
+
+    appendUserMessage(message);
+    const typingEl = appendTypingIndicator();
+
     try {
       const turn = await api("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message }),
       });
-      appendTurn(turn);
+      typingEl.remove();
+      appendAssistantTurn(turn);
     } catch (err) {
-      appendTurn({ user: message, status: "provider_error", assistant_text: null, error: err.message, rounds: [] });
+      typingEl.remove();
+      appendAssistantTurn({ user: message, status: "provider_error", assistant_text: null, error: err.message, rounds: [] });
     } finally {
       submitBtn.disabled = false;
       input.focus();
     }
   });
+
+  function appendAssistantTurn(turn) {
+    const wrap = document.createElement("div");
+    wrap.innerHTML = renderAssistantOnly(turn);
+    while (wrap.firstChild) scrollEl.appendChild(wrap.firstChild);
+    scrollEl.scrollTop = scrollEl.scrollHeight;
+  }
+
+  function renderAssistantOnly(turn) {
+    const statusClass = turn.status || "answered";
+    const rounds = (turn.rounds || [])
+      .map((round, idx) => {
+        const calls = (round.tool_results || []).map(renderToolEvent).join("");
+        return `
+          <div class="round-block">
+            <div class="round-label">Round ${round.round ?? idx + 1}${round.assistant_text ? " · " + escapeHtml(round.assistant_text) : ""}</div>
+            ${calls || '<div style="font-size:12px;color:var(--muted)">(không gọi tool)</div>'}
+          </div>`;
+      })
+      .join("");
+
+    return `
+      <div class="msg assistant">
+        <span class="status-chip ${statusClass}">${escapeHtml(statusClass)}</span>
+        <div class="bubble">${escapeHtml(turn.assistant_text || turn.error || "(không có phản hồi)")}</div>
+        ${rounds ? `<div class="trace">${rounds}</div>` : ""}
+      </div>`;
+  }
 
   $("#btn-reset").addEventListener("click", async () => {
     await api("/api/reset", { method: "POST" });
