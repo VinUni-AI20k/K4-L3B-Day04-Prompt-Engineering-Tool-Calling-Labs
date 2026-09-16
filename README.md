@@ -77,6 +77,17 @@ python run_eval.py --provider openrouter --version v0 --suite base --eval-cases 
 
 Thay `openrouter` bằng `openai`, `anthropic` hoặc `gemini` khi dùng provider khác. Không commit `.env`.
 
+## Mở UI demo của nhóm
+
+Sau khi cài dependencies và điền key provider, chạy trong PowerShell:
+
+```powershell
+cd starter_v0
+python ui.py --provider openai --version v3 --port 8000
+```
+
+Mở `http://127.0.0.1:8000/`. UI dùng cùng conversation handler với `chat.py`, hiển thị artifact version, từng lượt hội thoại, tên tool, input JSON, result/error và tự lưu transcript vào `starter_v0/transcripts/`. Dừng server bằng `Ctrl+C`.
+
 ## Tài liệu cần đọc
 
 | File | Dùng khi |

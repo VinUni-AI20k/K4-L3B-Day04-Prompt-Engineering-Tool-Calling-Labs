@@ -1,0 +1,25 @@
+{
+  "transcript_id": "ui_demo_normal_search",
+  "evidence_type": "ui_demo_rehearsal",
+  "version": "v3",
+  "artifact_version": "v3+p9b82dafa338f+tdd87e0b37314",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "scenario": "Normal request: gaming laptop under budget",
+  "observed": "search_products was called with the budget and need; the answer listed three matching mock products.",
+  "turns": [
+    {
+      "turn_index": 1,
+      "user": "Tìm laptop gaming dưới 30 triệu.",
+      "status": "answered",
+      "assistant_text": "Đã tìm thấy 3 laptop gaming trong ngân sách 30 triệu đồng.",
+      "tool_events": [
+        {
+          "tool": "search_products",
+          "args": {"max_price_vnd": 30000000, "need": "gaming"},
+          "result": {"tool": "search_products", "results": ["PROD002", "PROD008", "PROD012"], "snapshot_at": "2026-09-15T09:00:00+07:00"}
+        }
+      ]
+    }
+  ]
+}

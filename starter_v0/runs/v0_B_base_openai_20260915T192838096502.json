@@ -1,0 +1,2248 @@
+{
+  "run_id": "v0_B_base_openai_20260915T192838096502",
+  "version": "v0",
+  "artifact_version": "v0+p2fef25f25634+t1f59ff7dd211",
+  "prompt_hash": "2fef25f256348aed0baf9ce959c6b698f4424a8d5aa982267a078bb381876e34",
+  "tools_hash": "1f59ff7dd2118277e255ad4e2626052fc461102746da01b8a05e9abb081a6ade",
+  "phase": "B",
+  "suite": "base",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "system_prompt": "E:\\VinAI\\Day4\\K4-L3-DAY04-PhamAnhMinh-2A202603009-PromptEngineeringToolCalling\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "E:\\VinAI\\Day4\\K4-L3-DAY04-PhamAnhMinh-2A202603009-PromptEngineeringToolCalling\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\sales\\eval_sales_base.json",
+  "dataset_id": "day04_v3_sales_base",
+  "dataset_role": "base",
+  "description": "Fixed core evaluation cases for Nova Laptop Sales Assistant. 20 single-turn queries and 10 multi-turn turns.",
+  "generated_at": "2026-09-15T19:28:38",
+  "summary": {
+    "total_cases": 30,
+    "measured_cases": 30,
+    "provider_error_cases": 0,
+    "passed_cases": 25,
+    "case_accuracy": 0.8333,
+    "tool_routing_accuracy": 0.8667,
+    "argument_accuracy": 0.8333,
+    "multiturn_accuracy": 0.8,
+    "failure_counts": {
+      "wrong_tool": 1,
+      "missing_info": 2,
+      "wrong_boundary": 1,
+      "wrong_arg_value": 1
+    },
+    "observed_mismatch_counts": {
+      "wrong_arg_value": 1,
+      "missing_tool_call": 2,
+      "extra_tool_call": 2
+    }
+  },
+  "results": [
+    {
+      "id": "S01_search_budget_gaming",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "route_search",
+        "difficulty": "easy",
+        "what_it_tests": "Tìm kiếm laptop theo nhu cầu và ngân sách."
+      },
+      "input": "Tìm giúp tôi laptop gaming giá dưới 30 triệu.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_products",
+            "args": {
+              "need": "gaming",
+              "max_price_vnd": 30000000
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "search_products",
+            "args": {
+              "need": "gaming",
+              "max_price_vnd": 30000000
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "search_products",
+          "args": {
+            "need": "gaming",
+            "max_price_vnd": 30000000
+          },
+          "result": {
+            "tool": "search_products",
+            "query": "",
+            "brand": "all",
+            "max_price_vnd": 30000000,
+            "need": "gaming",
+            "results": [
+              {
+                "product_id": "PROD002",
+                "brand": "Lenovo",
+                "name": "LOQ 15IRX9",
+                "price_vnd": 27990000,
+                "cpu": "Intel Core i5-13450HX",
+                "ram_gb": 24,
+                "storage_gb": 512,
+                "display": "15.6 inch FHD 144Hz",
+                "needs": [
+                  "programming",
+                  "gaming"
+                ]
+              },
+              {
+                "product_id": "PROD008",
+                "brand": "HP",
+                "name": "Victus 16",
+                "price_vnd": 28990000,
+                "cpu": "AMD Ryzen 7 7840HS",
+                "ram_gb": 16,
+                "storage_gb": 512,
+                "display": "16.1 inch FHD 144Hz",
+                "needs": [
+                  "gaming",
+                  "design"
+                ]
+              },
+              {
+                "product_id": "PROD012",
+                "brand": "Acer",
+                "name": "Nitro V 15",
+                "price_vnd": 24990000,
+                "cpu": "Intel Core i5-13420H",
+                "ram_gb": 16,
+                "storage_gb": 512,
+                "display": "15.6 inch FHD 144Hz",
+                "needs": [
+                  "gaming",
+                  "design"
+                ]
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "S02_search_brand_office",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "route_search",
+        "difficulty": "easy",
+        "what_it_tests": "Tìm kiếm theo hãng và mục đích văn phòng."
+      },
+      "input": "Tôi muốn tìm laptop văn phòng của hãng ASUS.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_products",
+            "args": {
+              "brand": "asus",
+              "need": "office"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "search_products",
+            "args": {
+              "brand": "asus",
+              "need": "office"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "search_products",
+          "args": {
+            "brand": "asus",
+            "need": "office"
+          },
+          "result": {
+            "tool": "search_products",
+            "query": "",
+            "brand": "asus",
+            "max_price_vnd": null,
+            "need": "office",
+            "results": [
+              {
+                "product_id": "PROD005",
+                "brand": "ASUS",
+                "name": "Vivobook S 14 OLED",
+                "price_vnd": 22990000,
+                "cpu": "Intel Core Ultra 5 125H",
+                "ram_gb": 16,
+                "storage_gb": 512,
+                "display": "14 inch OLED",
+                "needs": [
+                  "study",
+                  "office",
+                  "design"
+                ]
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "S03_product_details",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "product_details",
+        "difficulty": "easy",
+        "what_it_tests": "Mã sản phẩm cụ thể phải gọi get_product_details."
+      },
+      "input": "Xem cấu hình chi tiết và thông tin của mã PROD001.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "get_product_details",
+            "args": {
+              "product_id": "PROD001"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "get_product_details",
+            "args": {
+              "product_id": "PROD001"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "get_product_details",
+          "args": {
+            "product_id": "PROD001"
+          },
+          "result": {
+            "tool": "get_product_details",
+            "product": {
+              "product_id": "PROD001",
+              "brand": "Lenovo",
+              "name": "ThinkBook 14 Gen 6",
+              "price_vnd": 18990000,
+              "cpu": "Intel Core i5-1335U",
+              "ram_gb": 16,
+              "storage_gb": 512,
+              "display": "14 inch FHD",
+              "needs": [
+                "study",
+                "office",
+                "programming"
+              ]
+            },
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "S04_check_inventory_full",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "inventory_check",
+        "difficulty": "medium",
+        "what_it_tests": "Kiểm tra tồn kho đúng sản phẩm và chi nhánh quận 1."
+      },
+      "input": "Kiểm tra xem laptop PROD002 còn hàng ở chi nhánh quận 1 không?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_inventory",
+            "args": {
+              "product_id": "PROD002",
+              "branch": "district_1"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "check_inventory",
+            "args": {
+              "product_id": "PROD002",
+              "branch": "district_1"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "check_inventory",
+          "args": {
+            "product_id": "PROD002",
+            "branch": "district_1"
+          },
+          "result": {
+            "tool": "check_inventory",
+            "product_id": "PROD002",
+            "branch": "district_1",
+            "quantity": 2,
+            "availability": "in_stock",
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "S05_check_inventory_hanoi",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "inventory_check",
+        "difficulty": "medium",
+        "what_it_tests": "Trích đúng mã máy và branch ha_noi."
+      },
+      "input": "Laptop PROD004 còn tồn ở chi nhánh Hà Nội không bạn?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_inventory",
+            "args": {
+              "product_id": "PROD004",
+              "branch": "ha_noi"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "check_inventory",
+            "args": {
+              "product_id": "PROD004",
+              "branch": "ha_noi"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "check_inventory",
+          "args": {
+            "product_id": "PROD004",
+            "branch": "ha_noi"
+          },
+          "result": {
+            "tool": "check_inventory",
+            "product_id": "PROD004",
+            "branch": "ha_noi",
+            "quantity": 1,
+            "availability": "in_stock",
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "S06_compare_two_laptops",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "compare_laptops",
+        "difficulty": "medium",
+        "what_it_tests": "So sánh 2 sản phẩm gọi compare_products."
+      },
+      "input": "So sánh giúp tôi cấu hình giữa PROD001 và PROD003.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "compare_products",
+            "args": {
+              "product_ids": [
+                "PROD001",
+                "PROD003"
+              ]
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "compare_products",
+            "args": {
+              "product_ids": [
+                "PROD001",
+                "PROD003"
+              ]
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "compare_products",
+          "args": {
+            "product_ids": [
+              "PROD001",
+              "PROD003"
+            ]
+          },
+          "result": {
+            "tool": "compare_products",
+            "product_ids": [
+              "PROD001",
+              "PROD003"
+            ],
+            "products": [
+              {
+                "product_id": "PROD001",
+                "brand": "Lenovo",
+                "name": "ThinkBook 14 Gen 6",
+                "price_vnd": 18990000,
+                "cpu": "Intel Core i5-1335U",
+                "ram_gb": 16,
+                "storage_gb": 512,
+                "display": "14 inch FHD",
+                "needs": [
+                  "study",
+                  "office",
+                  "programming"
+                ]
+              },
+              {
+                "product_id": "PROD003",
+                "brand": "Dell",
+                "name": "Inspiron 14 5440",
+                "price_vnd": 21490000,
+                "cpu": "Intel Core 7 150U",
+                "ram_gb": 16,
+                "storage_gb": 512,
+                "display": "14 inch FHD+",
+                "needs": [
+                  "study",
+                  "office",
+                  "programming"
+                ]
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "S07_check_promotion",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "promotion_check",
+        "difficulty": "easy",
+        "what_it_tests": "Tra cứu khuyến mãi cho mã PROD002."
+      },
+      "input": "Laptop PROD002 hiện đang có chương trình khuyến mãi hay giảm giá gì không?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_promotion",
+            "args": {
+              "product_id": "PROD002"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "check_promotion",
+            "args": {
+              "product_id": "PROD002"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "check_promotion",
+          "args": {
+            "product_id": "PROD002"
+          },
+          "result": {
+            "tool": "check_promotion",
+            "product_id": "PROD002",
+            "promotions": [
+              {
+                "promotion_id": "PROMO001",
+                "product_id": "PROD002",
+                "title": "Giảm 1.500.000 VND",
+                "discount_vnd": 1500000,
+                "valid_until": "2026-10-31"
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "S08_search_warranty_policy",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "policy_search",
+        "difficulty": "easy",
+        "what_it_tests": "Tìm chính sách bảo hành."
+      },
+      "input": "Chính sách bảo hành laptop của cửa hàng Nova Laptop như thế nào?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_policy",
+            "args": {
+              "category": "warranty"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "search_policy",
+            "args": {
+              "query": "bảo hành"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "category: expected 'warranty', got None"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "search_policy",
+          "args": {
+            "query": "bảo hành"
+          },
+          "result": {
+            "tool": "search_policy",
+            "query": "bảo hành",
+            "category": "all",
+            "results": [
+              {
+                "policy_id": "POL001",
+                "category": "warranty",
+                "title": "Bảo hành tiêu chuẩn",
+                "content": "Laptop được bảo hành phần cứng 12 tháng tại trung tâm ủy quyền."
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "S09_search_return_policy",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "policy_search",
+        "difficulty": "easy",
+        "what_it_tests": "Tìm chính sách đổi trả."
+      },
+      "input": "Quy định đổi trả máy trong bao nhiêu ngày vậy shop?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_policy",
+            "args": {
+              "category": "returns"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "search_policy",
+            "args": {
+              "query": "đổi trả",
+              "category": "returns"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "search_policy",
+          "args": {
+            "query": "đổi trả",
+            "category": "returns"
+          },
+          "result": {
+            "tool": "search_policy",
+            "query": "đổi trả",
+            "category": "returns",
+            "results": [
+              {
+                "policy_id": "POL002",
+                "category": "returns",
+                "title": "Đổi trả",
+                "content": "Đổi sản phẩm trong 7 ngày nếu còn nguyên phụ kiện và không có dấu hiệu hư hỏng do người dùng."
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "S10_search_shipping_policy",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "policy_search",
+        "difficulty": "easy",
+        "what_it_tests": "Tìm chính sách giao hàng."
+      },
+      "input": "Phí giao hàng nội thành tính thế nào shop?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_policy",
+            "args": {
+              "category": "shipping"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "search_policy",
+            "args": {
+              "query": "phí giao hàng",
+              "category": "shipping"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "search_policy",
+          "args": {
+            "query": "phí giao hàng",
+            "category": "shipping"
+          },
+          "result": {
+            "tool": "search_policy",
+            "query": "phí giao hàng",
+            "category": "shipping",
+            "results": [
+              {
+                "policy_id": "POL003",
+                "category": "shipping",
+                "title": "Giao hàng",
+                "content": "Miễn phí giao hàng nội thành cho đơn từ 10.000.000 VND; đơn khác được báo phí trước khi xác nhận."
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "S11_lookup_customer",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "customer_lookup",
+        "difficulty": "easy",
+        "what_it_tests": "Tra cứu thông tin khách hàng."
+      },
+      "input": "Tra cứu thông tin khách hàng mã CUS001 giúp mình.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_customer",
+            "args": {
+              "customer_id": "CUS001"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup_customer",
+            "args": {
+              "customer_id": "CUS001"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup_customer",
+          "args": {
+            "customer_id": "CUS001"
+          },
+          "result": {
+            "tool": "lookup_customer",
+            "customer": {
+              "customer_id": "CUS001",
+              "display_name": "Minh Anh",
+              "tier": "standard"
+            },
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "S12_get_order_status",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "order_status",
+        "difficulty": "easy",
+        "what_it_tests": "Tra cứu trạng thái đơn hàng."
+      },
+      "input": "Kiểm tra tình trạng đơn hàng ORD001 của tôi.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "get_order_status",
+            "args": {
+              "order_id": "ORD001"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "get_order_status",
+            "args": {
+              "order_id": "ORD001"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "get_order_status",
+          "args": {
+            "order_id": "ORD001"
+          },
+          "result": {
+            "tool": "get_order_status",
+            "order": {
+              "order_id": "ORD001",
+              "customer_id": "CUS001",
+              "product_id": "PROD001",
+              "quantity": 1,
+              "branch": "district_1",
+              "status": "processing"
+            },
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "S13_missing_branch_inventory",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "clarify_branch",
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu chi nhánh khi check tồn kho phải hỏi lại, không tự đoán."
+      },
+      "input": "Kiểm tra xem laptop PROD001 có sẵn hàng không shop?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "choice"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "check_inventory",
+            "args": {
+              "product_id": "PROD001",
+              "branch": "district_1"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "missing_info",
+        "failures": [
+          "missing tool call clarify",
+          "extra tool call check_inventory"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "check_inventory",
+          "args": {
+            "product_id": "PROD001",
+            "branch": "district_1"
+          },
+          "result": {
+            "tool": "check_inventory",
+            "product_id": "PROD001",
+            "branch": "district_1",
+            "quantity": 5,
+            "availability": "in_stock",
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "S14_missing_product_detail",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "clarify_product",
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu mã sản phẩm phải hỏi lại khách."
+      },
+      "input": "Cho mình xin cấu hình chi tiết của chiếc laptop bên bạn với.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có thể cho mình biết mã sản phẩm của chiếc laptop mà bạn muốn xem cấu hình chi tiết không?",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có thể cho mình biết mã sản phẩm của chiếc laptop mà bạn muốn xem cấu hình chi tiết không?",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "clarify",
+            "question": "Bạn có thể cho mình biết mã sản phẩm của chiếc laptop mà bạn muốn xem cấu hình chi tiết không?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "S15_confirm_before_order",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "confirm_write",
+        "difficulty": "medium",
+        "what_it_tests": "Tạo đơn là write action, phải hỏi xác nhận trước khi gọi create_order."
+      },
+      "input": "Tôi muốn đặt mua 1 chiếc PROD001 ở chi nhánh Quận 1 cho khách CUS001.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "create_order",
+            "args": {
+              "customer_id": "CUS001",
+              "product_id": "PROD001",
+              "quantity": 1,
+              "branch": "district_1"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "wrong_boundary",
+        "failures": [
+          "missing tool call clarify",
+          "extra tool call create_order"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "create_order",
+          "args": {
+            "customer_id": "CUS001",
+            "product_id": "PROD001",
+            "quantity": 1,
+            "branch": "district_1"
+          },
+          "result": {
+            "tool": "create_order",
+            "status": "needs_confirmation",
+            "payload": {
+              "customer_id": "CUS001",
+              "product_id": "PROD001",
+              "quantity": 1,
+              "branch": "district_1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "S16_parallel_detail_and_promo",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "parallel_tools",
+        "difficulty": "hard",
+        "what_it_tests": "Gọi đồng thời cả xem cấu hình và kiểm tra khuyến mãi."
+      },
+      "input": "Cho mình xem cấu hình và khuyến mãi của laptop PROD005.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "get_product_details",
+            "args": {
+              "product_id": "PROD005"
+            }
+          },
+          {
+            "name": "check_promotion",
+            "args": {
+              "product_id": "PROD005"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "get_product_details",
+            "args": {
+              "product_id": "PROD005"
+            }
+          },
+          {
+            "name": "check_promotion",
+            "args": {
+              "product_id": "PROD005"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "get_product_details",
+          "args": {
+            "product_id": "PROD005"
+          },
+          "result": {
+            "tool": "get_product_details",
+            "product": {
+              "product_id": "PROD005",
+              "brand": "ASUS",
+              "name": "Vivobook S 14 OLED",
+              "price_vnd": 22990000,
+              "cpu": "Intel Core Ultra 5 125H",
+              "ram_gb": 16,
+              "storage_gb": 512,
+              "display": "14 inch OLED",
+              "needs": [
+                "study",
+                "office",
+                "design"
+              ]
+            },
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        },
+        {
+          "tool": "check_promotion",
+          "args": {
+            "product_id": "PROD005"
+          },
+          "result": {
+            "tool": "check_promotion",
+            "product_id": "PROD005",
+            "promotions": [
+              {
+                "promotion_id": "PROMO002",
+                "product_id": "PROD005",
+                "title": "Tặng chuột không dây",
+                "gift": "Wireless Mouse",
+                "valid_until": "2026-09-30"
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "S17_search_macbook_programming",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "search_args",
+        "difficulty": "medium",
+        "what_it_tests": "Trích đúng brand apple và need programming."
+      },
+      "input": "Tìm laptop Apple phục vụ lập trình giúp tôi.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_products",
+            "args": {
+              "brand": "apple",
+              "need": "programming"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "search_products",
+            "args": {
+              "brand": "apple",
+              "need": "programming"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "search_products",
+          "args": {
+            "brand": "apple",
+            "need": "programming"
+          },
+          "result": {
+            "tool": "search_products",
+            "query": "",
+            "brand": "apple",
+            "max_price_vnd": null,
+            "need": "programming",
+            "results": [
+              {
+                "product_id": "PROD009",
+                "brand": "Apple",
+                "name": "MacBook Air 13 M3",
+                "price_vnd": 26990000,
+                "cpu": "Apple M3",
+                "ram_gb": 16,
+                "storage_gb": 512,
+                "display": "13.6 inch Liquid Retina",
+                "needs": [
+                  "study",
+                  "office",
+                  "programming",
+                  "design"
+                ]
+              },
+              {
+                "product_id": "PROD010",
+                "brand": "Apple",
+                "name": "MacBook Pro 14 M3 Pro",
+                "price_vnd": 49990000,
+                "cpu": "Apple M3 Pro",
+                "ram_gb": 18,
+                "storage_gb": 512,
+                "display": "14.2 inch Liquid Retina XDR",
+                "needs": [
+                  "programming",
+                  "design"
+                ]
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "S18_compare_three_laptops",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "compare_multiple",
+        "difficulty": "medium",
+        "what_it_tests": "So sánh danh sách 3 sản phẩm."
+      },
+      "input": "So sánh 3 mã PROD002, PROD004, PROD006 xem máy nào phù hợp gaming hơn.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "compare_products",
+            "args": {
+              "product_ids": [
+                "PROD002",
+                "PROD004",
+                "PROD006"
+              ]
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "compare_products",
+            "args": {
+              "product_ids": [
+                "PROD002",
+                "PROD004",
+                "PROD006"
+              ]
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "compare_products",
+          "args": {
+            "product_ids": [
+              "PROD002",
+              "PROD004",
+              "PROD006"
+            ]
+          },
+          "result": {
+            "tool": "compare_products",
+            "product_ids": [
+              "PROD002",
+              "PROD004",
+              "PROD006"
+            ],
+            "products": [
+              {
+                "product_id": "PROD002",
+                "brand": "Lenovo",
+                "name": "LOQ 15IRX9",
+                "price_vnd": 27990000,
+                "cpu": "Intel Core i5-13450HX",
+                "ram_gb": 24,
+                "storage_gb": 512,
+                "display": "15.6 inch FHD 144Hz",
+                "needs": [
+                  "programming",
+                  "gaming"
+                ]
+              },
+              {
+                "product_id": "PROD004",
+                "brand": "Dell",
+                "name": "G15 5530",
+                "price_vnd": 32990000,
+                "cpu": "Intel Core i7-13650HX",
+                "ram_gb": 16,
+                "storage_gb": 1024,
+                "display": "15.6 inch QHD 165Hz",
+                "needs": [
+                  "gaming",
+                  "design"
+                ]
+              },
+              {
+                "product_id": "PROD006",
+                "brand": "ASUS",
+                "name": "TUF Gaming A15",
+                "price_vnd": 30990000,
+                "cpu": "AMD Ryzen 7 7735HS",
+                "ram_gb": 16,
+                "storage_gb": 512,
+                "display": "15.6 inch FHD 144Hz",
+                "needs": [
+                  "gaming",
+                  "programming"
+                ]
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "S19_out_of_scope_cooking",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "out_of_scope",
+        "difficulty": "easy",
+        "what_it_tests": "Câu hỏi ẩm thực ngoài phạm vi bán laptop, từ chối không gọi tool."
+      },
+      "input": "Hướng dẫn mình cách nấu món phở bò Nam Định truyền thống chuẩn vị.",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Tôi chỉ có thể hỗ trợ bạn về việc tìm kiếm và mua sắm laptop. Nếu bạn cần thông tin về laptop hoặc các sản phẩm liên quan, hãy cho tôi biết!",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "S20_out_of_scope_weather",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "out_of_scope",
+        "difficulty": "easy",
+        "what_it_tests": "Câu hỏi thời tiết ngoài phạm vi bán laptop, từ chối không gọi tool."
+      },
+      "input": "Thời tiết ngày mai ở Hà Nội thế nào có mưa không bạn?",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Tôi không thể cung cấp thông tin về thời tiết. Tuy nhiên, tôi có thể giúp bạn tìm kiếm laptop, kiểm tra sản phẩm, khuyến mãi hoặc chính sách của cửa hàng Nova Laptop. Bạn cần hỗ trợ gì?",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SM01_clarify_then_branch",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_fill_branch",
+        "difficulty": "hard",
+        "what_it_tests": "Hội thoại bổ sung chi nhánh ở lượt sau rồi kiểm tra tồn kho."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Kiểm tra tồn kho máy PROD003 giúp mình."
+        },
+        {
+          "role": "user",
+          "content": "Mình muốn lấy ở chi nhánh Thủ Đức."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_inventory",
+            "args": {
+              "product_id": "PROD003",
+              "branch": "thu_duc"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "check_inventory",
+            "args": {
+              "product_id": "PROD003",
+              "branch": "thu_duc"
+            }
+          },
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có muốn xác nhận đơn hàng cho sản phẩm này không?",
+              "response_type": "yes_no"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "extra_tool_call",
+        "failure_type": "missing_info",
+        "failures": [
+          "extra tool call clarify"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "check_inventory",
+          "args": {
+            "product_id": "PROD003",
+            "branch": "thu_duc"
+          },
+          "result": {
+            "tool": "check_inventory",
+            "product_id": "PROD003",
+            "branch": "thu_duc",
+            "quantity": 2,
+            "availability": "in_stock",
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        },
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có muốn xác nhận đơn hàng cho sản phẩm này không?",
+            "response_type": "yes_no"
+          },
+          "result": {
+            "tool": "clarify",
+            "question": "Bạn có muốn xác nhận đơn hàng cho sản phẩm này không?",
+            "response_type": "yes_no",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "SM02_change_branch_inventory",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_correct_branch",
+        "difficulty": "hard",
+        "what_it_tests": "Chi nhánh sửa ở lượt 2 phải thay thế chi nhánh cũ."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Kiểm tra tồn kho PROD001 ở chi nhánh Quận 1."
+        },
+        {
+          "role": "user",
+          "content": "À nhầm, kiểm tra ở chi nhánh Hà Nội giúp mình."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_inventory",
+            "args": {
+              "product_id": "PROD001",
+              "branch": "ha_noi"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "check_inventory",
+            "args": {
+              "product_id": "PROD001",
+              "branch": "ha_noi"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "check_inventory",
+          "args": {
+            "product_id": "PROD001",
+            "branch": "ha_noi"
+          },
+          "result": {
+            "tool": "check_inventory",
+            "product_id": "PROD001",
+            "branch": "ha_noi",
+            "quantity": 3,
+            "availability": "in_stock",
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SM03_change_product_detail",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_correct_product",
+        "difficulty": "hard",
+        "what_it_tests": "Sản phẩm sửa ở lượt 2 thay thế sản phẩm cũ."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Xem cấu hình máy PROD001 giúp tôi."
+        },
+        {
+          "role": "user",
+          "content": "Thôi đổi sang xem chi tiết máy PROD002 đi bạn."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "get_product_details",
+            "args": {
+              "product_id": "PROD002"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "get_product_details",
+            "args": {
+              "product_id": "PROD002"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "get_product_details",
+          "args": {
+            "product_id": "PROD002"
+          },
+          "result": {
+            "tool": "get_product_details",
+            "product": {
+              "product_id": "PROD002",
+              "brand": "Lenovo",
+              "name": "LOQ 15IRX9",
+              "price_vnd": 27990000,
+              "cpu": "Intel Core i5-13450HX",
+              "ram_gb": 24,
+              "storage_gb": 512,
+              "display": "15.6 inch FHD 144Hz",
+              "needs": [
+                "programming",
+                "gaming"
+              ]
+            },
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SM04_search_then_narrow_budget",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_carry_and_filter",
+        "difficulty": "hard",
+        "what_it_tests": "Giữ brand HP và need office từ lượt 1, thêm ngân sách ở lượt 2."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm laptop văn phòng của hãng HP."
+        },
+        {
+          "role": "user",
+          "content": "Lọc thêm giá dưới 20 triệu giúp tôi."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_products",
+            "args": {
+              "brand": "hp",
+              "need": "office",
+              "max_price_vnd": 20000000
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "search_products",
+            "args": {
+              "brand": "hp",
+              "max_price_vnd": 20000000,
+              "need": "office"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "search_products",
+          "args": {
+            "brand": "hp",
+            "max_price_vnd": 20000000,
+            "need": "office"
+          },
+          "result": {
+            "tool": "search_products",
+            "query": "",
+            "brand": "hp",
+            "max_price_vnd": 20000000,
+            "need": "office",
+            "results": [
+              {
+                "product_id": "PROD007",
+                "brand": "HP",
+                "name": "Pavilion 14",
+                "price_vnd": 16990000,
+                "cpu": "Intel Core i5-1335U",
+                "ram_gb": 8,
+                "storage_gb": 512,
+                "display": "14 inch FHD",
+                "needs": [
+                  "study",
+                  "office"
+                ]
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SM05_order_with_confirmation",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_order_confirm",
+        "difficulty": "hard",
+        "what_it_tests": "Sau khi khách xác nhận rõ ràng thì tạo đơn hàng với confirmed=true."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tôi muốn đặt mua 1 máy PROD001 nhận tại chi nhánh Quận 1, mã khách CUS001."
+        },
+        {
+          "role": "user",
+          "content": "Tôi xác nhận thông tin đơn hàng trên là chính xác, hãy tạo đơn cho tôi."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "create_order",
+            "args": {
+              "customer_id": "CUS001",
+              "product_id": "PROD001",
+              "quantity": 1,
+              "branch": "district_1",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "create_order",
+            "args": {
+              "customer_id": "CUS001",
+              "product_id": "PROD001",
+              "quantity": 1,
+              "branch": "district_1",
+              "confirmed": true
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "create_order",
+          "args": {
+            "customer_id": "CUS001",
+            "product_id": "PROD001",
+            "quantity": 1,
+            "branch": "district_1",
+            "confirmed": true
+          },
+          "result": {
+            "tool": "create_order",
+            "status": "created",
+            "order": {
+              "order_id": "NEW93795878",
+              "customer_id": "CUS001",
+              "product_id": "PROD001",
+              "quantity": 1,
+              "branch": "district_1",
+              "status": "confirmed",
+              "source": "local_mock"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "SM06_order_then_cancelled",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_cancel_order",
+        "difficulty": "hard",
+        "what_it_tests": "Tôn trọng yêu cầu hủy của khách, không gọi create_order."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tạo đơn mua PROD002 chi nhánh Thủ Đức cho CUS002."
+        },
+        {
+          "role": "user",
+          "content": "Khoan, tôi không muốn mua nữa, hủy yêu cầu đặt hàng này đi."
+        }
+      ],
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "{\n  \"intent\": \"order\",\n  \"action\": \"cancel\",\n  \"reply\": \"Yêu cầu đặt hàng của bạn đã được hủy.\",\n  \"evidence_ids\": []\n}",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "SM07_check_inventory_then_details",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_carry_product_id",
+        "difficulty": "hard",
+        "what_it_tests": "Chuyển từ check tồn kho sang xem chi tiết, giữ product_id PROD009."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Kiểm tra tồn kho PROD009 ở chi nhánh Quận 1."
+        },
+        {
+          "role": "user",
+          "content": "Xem thêm thông tin cấu hình chi tiết của máy đó luôn."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "get_product_details",
+            "args": {
+              "product_id": "PROD009"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "get_product_details",
+            "args": {
+              "product_id": "PROD009"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "get_product_details",
+          "args": {
+            "product_id": "PROD009"
+          },
+          "result": {
+            "tool": "get_product_details",
+            "product": {
+              "product_id": "PROD009",
+              "brand": "Apple",
+              "name": "MacBook Air 13 M3",
+              "price_vnd": 26990000,
+              "cpu": "Apple M3",
+              "ram_gb": 16,
+              "storage_gb": 512,
+              "display": "13.6 inch Liquid Retina",
+              "needs": [
+                "study",
+                "office",
+                "programming",
+                "design"
+              ]
+            },
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SM08_check_order_then_policy",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_switch_topic",
+        "difficulty": "medium",
+        "what_it_tests": "Chuyển chủ đề từ tra đơn sang tra cứu chính sách đổi trả."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tra cứu đơn hàng ORD002 xem đã giao chưa."
+        },
+        {
+          "role": "user",
+          "content": "Sẵn tiện cho hỏi chính sách đổi trả hàng nếu máy bị lỗi."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_policy",
+            "args": {
+              "category": "returns"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "search_policy",
+            "args": {
+              "query": "đổi trả",
+              "category": "returns"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "search_policy",
+          "args": {
+            "query": "đổi trả",
+            "category": "returns"
+          },
+          "result": {
+            "tool": "search_policy",
+            "query": "đổi trả",
+            "category": "returns",
+            "results": [
+              {
+                "policy_id": "POL002",
+                "category": "returns",
+                "title": "Đổi trả",
+                "content": "Đổi sản phẩm trong 7 ngày nếu còn nguyên phụ kiện và không có dấu hiệu hư hỏng do người dùng."
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SM09_order_change_quantity_confirm",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_modify_and_confirm",
+        "difficulty": "hard",
+        "what_it_tests": "Cập nhật số lượng 2 và tạo đơn sau khi xác nhận."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đặt 1 máy PROD007 cho khách CUS005 chi nhánh Quận 1."
+        },
+        {
+          "role": "user",
+          "content": "Đổi thành 2 máy nhé, tôi đồng ý xác nhận tạo đơn."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "create_order",
+            "args": {
+              "customer_id": "CUS005",
+              "product_id": "PROD007",
+              "quantity": 2,
+              "branch": "district_1",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "create_order",
+            "args": {
+              "customer_id": "CUS005",
+              "product_id": "PROD007",
+              "quantity": 2,
+              "branch": "district_1",
+              "confirmed": true
+            }
+          },
+          {
+            "name": "check_inventory",
+            "args": {
+              "product_id": "PROD007",
+              "branch": "district_1"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "extra_tool_call",
+        "failure_type": "wrong_arg_value",
+        "failures": [
+          "extra tool call check_inventory"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "create_order",
+          "args": {
+            "customer_id": "CUS005",
+            "product_id": "PROD007",
+            "quantity": 2,
+            "branch": "district_1",
+            "confirmed": true
+          },
+          "result": {
+            "tool": "create_order",
+            "status": "created",
+            "order": {
+              "order_id": "NEWF79A4310",
+              "customer_id": "CUS005",
+              "product_id": "PROD007",
+              "quantity": 2,
+              "branch": "district_1",
+              "status": "confirmed",
+              "source": "local_mock"
+            }
+          }
+        },
+        {
+          "tool": "check_inventory",
+          "args": {
+            "product_id": "PROD007",
+            "branch": "district_1"
+          },
+          "result": {
+            "tool": "check_inventory",
+            "product_id": "PROD007",
+            "branch": "district_1",
+            "quantity": 6,
+            "availability": "in_stock",
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SM10_search_then_compare",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_compare",
+        "difficulty": "medium",
+        "what_it_tests": "Từ tìm kiếm chuyển sang so sánh 2 mẫu sản phẩm."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm laptop Lenovo dùng cho học tập."
+        },
+        {
+          "role": "user",
+          "content": "So sánh hai mẫu PROD001 và PROD002 giúp tôi."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "compare_products",
+            "args": {
+              "product_ids": [
+                "PROD001",
+                "PROD002"
+              ]
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "compare_products",
+            "args": {
+              "product_ids": [
+                "PROD001",
+                "PROD002"
+              ]
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "compare_products",
+          "args": {
+            "product_ids": [
+              "PROD001",
+              "PROD002"
+            ]
+          },
+          "result": {
+            "tool": "compare_products",
+            "product_ids": [
+              "PROD001",
+              "PROD002"
+            ],
+            "products": [
+              {
+                "product_id": "PROD001",
+                "brand": "Lenovo",
+                "name": "ThinkBook 14 Gen 6",
+                "price_vnd": 18990000,
+                "cpu": "Intel Core i5-1335U",
+                "ram_gb": 16,
+                "storage_gb": 512,
+                "display": "14 inch FHD",
+                "needs": [
+                  "study",
+                  "office",
+                  "programming"
+                ]
+              },
+              {
+                "product_id": "PROD002",
+                "brand": "Lenovo",
+                "name": "LOQ 15IRX9",
+                "price_vnd": 27990000,
+                "cpu": "Intel Core i5-13450HX",
+                "ram_gb": 24,
+                "storage_gb": 512,
+                "display": "15.6 inch FHD 144Hz",
+                "needs": [
+                  "programming",
+                  "gaming"
+                ]
+              }
+            ],
+            "snapshot_at": "2026-09-15T09:00:00+07:00"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -4,6 +4,8 @@ from typing import Any
 
 
 def ask_user(question: str = "", response_type: str = "text", options: list[str] | None = None) -> dict[str, Any]:
+    if not question:
+        return {"error": "missing_question", "message": "Question cannot be empty"}
     return {
         "tool": "clarify",
         "question": question,

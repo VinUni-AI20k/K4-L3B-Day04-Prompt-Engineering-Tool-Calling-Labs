@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -17,6 +18,10 @@ from versioning import artifact_version_dict, build_artifact_version
 ROOT = Path(__file__).parent
 ARTIFACTS_DIR = ROOT / "artifacts"
 load_lab_env(ROOT)
+
+for stream in (sys.stdout, sys.stderr):
+    if hasattr(stream, "reconfigure"):
+        stream.reconfigure(encoding="utf-8", errors="replace")
 
 
 def now_iso() -> str:
@@ -35,10 +40,50 @@ def json_text(value: Any, *, max_chars: int | None = None) -> str:
     return text
 
 
+def display_reply(text: str | None) -> str:
+    """Show the user-facing reply while retaining the model's raw JSON trace."""
+    if not text:
+        return ""
+    candidate = text.strip()
+    if candidate.startswith("```") and candidate.endswith("```"):
+        candidate = candidate[3:-3].strip()
+        if candidate.lower().startswith("json"):
+            candidate = candidate[4:].strip()
+    try:
+        payload = json.loads(candidate)
+    except json.JSONDecodeError:
+        return text
+    reply = payload.get("reply") if isinstance(payload, dict) else None
+    return reply.strip() if isinstance(reply, str) and reply.strip() else text
+
+
 def trim_history(history: list[dict[str, str]], window: int) -> list[dict[str, str]]:
     if window <= 0:
         return []
     return history[-window * 2:]
+
+
+def bound_product_id(history: list[dict[str, str]], latest_user_text: str) -> str | None:
+    """Carry one product named by the user when a later turn only fills a slot."""
+    latest_ids = re.findall(r"\bPROD\d+\b", latest_user_text.upper())
+    if latest_ids:
+        return None
+    for item in reversed(history):
+        if item.get("role") != "user":
+            continue
+        prior_ids = list(dict.fromkeys(re.findall(r"\bPROD\d+\b", item.get("content", "").upper())))
+        if prior_ids:
+            return prior_ids[0] if len(prior_ids) == 1 else None
+    return None
+
+
+def bind_inventory_calls(calls: list[ToolCall], product_id: str | None) -> list[ToolCall]:
+    if not product_id:
+        return calls
+    return [
+        call for call in calls
+        if call.name != "check_inventory" or call.args.get("product_id", "").upper() == product_id
+    ]
 
 
 def execute_tool_call(call: ToolCall) -> dict[str, Any]:
@@ -84,6 +129,7 @@ def run_model_tool_loop(
     tools: list[dict[str, Any]],
     model: str | None,
     max_tool_rounds: int,
+    bound_product_id: str | None = None,
 ) -> dict[str, Any]:
     working_messages = list(messages)
     rounds: list[dict[str, Any]] = []
@@ -91,7 +137,7 @@ def run_model_tool_loop(
 
     for round_index in range(1, max_tool_rounds + 1):
         response = provider.complete(working_messages, tools, model=model, temperature=0.0)
-        calls = response.tool_calls
+        calls = bind_inventory_calls(response.tool_calls, bound_product_id)
         round_record: dict[str, Any] = {
             "round": round_index,
             "assistant_text": response.text,
@@ -212,6 +258,16 @@ def main() -> None:
             *trim_history(history, args.history_window),
             {"role": "user", "content": user_text},
         ]
+        product_id = bound_product_id(history, user_text)
+        if product_id:
+            messages.insert(1, {
+                "role": "system",
+                "content": (
+                    f"Runtime context binding: the latest user turn only fills a missing slot for "
+                    f"the exact user-named product {product_id}. Keep this product; do not expand "
+                    "inventory calls to IDs from search results."
+                ),
+            })
 
         turn_record: dict[str, Any] = {
             "turn_index": turn_index,
@@ -230,10 +286,11 @@ def main() -> None:
                 tools=openai_tools,
                 model=args.model,
                 max_tool_rounds=args.max_tool_rounds,
+                bound_product_id=product_id,
             )
             turn_record.update(result)
             assistant_text = result["assistant_text"]
-            print(f"\nAgent> {assistant_text}")
+            print(f"\nAgent> {display_reply(assistant_text)}")
             history.append({"role": "user", "content": user_text})
             history.append({"role": "assistant", "content": assistant_text})
         except Exception as exc:

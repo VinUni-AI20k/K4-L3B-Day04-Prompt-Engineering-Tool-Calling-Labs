@@ -1,0 +1,17 @@
+{
+  "transcript_id": "v2_openai_ui_20260916T111540281799",
+  "version": "v2",
+  "artifact_version": "v2+p9b82dafa338f+tdd87e0b37314",
+  "prompt_hash": "9b82dafa338f78c7ccdcd66a9bf18a4afd3f785eadd377c0feab9be4f75e1433",
+  "tools_hash": "dd87e0b37314e5cc117e79383ec86b721cb0e345bb7d656deba0c92aba21ec25",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "system_prompt": "git:f5e2fbc9:starter_v0/artifacts/system_prompt.md",
+  "tools": "git:f5e2fbc9:starter_v0/artifacts/tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-09-16T11:15:40",
+  "updated_at": "2026-09-16T11:15:40",
+  "ui": true,
+  "turns": []
+}

@@ -5,7 +5,7 @@
 ## Tên repo
 
 ```text
-K4-L3-DAY04-HoVaTen-MSSV-PromptEngineeringToolCalling
+K4-L3-DAY04-PhamAnhMinh-2A202603009-PromptEngineeringToolCalling
 ```
 
 Dùng họ tên không dấu và MSSV của người đại diện; không có khoảng trắng; dùng `DAY04` và `L3`. Liệt kê mọi thành viên trong [TEAM.md](TEAM.md).
@@ -38,7 +38,7 @@ Mỗi thành viên mở đúng bài Day04 trên VLearn, nộp URL trang gốc c�
 
 ## Kiểm tra trước khi nộp
 
-- [ ] Tên repo, TEAM và INDIVIDUAL đúng quy tắc.
-- [ ] Có đủ run, report, UI/transcript và 10 case nhóm.
-- [ ] Không sửa bộ câu cố định, không có key hoặc dữ liệu thật.
-- [ ] Repo mở được cho người chấm và từng thành viên đã nộp cùng URL trên VLearn.
+- [x] Tên repo, TEAM và INDIVIDUAL đúng quy tắc.
+- [x] Có đủ run, report, UI/transcript và 10 case nhóm.
+- [x] Không sửa bộ câu cố định, không có key hoặc dữ liệu thật.
+- [x] Repo mở được cho người chấm và từng thành viên đã nộp cùng URL trên VLearn.
