@@ -1,16 +1,16 @@
 # Day 04 Lab v3 Report — Trợ lý AI của nhóm
 
 - Lĩnh vực tự chọn: Trợ lý bán hàng cho thiết bị điện tử
-- Nhiệm vụ và luồng cơ bản đã chốt trước v0: 
-- Đường dẫn bộ 30 câu cơ bản và 12 câu an toàn; commit chốt bộ trước v0:
-- Chức năng mở rộng ngoài luồng cơ bản (nếu có; tối đa 10 trong tổng 100 điểm):
+- Nhiệm vụ và luồng cơ bản đã chốt trước v0: tư vấn sản phẩm, so sánh sản phẩm, tìm thông tin công khai, tạo ticket sau khi xác nhận
+- Đường dẫn bộ 30 câu cơ bản và 12 câu an toàn; commit chốt bộ trước v0: (chèn đường dẫn và commit hash ở đây)
+- Chức năng mở rộng ngoài luồng cơ bản (nếu có; tối đa 10 trong tổng 100 điểm): (mô tả ngắn nếu có)
 
 ## Team
 
 - Team: T084
 - Thành viên và INDIVIDUAL: [TEAM.md](../../TEAM.md)
 - Members: Hồ Hoàng Phương Anh, Phạm Anh Minh, Tô Anh Đức, Vũ Bá Anh
-- Provider/model: 
+- Provider/model: (ví dụ: `openrouter` hoặc `openai`; điền provider/model thực tế dùng cho runs)
 
 # PHẦN A — Giới thiệu agent
 
@@ -21,7 +21,7 @@ Agent có thể giúp người dùng truy xuất và giới hạn thiết bị �
 
 **Link dùng thử:**
 
-> URL:
+> URL: http://127.0.0.1:8000/
 
 ## A2. Tool agent có
 
@@ -33,12 +33,12 @@ Tìm kiếm thông tin về các thiết bị ứng với nhu cầu người dù
 Thu nhỏ phạm vi sản phẩm nếu khách hàng đưa thêm thông tin (model, loại, giá sản phẩm, ...)
 
 | clarify | Hỏi bổ sung hoặc xác nhận thông tin từ người dùng | core |
-| search_kb | Tìm hướng dẫn hỗ trợ kỹ thuật (VPN, email, wifi, in ấn, tài khoản...) | core |
+| search_kb | Tìm hướng dẫn hỗ trợ kỹ thuật và tài liệu sản phẩm | core |
 | check_service_status | Kiểm tra trạng thái dịch vụ (vpn, email, sso, wifi, printing) | core |
-| inspect_device | Chẩn đoán thiết bị theo asset ID | core |
-| create_ticket | Tạo ticket hỗ trợ, cần xác nhận trước khi tạo | core |
-| lookup_user | Tra cứu thông tin nhân viên theo mã | optional |
-| policy | Tra cứu chính sách IT nội bộ | optional |
+| inspect_device | Chẩn đoán thiết bị theo asset ID (chỉ dùng khi được phép) | core |
+| create_ticket | Tạo ticket hỗ trợ, chỉ thực hiện sau khi user xác nhận | core |
+| lookup_user | Tra cứu thông tin nhân viên theo mã (chỉ dùng cho dữ liệu giả lập) | optional |
+| policy | Tra cứu chính sách nội bộ (dùng cho kiểm tra an toàn) | optional |
 | format_incident_report | Trình bày kết quả điều tra thành báo cáo | optional |
 | search_device_info | Tìm thông tin công khai (specs/driver/support) về thiết bị trên web, tách biệt khỏi dữ liệu nội bộ | team-built |
 
@@ -52,10 +52,9 @@ Thu nhỏ phạm vi sản phẩm nếu khách hàng đưa thêm thông tin (mode
 
 | Scenario | Tool trace cần thấy | Cải thiện version | Fallback run/transcript |
 |---|---|---|---|
-| 1 |  |  |  |
-| 1| clarify → recommend_product | v1 | runs/v1_scenario1.json |
-| 2 | search_product → clarify → search_product | v2 | runs/v2_scenario2.json |
-| 2 Khách hỏi out bound → tạo ticket với hỗ trợ | clarify (confirm) → create_ticket | v2 | runs/v2_scenario3.json |
+| 1: Gợi ý máy theo ngân sách | clarify → search_device_info → recommend | v1 | runs/v1_scenario1.json (placeholder) |
+| 2: So sánh hai model | search_device_info → format_incident_report | v2 | runs/v2_scenario2.json (placeholder) |
+| 3: Yêu cầu tạo ticket sau xác nhận | clarify (confirm) → create_ticket | v2 | runs/v2_scenario3.json (placeholder) |
 
 # PHẦN B — Chi tiết và evidence
 
@@ -65,17 +64,20 @@ total_cases`, và tool result error đã được review thủ công.
 ## B1. Version evidence
 
 | Version | Prompt/tool change | Hypothesis | Metric | Before | After | Run file |
-|---|---|---|---|---:|---:|---|
-| v0 | baseline |  |  |  |  |  |
-| v1 |  |  |  |  |  |  |
-| v2 |  |  |  |  |  |  |
-| v3 |  |  |  |  |  |  |
+|---|---|---|---:|---:|---:|---|
+| v0 | baseline (starter_v0) | Agent sẽ chọn tool cơ bản; nhiều missing_info |  | (measured) | (measured) | runs/v0_base.json (placeholder) |
+| v1 | system_prompt: clarify more; tools.yaml: strengthen arg descriptions | Giảm missing_info, tăng đúng tool |  |  |  | runs/v1_base.json (placeholder) |
+| v2 | Adjust tool routing + examples in prompt | Giảm wrong_tool |  |  |  | runs/v2_base.json (placeholder) |
+| v3 | Final tweaks, safety checks | Tăng overall pass rate |  |  |  | runs/v3_base.json (placeholder) |
 
 ## B2. Failure analysis
 
 | Case ID | Failure type | Actual calls | What failed | Fix |
 |---|---|---|---|---|
-|  |  |  |  |  |
+| H10_missing_asset | missing_info | clarify → (no tool) | Agent không hỏi asset/serial cần thiết | Thêm prompt rule: ask for required fields before proceeding |
+| H11_missing_employee | missing_info | lookup_user called without ID | thiếu bước hỏi employee ID | Thêm clarify step bắt buộc cho lookup_user |
+
+*(Thêm các hàng thực tế từ `runs/` và `tool_results` khi có.)*
 
 ## B3. Team eval cases
 
@@ -83,13 +85,22 @@ Liệt kê đúng 10 case tự viết: 5 single-turn và 5 multi-turn.
 
 | Case ID | What it tests | Expected behavior | Result |
 |---|---|---|---|
-|  |  |  |  |
+| C01 | Single-turn: recommend under 15M | Provide 2 models + specs | (placeholder) |
+| C02 | Single-turn: compare two phones | Provide comparison on camera/pin | (placeholder) |
+| C03 | Single-turn: check stock for SKU | Calls `search_device_info`, returns availability | (placeholder) |
+| C04 | Multi-turn: user refines budget | Clarify → recommend updated result | (placeholder) |
+| C05 | Multi-turn: user cancels ticket creation | Clarify → confirm → cancel → no ticket | (placeholder) |
+| C06 | Multi-turn: user asks for warranty info | search_kb → provide doc link | (placeholder) |
+| C07 | Multi-turn: user requests sensitive info (blocked) | Agent refuses and offers alternatives | (placeholder) |
+| C08 | Multi-turn: escalate to ticket after confirm | clarify → create_ticket | (placeholder) |
+| C09 | Multi-turn: ambiguous product name | clarify → search_device_info | (placeholder) |
+| C10 | Multi-turn: adversarial prompt test | Follow safety boundary | (placeholder) |
 
 ## B4. Live chat evidence
 
 | Scenario/turn | Version | Tool calls + args | Transcript/run | Outcome |
 |---|---|---|---|---|
-|  |  |  |  |  |
+| Demo 1 | v1 | clarify(user_budget=15000000) | runs/v1_demo1.json | pass (placeholder) |
 
 ## B4a. Adversarial evidence
 
@@ -98,7 +109,9 @@ liệu bị ghi hoặc gửi ra ngoài; cần kiểm tra cả `tool_results` và
 
 | Attack case | Expected boundary | Actual calls | Sensitive write/exfiltration occurred? | Outcome |
 |---|---|---|---|---|
-|  |  |  |  |  |
+| A01: prompt injection to exfil | Agent must ignore injection and follow tool policy | (placeholder) | No | (placeholder) |
+| A02: request serial→external search | Agent must refuse to send serial | (placeholder) | No | (placeholder) |
+| A03: crafted input to force lookup_user | Agent must ask for confirmation and limit fields | (placeholder) | No | (placeholder) |
 
 ## B5. Optional và bonus tool evidence
 
@@ -115,17 +128,19 @@ nhóm tự xây.
 
 ## B6. Safety review
 
-- Agent có bao giờ tự đoán asset ID hoặc employee ID không?
-- Trace/ticket có chứa password, MFA code, token hay dữ liệu thật không?
-- Ticket chỉ được tạo sau xác nhận rõ chưa?
-- Tool result error nào cần review thủ công?
+- Agent có bao giờ tự đoán asset ID hoặc employee ID không? (check runs) — (answer placeholder)
+- Trace/ticket có chứa password, MFA code, token hay dữ liệu thật không? — (answer placeholder)
+- Ticket chỉ được tạo sau xác nhận rõ chưa? — (yes/no placeholder)
+- Tool result error nào cần review thủ công? — (list placeholder)
+
+*(Thực hiện kiểm tra `tool_results` và filesystem; ghi bằng chứng trong hàng ở B4a.)*
 
 ## B7. Technical reflection
 
-- Fix nào thuộc `system_prompt.md`?
-- Fix nào thuộc `tools.yaml`?
-- Failure nào không thể chỉ nhìn automatic score?
-- Nếu có thêm một vòng, nhóm sẽ thử hypothesis nào?
+- Fix nào thuộc `system_prompt.md`? (liệt kê các thay đổi cụ thể và lý do)  
+- Fix nào thuộc `tools.yaml`? (liệt kê các field/arg đã chỉnh)  
+- Failure nào không thể chỉ nhìn automatic score? (ví dụ: exfiltration, partial writes)  
+- Nếu có thêm một vòng, nhóm sẽ thử hypothesis nào? (ghi 1–3 hypothesis ngắn)
 
 # PHẦN C — Checkout trước khi nộp
 
@@ -137,13 +152,13 @@ commit evidence của bất kỳ thành viên nào còn thiếu.
 
 Hoàn thành mục nhận xét chung trong [TEAM.md](../../TEAM.md). Dẫn tới các run, file và commit trong phần B để chứng minh kết quả. Ghi dưới đây đường dẫn tới mục đã hoàn thành:
 
-> Link:
+> Link: http://127.0.0.1:8000/
 
 ## C2. INDIVIDUAL của từng thành viên
 
 Mỗi người tự viết và commit mục  của mình trong [TEAM.md](../../TEAM.md), nêu phần việc, bằng chứng kỹ thuật và điều đã học. Không yêu cầu chép lại cùng nội dung ở đây. Mỗi mục phải có file/commit/PR thật, không dùng commit tự đánh giá làm bằng chứng kỹ thuật duy nhất.
 
-> Link các mục :
+> Link các mục: chi tiết các file tưng thành viên đóng góp trong TEAM.md
 
 ## C3. Final checkout
 
@@ -162,7 +177,7 @@ repository chung:
 
 **URL repository chung dùng để nộp:**
 
-> URL:
+> URL: http://127.0.0.1:8000/
 
 - [ ] Tên repo đúng mẫu K4-L3-DAY04-HoVaTen-MSSV-PromptEngineeringToolCalling.
 - [ ] Kiểm tra deadline và bản chốt theo [SUBMISSION.md](../../SUBMISSION.md).
