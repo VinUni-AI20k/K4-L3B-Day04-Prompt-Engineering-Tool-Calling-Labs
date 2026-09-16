@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Northstar AI — IT Helpdesk Tool Calling Studio</title>
+  <meta name="description" content="Giao diện tương tác chatbot IT Helpdesk AI Agent với khung chat văn bản ở giữa và chi tiết JSON Tool Calls ở bên phải.">
+  
+  <!-- Modern Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="app-layout" id="app-root">
+    
+    <!-- TOP HEADER / BRAND BAR -->
+    <header class="app-header" id="main-header">
+      <div class="header-left">
+        <div class="brand-logo">
+          <div class="logo-text">Northstar<span class="logo-dot">.</span></div>
+          <span class="brand-tag">Helpdesk AI Studio</span>
+        </div>
+      </div>
+
+      <!-- Center: Version & Artifact Control -->
+      <div class="header-center">
+        <div class="version-control-card" id="version-control-panel">
+          <div class="version-selector-group">
+            <span class="label-caption">PHIÊN BẢN:</span>
+            <div class="version-tabs" id="version-tabs">
+              <button class="v-tab active" data-v="v0" id="btn-version-v0">v0</button>
+              <button class="v-tab" data-v="v1" id="btn-version-v1">v1</button>
+              <button class="v-tab" data-v="v2" id="btn-version-v2">v2</button>
+              <button class="v-tab" data-v="v3" id="btn-version-v3">v3</button>
+            </div>
+          </div>
+
+          <div class="artifact-hash-pill" id="artifact-hash-display" title="Click để sao chép chuỗi phiên bản artifact đầy đủ">
+            <span class="hash-label">ARTIFACT:</span>
+            <code class="hash-code" id="artifact-version-string">v0+p...t...</code>
+            <button class="copy-icon-btn" id="btn-copy-hash" title="Sao chép mã phiên bản">📋</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Provider Selector & Sidebar Toggle -->
+      <div class="header-right">
+        <div class="provider-badge-box">
+          <div class="provider-select-wrapper">
+            <span class="label-caption">PROVIDER:</span>
+            <select id="provider-select" class="custom-select">
+              <option value="simulator">🧪 Simulator (Offline/Demo)</option>
+              <option value="openrouter">⚡ OpenRouter</option>
+              <option value="openai">🤖 OpenAI</option>
+              <option value="gemini">✨ Google Gemini</option>
+              <option value="anthropic">🧠 Anthropic</option>
+            </select>
+          </div>
+          <div class="status-dot-indicator" id="provider-status-dot" title="Trạng thái: Ready"></div>
+        </div>
+
+        <button class="header-action-btn secondary-btn" id="btn-toggle-sidebar" title="Mở/Đóng Bảng điều khiển">
+          <span class="btn-icon">📁</span>
+          <span class="btn-text">Test Suite</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- METADATA RIBBON -->
+    <div class="metadata-ribbon" id="meta-ribbon">
+      <div class="ribbon-item" title="Mã băm SHA256 của system_prompt.md">
+        <span class="ribbon-icon">📝</span>
+        <span class="ribbon-key">Prompt Hash:</span>
+        <code class="ribbon-val" id="prompt-hash-val">loading...</code>
+      </div>
+      <div class="ribbon-item" title="Mã băm SHA256 của tools.yaml">
+        <span class="ribbon-icon">🔧</span>
+        <span class="ribbon-key">Tools Hash:</span>
+        <code class="ribbon-val" id="tools-hash-val">loading...</code>
+      </div>
+      <div class="ribbon-item">
+        <span class="ribbon-icon">🛡️</span>
+        <span class="ribbon-key">Quy Tắc Safety:</span>
+        <span class="ribbon-val text-emerald">Read = Trực tiếp | Write = Cần xác nhận</span>
+      </div>
+      <div class="ribbon-item ml-auto">
+        <button class="btn-chip" id="btn-view-prompt" title="Xem System Prompt">👁️ System Prompt</button>
+        <button class="btn-chip" id="btn-view-tools" title="Xem danh sách 9 Tools">🛠️ 9 Tools</button>
+      </div>
+    </div>
+
+    <!-- MAIN BODY: 3-COLUMN WORKSPACE -->
+    <div class="main-body" id="main-container">
+      
+      <!-- COLUMN 1: LEFT SIDEBAR (TEST SUITE & TRANSCRIPTS) -->
+      <aside class="sidebar" id="sidebar-drawer">
+        <div class="sidebar-header">
+          <div class="sidebar-tabs">
+            <button class="side-tab active" id="tab-btn-cases" data-target="panel-cases">🧪 Test Cases</button>
+            <button class="side-tab" id="tab-btn-transcripts" data-target="panel-transcripts">📜 Transcripts</button>
+            <button class="side-tab" id="tab-btn-registry" data-target="panel-registry">🧰 9 Tools</button>
+          </div>
+        </div>
+
+        <div class="sidebar-content">
+          <!-- Panel 1: Eval Cases -->
+          <div class="side-panel active" id="panel-cases">
+            <div class="panel-section-header">
+              <span class="panel-title">Bộ Test Evaluator</span>
+              <div class="filter-pills">
+                <button class="filter-pill active" data-filter="base">Base (30)</button>
+                <button class="filter-pill" data-filter="adversarial">Safety (12)</button>
+              </div>
+            </div>
+            <p class="panel-desc">Click vào bất kỳ câu hỏi nào bên dưới để chạy thử nghiệm với Chatbot:</p>
+            <div class="cases-scroll-list" id="eval-cases-list">
+              <div class="loading-spinner-box"><div class="spinner"></div> Đang tải test cases...</div>
+            </div>
+          </div>
+
+          <!-- Panel 2: Transcripts Explorer -->
+          <div class="side-panel" id="panel-transcripts">
+            <div class="panel-section-header">
+              <span class="panel-title">Kho Transcript Đã Lưu</span>
+              <button class="btn-refresh-sm" id="btn-refresh-transcripts" title="Làm mới danh sách">🔄</button>
+            </div>
+            <p class="panel-desc">Tải các phiên chat cũ để soi lại chuỗi gọi tool & phản hồi:</p>
+            <div class="transcripts-scroll-list" id="transcripts-list">
+              <div class="loading-spinner-box"><div class="spinner"></div> Đang tải danh sách...</div>
+            </div>
+          </div>
+
+          <!-- Panel 3: Tool Registry -->
+          <div class="side-panel" id="panel-registry">
+            <div class="panel-section-header">
+              <span class="panel-title">Danh Sách 9 Tools</span>
+            </div>
+            <div class="tools-scroll-list" id="tools-registry-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- COLUMN 2: CENTER CHATBOT (OUTPUT VĂN BẢN CHÍNH) -->
+      <main class="chat-viewport" id="chat-viewport">
+        
+        <!-- Messages Flow -->
+        <div class="chat-messages-scroll" id="chat-messages-container">
+          
+          <!-- Welcome Hero Banner -->
+          <div class="welcome-card" id="welcome-message">
+            <div class="hero-badge">AI HELPDESK ASSISTANT</div>
+            <h2 class="welcome-title">Trợ Lý IT Helpdesk Thông Minh</h2>
+            <p class="welcome-subtitle">
+              Trải nghiệm hội thoại tự nhiên với Chatbot ở chính giữa. Mọi hoạt động truy vấn dữ liệu, gọi công cụ và chi tiết JSON được tách riêng ở cột bên phải.
+            </p>
+            
+            <div class="feature-highlights-row">
+              <div class="highlight-chip">
+                <span class="chip-icon">💬</span>
+                <span>Hội thoại tự nhiên</span>
+              </div>
+              <div class="highlight-chip">
+                <span class="chip-icon">⚡</span>
+                <span>Tự động gọi Tool</span>
+              </div>
+              <div class="highlight-chip">
+                <span class="chip-icon">📊</span>
+                <span>Soi JSON ở cột phải</span>
+              </div>
+            </div>
+
+            <!-- Quick Starter Prompts -->
+            <div class="quick-prompts-bar">
+              <span class="quick-title">Gợi ý thử nhanh:</span>
+              <div class="prompts-grid">
+                <button class="prompt-chip" data-prompt="Kiểm tra riêng VPN trên LT-204.">🔍 Check VPN trên LT-204</button>
+                <button class="prompt-chip" data-prompt="Dịch vụ VPN production hiện có đang gặp sự cố không?">⚙️ Check VPN production</button>
+                <button class="prompt-chip" data-prompt="Tra cứu tài khoản nhân viên EMP-1003 và thiết bị được cấp.">👤 Lookup EMP-1003</button>
+                <button class="prompt-chip" data-prompt="Tạo ticket giúp mình với mật khẩu là Secret123!">🚨 Test sensitive data error</button>
+                <button class="prompt-chip" data-prompt="Tạo ticket lỗi mạng cho laptop LT-204.">🎫 Test ticket confirmation</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live chat turns will be inserted here -->
+        </div>
+
+        <!-- Chat Action Toolbar -->
+        <div class="chat-toolbar" id="chat-controls-bar">
+          <div class="toolbar-left">
+            <button class="tool-btn" id="btn-clear-chat" title="Xóa màn hình chat">🗑️ Xóa Cuộc Trò Chuyện</button>
+            <button class="tool-btn" id="btn-export-transcript" title="Xuất transcript phiên chat hiện tại">💾 Lưu Transcript</button>
+            <span class="active-session-tag" id="session-turn-counter">0 lượt hội thoại</span>
+          </div>
+          <div class="toolbar-right">
+            <span class="mode-badge" id="execution-mode-badge">Chế độ: Simulator</span>
+          </div>
+        </div>
+
+        <!-- Clarification Quick Bar (Appears when Agent awaits user input) -->
+        <div class="clarification-bar hidden" id="clarification-panel">
+          <div class="clarify-header">
+            <span class="clarify-icon">💬</span>
+            <span class="clarify-title" id="clarify-prompt-text">Agent đang cần bạn bổ sung thông tin hoặc xác nhận:</span>
+          </div>
+          <div class="clarify-options" id="clarify-options-container">
+            <!-- Dynamic choice buttons -->
+          </div>
+        </div>
+
+        <!-- Chat Input Bar -->
+        <div class="chat-input-area" id="chat-input-box">
+          <form class="chat-form" id="chat-form">
+            <div class="input-wrapper">
+              <textarea 
+                id="user-input-field" 
+                class="chat-textarea" 
+                placeholder="Nhập câu hỏi hoặc yêu cầu hỗ trợ IT (ví dụ: 'Kiểm tra trạng thái laptop LT-204')..." 
+                rows="1"
+                required
+              ></textarea>
+              <button type="submit" id="btn-send-message" class="send-btn" title="Gửi (Enter)">
+                <span class="send-text">Gửi</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </main>
+
+      <!-- COLUMN 3: RIGHT PANEL (OUTPUT PHỤ DẠNG JSON & TOOL CALLS) -->
+      <aside class="json-inspector-panel" id="json-inspector-drawer">
+        <div class="inspector-header">
+          <div class="inspector-title-group">
+            <span class="inspector-icon">📊</span>
+            <h3 class="inspector-title">Tool Calls & Output JSON</h3>
+          </div>
+          <span class="inspector-badge" id="inspector-status-badge">REASONING & EXECUTION</span>
+        </div>
+
+        <!-- Inspector Tabs -->
+        <div class="inspector-tabs">
+          <button class="insp-tab active" id="insp-tab-tools" data-target="insp-panel-tools">🛠️ Tool Events</button>
+          <button class="insp-tab" id="insp-tab-raw" data-target="insp-panel-raw">📄 Raw Turn JSON</button>
+          <button class="insp-tab" id="insp-tab-hashes" data-target="insp-panel-hashes">🏷️ Metadata</button>
+        </div>
+
+        <div class="inspector-content">
+          <!-- Sub-Panel 1: Tool Call Events -->
+          <div class="insp-panel active" id="insp-panel-tools">
+            <div class="insp-panel-intro">
+              <span class="insp-subhead">Các công cụ đã thực thi ở lượt chat hiện tại:</span>
+            </div>
+            <div class="json-cards-container" id="inspector-tools-container">
+              <div class="json-empty-state">
+                <div class="empty-icon">🔍</div>
+                <div class="empty-title">Chưa có dữ liệu Tool Call</div>
+                <p class="empty-desc">Gửi tin nhắn hoặc chọn 1 câu hỏi để xem chi tiết JSON arguments và kết quả thực thi ở đây.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sub-Panel 2: Raw Turn JSON Payload -->
+          <div class="insp-panel" id="insp-panel-raw">
+            <div class="insp-panel-intro">
+              <span class="insp-subhead">Payload lượt tương tác đầy đủ (JSON):</span>
+              <button class="btn-copy-sm" id="btn-copy-raw-json">📋 Copy JSON</button>
+            </div>
+            <div class="json-code-box">
+              <pre><code id="raw-turn-json-code">// Payload JSON lượt chat sẽ hiển thị tại đây...</code></pre>
+            </div>
+          </div>
+
+          <!-- Sub-Panel 3: Hashes & Artifact Info -->
+          <div class="insp-panel" id="insp-panel-hashes">
+            <div class="metadata-card">
+              <div class="meta-row">
+                <span class="meta-label">Artifact Version:</span>
+                <code class="meta-val" id="meta-artifact-val">v0</code>
+              </div>
+              <div class="meta-row">
+                <span class="meta-label">System Prompt Hash:</span>
+                <code class="meta-val" id="meta-prompt-hash-val">...</code>
+              </div>
+              <div class="meta-row">
+                <span class="meta-label">Tools Declaration Hash:</span>
+                <code class="meta-val" id="meta-tools-hash-val">...</code>
+              </div>
+              <div class="meta-row">
+                <span class="meta-label">Active Provider:</span>
+                <code class="meta-val" id="meta-provider-val">Simulator</code>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- MODAL: VIEW SYSTEM PROMPT OR TOOLS -->
+    <div class="modal-overlay hidden" id="modal-overlay">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modal-title">Thông Tin Hệ Thống</h3>
+          <button class="modal-close-btn" id="btn-close-modal">✕</button>
+        </div>
+        <div class="modal-body" id="modal-body-content">
+          <pre><code id="modal-code-block"></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast-container" id="toast-container"></div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+

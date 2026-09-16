@@ -1,7 +1,291 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
-  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "description": "Original group evaluation cases for IT Helpdesk Agent: 5 single-turn and 5 multi-turn cases covering service checks, device inspection, policy routing, missing info clarification, and write boundaries.",
+  "allowed_failure_types": [
+    "wrong_tool",
+    "wrong_arg_value",
+    "wrong_boundary",
+    "unnecessary_tool",
+    "out_of_scope",
+    "missing_info"
+  ],
+  "cases": [
+    {
+      "id": "G01_check_printer_status",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra tình trạng dịch vụ in ấn printing trên production hiện tại.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "printing",
+              "environment": "production"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "route_shared_service",
+        "difficulty": "easy",
+        "what_it_tests": "Kiểm tra trạng thái dịch vụ in ấn dùng chung phải gọi check_service_status."
+      }
+    },
+    {
+      "id": "G02_inspect_printer_hardware",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra tình trạng phần cứng máy in PR-404 giúp mình.",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "PR-404",
+              "check": "hardware"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "device_check_arg",
+        "difficulty": "medium",
+        "what_it_tests": "Yêu cầu kiểm tra thiết bị cụ thể PR-404 với check=hardware."
+      }
+    },
+    {
+      "id": "G03_policy_external_tools",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tìm quy định công ty về việc sử dụng phần mềm bên ngoài external tools.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "policy",
+            "args": {
+              "policy_area": "external_tools"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "route_policy",
+        "difficulty": "medium",
+        "what_it_tests": "Tra cứu quy định công ty phải định tuyến đúng policy_area external_tools."
+      }
+    },
+    {
+      "id": "G04_missing_device_for_network",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra kết nối mạng trên máy tính để bàn của mình với.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "clarify_asset",
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu mã tài sản thiết bị thì bắt buộc phải gọi clarify để hỏi lại."
+      }
+    },
+    {
+      "id": "G05_confirm_printer_ticket",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tạo ticket mức medium vì máy in PR-502 bị kẹt giấy liên tục.",
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "confirm_write",
+        "difficulty": "medium",
+        "what_it_tests": "Yêu cầu tạo ticket là hành động ghi dữ liệu, bắt buộc phải hỏi xác nhận trước."
+      }
+    },
+    {
+      "id": "G06_multiturn_clarify_asset",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra phần mềm trên máy tính giúp tôi."
+        },
+        {
+          "role": "user",
+          "content": "Mã máy của mình là DT-031."
+        },
+        {
+          "role": "user",
+          "content": "Đúng rồi, kiểm tra software trên DT-031 nhé."
+        }
+      ],
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "DT-031",
+              "check": "software"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_fill_asset",
+        "difficulty": "hard",
+        "what_it_tests": "Ghi nhận mã máy bổ sung qua nhiều lượt và gọi đúng inspect_device."
+      }
+    },
+    {
+      "id": "G07_multiturn_policy_switch",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tìm quy định về cấp phát quyền truy cập tài khoản."
+        },
+        {
+          "role": "user",
+          "content": "Thôi đổi sang tìm chính sách bảo mật dữ liệu và quyền riêng tư nhé."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "policy",
+            "args": {
+              "query": "chính sách bảo mật dữ liệu và quyền riêng tư",
+              "policy_area": "data_privacy"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_switch_policy",
+        "difficulty": "medium",
+        "what_it_tests": "Chuyển hướng intent sang tra cứu chính sách bảo mật data_privacy."
+      }
+    },
+    {
+      "id": "G08_multiturn_change_device_and_check",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra security của máy LT-204."
+        },
+        {
+          "role": "user",
+          "content": "Mình đọc nhầm mã, máy cần kiểm tra là LT-318."
+        },
+        {
+          "role": "user",
+          "content": "Và chuyển sang kiểm tra phần cứng hardware của LT-318."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-318",
+              "check": "hardware"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_correction",
+        "difficulty": "hard",
+        "what_it_tests": "Cập nhật cả mã máy mới và danh mục kiểm tra mới nhất ở lượt sau."
+      }
+    },
+    {
+      "id": "G09_multiturn_ticket_confirm_flow",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tạo ticket khẩn cấp critical cho máy in PR-404."
+        },
+        {
+          "role": "user",
+          "content": "Đổi ưu tiên về high thôi."
+        },
+        {
+          "role": "user",
+          "content": "Tôi muốn xem lại thông tin và xác nhận trước khi bạn bấm tạo."
+        }
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_confirmation",
+        "difficulty": "hard",
+        "what_it_tests": "Sau khi đổi thông tin ticket vẫn phải giữ ranh giới hỏi xác nhận."
+      }
+    },
+    {
+      "id": "G10_multiturn_cancel_ticket",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tạo ticket cho lỗi đăng nhập SSO trên máy DT-087."
+        },
+        {
+          "role": "user",
+          "content": "À mình tự xử lý được rồi, hủy bỏ không cần tạo ticket nữa."
+        }
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "metadata": {
+        "skill": "multiturn_cancel",
+        "difficulty": "hard",
+        "what_it_tests": "Lệnh hủy ở lượt sau phải thắng yêu cầu tạo ticket trước đó; không gọi tool."
+      }
+    }
+  ]
 }
