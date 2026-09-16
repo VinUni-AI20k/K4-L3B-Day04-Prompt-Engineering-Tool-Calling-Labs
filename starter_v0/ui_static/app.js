@@ -96,7 +96,7 @@ function appendAssistant(turn) {
     </div>
     <div class="markdown-body">${marked.parse(content)}</div>
     <button type="button" class="btn-copy" onclick="copyText(this)" data-raw="${escapeHtml(content)}">Copy</button>
-    ${tools ? \`<div class="tools">\${tools}</div>\` : ""}
+    ${tools ? `<div class="tools">${tools}</div>` : ""}
   `;
   logEl.appendChild(wrap);
   wrap.scrollIntoView({ behavior: "smooth", block: "end" });
