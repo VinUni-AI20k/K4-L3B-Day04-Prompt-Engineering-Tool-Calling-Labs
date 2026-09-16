@@ -23,7 +23,7 @@ tool_declarations = load_tool_declarations(TOOLS_PATH)
 openai_tools = to_openai_tools(tool_declarations)
 artifact_version = build_artifact_version("v3", SYSTEM_PROMPT_PATH, TOOLS_PATH)
 
-st.set_page_config(page_title="Northstar Service Desk", page_icon="N", layout="wide")
+st.set_page_config(page_title="TuDaiBoTuc Help Desk", page_icon="N", layout="wide")
 
 st.markdown(
     """
@@ -31,6 +31,9 @@ st.markdown(
     @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;600;700;800&display=swap');
     :root { --ink:#17202a; --muted:#68737d; --paper:#f5f7f5; --line:#d8dfdc; --teal:#0e716d; --coral:#d45d43; }
     .stApp { background:var(--paper); color:var(--ink); }
+    [data-testid="stHeader"] { background:#102e35; }
+    [data-testid="stHeader"] * { color:#fff !important; }
+    [data-testid="stHeader"] button svg { stroke:#fff !important; fill:none !important; }
     [data-testid="stSidebar"] { background:#102e35; border-right:0; }
     [data-testid="stSidebar"] * { color:#e8f2ef; }
     .brand { padding:12px 0 24px; }
@@ -45,12 +48,41 @@ st.markdown(
     .hero p { color:var(--muted); margin:7px 0 0; }
     .stat { background:#fff; border:1px solid var(--line); padding:14px 16px; min-height:82px; }
     .stat-label { color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:1.2px; }
-    .stat-value { font-size:24px; font-weight:800; margin-top:5px; }
+    .stat-value { color:var(--muted); font-size:24px; font-weight:800; margin-top:5px; }
     .trace-card { background:#fff; border:1px solid var(--line); border-left:4px solid var(--teal); padding:14px 16px; margin:10px 0; }
     .trace-card.error { border-left-color:var(--coral); background:#fff8f6; }
     .trace-kicker { color:var(--muted); font-size:11px; font-weight:800; letter-spacing:1.2px; text-transform:uppercase; }
     .trace-title { font-size:17px; font-weight:800; margin-top:4px; }
     .stButton > button, .stDownloadButton > button { border-radius:2px; font-weight:700; }
+    [data-testid="stExpander"] details { background:#fff; border:1px solid var(--line); }
+    [data-testid="stExpander"] summary,
+    [data-testid="stExpander"] details[open] summary { background:#fff !important; color:var(--ink) !important; }
+    [data-testid="stExpander"] summary:hover,
+    [data-testid="stExpander"] summary:focus-visible { background:#e7f0ee !important; color:var(--ink) !important; }
+    [data-testid="stExpander"] summary span,
+    [data-testid="stExpander"] summary p { color:var(--ink) !important; }
+    [data-testid="stExpander"] summary svg { color:var(--ink) !important; stroke:var(--ink) !important; }
+    [data-testid="stDownloadButton"] > button,
+    .stDownloadButton > button { background:#0e716d !important; color:#fff !important; border:1px solid #07534f !important; }
+    [data-testid="stDownloadButton"] > button:hover,
+    [data-testid="stDownloadButton"] > button:focus-visible,
+    .stDownloadButton > button:hover,
+    .stDownloadButton > button:focus-visible { background:#07534f !important; color:#fff !important; }
+    [data-testid="stDownloadButton"] > button p,
+    [data-testid="stDownloadButton"] > button span,
+    [data-testid="stDownloadButton"] > button svg,
+    .stDownloadButton > button p,
+    .stDownloadButton > button span,
+    .stDownloadButton > button svg { color:#fff !important; stroke:#fff !important; }
+    [data-testid="stChatInput"] { background:#102e35; border:1px solid #79c5ba; }
+    [data-testid="stChatInput"] textarea { color:#fff !important; caret-color:#fff; }
+    [data-testid="stChatInput"] textarea::placeholder { color:#b9efe3 !important; opacity:1; }
+    [data-testid="stChatInput"] button { color:#fff !important; }
+    [data-testid="stChatInput"] button svg { stroke:#fff !important; }
+    [data-testid="stSpinner"] { color:#17202a !important; }
+    [data-testid="stSpinner"] * { color:#17202a !important; }
+    [data-testid="stAlert"] { color:#17202a; }
+    [data-testid="stAlert"] p { color:inherit !important; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -77,12 +109,12 @@ def all_events() -> list[dict[str, Any]]:
 
 def transcript_payload() -> dict[str, Any]:
     return {
-        "transcript_type": "northstar_helpdesk_evidence",
+        "transcript_type": "TuDaiBoTuc_helpdesk_evidence",
         "transcript_version": "1.0",
         "session_started": st.session_state.session_started,
         "updated_at": now_iso(),
         "artifact": artifact_version_dict(artifact_version),
-        "provider": "openrouter",
+        "provider": "groq",
         "system_prompt": str(SYSTEM_PROMPT_PATH),
         "tools_declaration": str(TOOLS_PATH),
         "turns": st.session_state.turns,
@@ -91,7 +123,7 @@ def transcript_payload() -> dict[str, Any]:
 
 def transcript_markdown() -> str:
     lines = [
-        "# Northstar Service Desk Transcript",
+        "# TuDaiBoTuc Help Desk Transcript",
         f"- Session started: {st.session_state.session_started}",
         f"- Updated: {now_iso()}",
         f"- Artifact: `{artifact_version.artifact_version}`",
@@ -131,7 +163,7 @@ def render_event(event: dict[str, Any], index: int) -> None:
     with right:
         st.caption("EXECUTION RESULT")
         if failed:
-            st.error(json.dumps(result, ensure_ascii=False, indent=2), icon="!")
+            st.error(json.dumps(result, ensure_ascii=False, indent=2))
         else:
             st.code(json.dumps(result, ensure_ascii=False, indent=2), language="json")
 
@@ -142,12 +174,21 @@ def render_turn(turn: dict[str, Any]) -> None:
     st.markdown(f"### Turn {turn['turn_index']} - {status}")
     st.markdown(f"**User request**  \n{turn['user']}")
     if turn.get("error"):
-        st.error(json.dumps(turn["error"], ensure_ascii=False, indent=2), icon="!")
+        st.error(json.dumps(turn["error"], ensure_ascii=False, indent=2))
     if not turn.get("tool_events"):
         st.info("No tool was called for this request.")
     else:
-        for index, event in enumerate(turn["tool_events"], start=1):
-            render_event(event, index)
+        evidence_index = 1
+        for round_record in turn.get("rounds", []):
+            calls = round_record.get("tool_calls", [])
+            if calls:
+                st.markdown(f"**Tool round {round_record.get('round', '?')}**")
+                for call in calls:
+                    st.caption(f"Selected tool: `{call.get('name', 'unknown_tool')}`")
+                    st.code(json.dumps(call.get("args", {}), ensure_ascii=False, indent=2), language="json")
+            for event in round_record.get("tool_results", []):
+                render_event(event, evidence_index)
+                evidence_index += 1
     if turn.get("assistant_text"):
         st.markdown("**Assistant response**")
         st.markdown(turn["assistant_text"])
@@ -158,7 +199,7 @@ init_state()
 
 with st.sidebar:
     st.markdown(
-        "<div class='brand'><span class='brand-mark'>NS</span><span class='brand-name'>Northstar<br>Service Desk</span><span class='brand-sub'>Evidence console</span></div>",
+        "<div class='brand'><span class='brand-mark'>NS</span><span class='brand-name'>TuDaiBoTuc<br>Service Desk</span><span class='brand-sub'>Evidence console</span></div>",
         unsafe_allow_html=True,
     )
     st.caption("A live helpdesk workspace where every answer stays attached to its evidence.")
@@ -175,7 +216,7 @@ with st.sidebar:
     st.code(artifact_version.artifact_version, language="text")
 
 st.markdown(
-    "<div class='hero'><div class='eyebrow'>Northstar Labs / Internal IT</div><h1>Helpdesk command center</h1><p>Ask for a diagnosis, policy lookup, or service check. The evidence trail stays visible.</p></div>",
+    "<div class='hero'><div class='eyebrow'>VinUni Labs / Internal IT</div><h1>Helpdesk command center</h1><p>Ask for a diagnosis, policy lookup, or service check. The evidence trail stays visible.</p></div>",
     unsafe_allow_html=True,
 )
 
@@ -197,9 +238,9 @@ with st.expander("Export transcript", expanded=False):
     payload = transcript_payload()
     download_json, download_markdown = st.columns(2)
     with download_json:
-        st.download_button("Download evidence JSON", json.dumps(payload, ensure_ascii=False, indent=2), "northstar-transcript.json", "application/json", use_container_width=True)
+        st.download_button("Download evidence JSON", json.dumps(payload, ensure_ascii=False, indent=2), "tudaibotuc-transcript.json", "application/json", use_container_width=True)
     with download_markdown:
-        st.download_button("Download report Markdown", transcript_markdown(), "northstar-transcript.md", "text/markdown", use_container_width=True)
+        st.download_button("Download report Markdown", transcript_markdown(), "tudaibotuc-transcript.md", "text/markdown", use_container_width=True)
 
 if prompt := st.chat_input("Describe the IT issue or ask for a service check..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
@@ -210,7 +251,7 @@ if prompt := st.chat_input("Describe the IT issue or ask for a service check..."
         with st.spinner("Routing request and collecting evidence..."):
             try:
                 result = run_model_tool_loop(
-                    provider=make_provider("openrouter"),
+                    provider=make_provider("groq"),
                     messages=chat_history,
                     tools=openai_tools,
                     model=None,
@@ -243,4 +284,4 @@ if prompt := st.chat_input("Describe the IT issue or ask for a service check..."
                     "error": error,
                 }
                 st.session_state.turns.append(turn)
-                st.error(json.dumps(error, ensure_ascii=False, indent=2), icon="!")
+                st.error(json.dumps(error, ensure_ascii=False, indent=2))
