@@ -44,15 +44,18 @@ Thu nhỏ phạm vi sản phẩm nếu khách hàng đưa thêm thông tin (mode
 
 ## A3. Câu hỏi mẫu
 
-1.
-2.
-3.
+1. Tôi muốn mua laptop khoảgn 15 triệu để làm đồ họa, gợi ý đi
+2. So sánh giúp tôi iPhone 15 và Samsung S24 về giá và cấu hình camera
+3. Con chuột Logitech MX Master 3 này còn hàng không, giá bao nhiêu
 
 ## A4. Kịch bản demo đã rehearse
 
 | Scenario | Tool trace cần thấy | Cải thiện version | Fallback run/transcript |
 |---|---|---|---|
 | 1 |  |  |  |
+| 1| clarify → recommend_product | v1 | runs/v1_scenario1.json |
+| 2 | search_product → clarify → search_product | v2 | runs/v2_scenario2.json |
+| 2 Khách hỏi out bound → tạo ticket với hỗ trợ | clarify (confirm) → create_ticket | v2 | runs/v2_scenario3.json |
 
 # PHẦN B — Chi tiết và evidence
 
