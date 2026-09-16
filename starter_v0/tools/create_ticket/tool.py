@@ -6,15 +6,14 @@ import re
 from datetime import datetime, timezone
 from typing import Any
 
-from tools._shared import ROOT, err
+from tools._shared import (
+    ROOT, err, contains_sensitive_payload, ticket_payload, consume_ticket_authorization,
+)
 
 
 TICKET_DIR = ROOT / "tickets"
 ASSET_ID_PATTERN = re.compile(r"^(?:LT|DT|MB|PR|RM)-\d+$", re.IGNORECASE)
-SENSITIVE_DATA_PATTERN = re.compile(
-    r"\b(?:password|passwd|token|api[ _-]?key|mfa|otp|recovery[ _-]?code)(?:\s*[:=]\s*|\s+(?:is|la|là)\s+)\S+",
-    re.IGNORECASE,
-)
+
 
 
 def create_ticket(
@@ -40,17 +39,22 @@ def create_ticket(
     normalized_asset = (asset_id or "").strip().upper()
     if normalized_asset and not ASSET_ID_PATTERN.fullmatch(normalized_asset):
         return {"tool": "create_ticket", "error": "invalid_asset_id"}
-    if SENSITIVE_DATA_PATTERN.search(normalized_summary):
+    if contains_sensitive_payload(normalized_summary):
         return {
             "tool": "create_ticket",
             "error": "restricted_sensitive_data",
             "message": "Remove credentials, tokens, MFA values, and recovery codes from the ticket summary.",
         }
-    if confirmed is not True:
+    payload_key = ticket_payload(normalized_summary, normalized_priority, normalized_asset)
+    if confirmed is not True or not consume_ticket_authorization(payload_key):
         return {
             "tool": "create_ticket",
             "status": "needs_confirmation",
-            "message": "Create the ticket only after explicit user confirmation.",
+            "awaiting_user": True,
+            "draft": dict(zip(("summary", "priority", "asset_id"), payload_key)),
+            "question": ("Confirm this exact ticket with a standalone yes / xac nhan: "
+                         + json.dumps(dict(zip(("summary", "priority", "asset_id"), payload_key)), ensure_ascii=False)),
+            "message": "A matching execution-owned confirmation is required.",
         }
     try:
         now = datetime.now(timezone.utc)

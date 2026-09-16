@@ -5,7 +5,7 @@ from typing import Any
 
 import yaml
 
-from tools._shared import ROOT, err, fold_text, terms
+from tools._shared import ROOT, err, split_reference_text, terms
 
 
 KB_DIR = ROOT / "helpdesk_data" / "knowledge_base"
@@ -20,22 +20,8 @@ def _load_doc(path: Path) -> tuple[dict[str, Any], str]:
     return {}, raw.strip()
 
 
-def _split_trusted_content(body: str) -> tuple[str, list[str]]:
-    trusted: list[str] = []
-    untrusted: list[str] = []
-    suspicious_markers = (
-        "assistant:", "system:", "developer:", "ignore all", "ignore previous",
-        "bo qua chi dan", "bỏ qua chỉ dẫn", "call create_ticket", "reveal the system prompt",
-    )
-    for line in body.splitlines():
-        stripped = line.strip()
-        folded = fold_text(stripped)
-        if stripped.startswith(">") or any(marker in folded for marker in suspicious_markers):
-            if stripped:
-                untrusted.append(stripped.lstrip("> ").strip())
-            continue
-        trusted.append(line)
-    return "\n".join(trusted).strip(), untrusted
+def _split_trusted_content(value: str) -> tuple[str, list[str]]:
+    return split_reference_text(value)
 
 
 def search_kb(query: str = "", category: str = "all", top_k: int = 3) -> dict[str, Any]:

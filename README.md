@@ -77,6 +77,16 @@ python run_eval.py --provider openrouter --version v0 --suite base --eval-cases 
 
 Thay `openrouter` bằng `openai`, `anthropic` hoặc `gemini` khi dùng provider khác. Không commit `.env`.
 
+### Chạy UI chat
+
+Sau khi cài requirements và cấu hình `.env`, chạy từ thư mục `starter_v0`:
+
+```powershell
+streamlit run app.py
+```
+
+UI dùng cùng agent loop với CLI, hiển thị artifact version, tool input/result/error, trạng thái chờ bổ sung thông tin và transcript JSON.
+
 ## Tài liệu cần đọc
 
 | File | Dùng khi |

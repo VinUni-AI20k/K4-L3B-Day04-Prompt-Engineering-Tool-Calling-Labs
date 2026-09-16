@@ -1,7 +1,304 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
-  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "description": "10 original IT helpdesk cases authored by the team: 5 single-turn query cases and 5 multi-turn turns cases.",
+  "allowed_failure_types": [
+    "wrong_tool",
+    "wrong_arg_value",
+    "wrong_boundary",
+    "unnecessary_tool",
+    "out_of_scope",
+    "missing_info"
+  ],
+  "cases": [
+    {
+      "id": "G01_service_and_device_parallel",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra trạng thái SSO production và chẩn đoán phần cứng máy LT-204 giúp tôi.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "sso",
+              "environment": "production"
+            }
+          },
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-204",
+              "check": "hardware"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "parallel_service_device",
+        "difficulty": "hard",
+        "what_it_tests": "Một yêu cầu gồm cả service SSO và phần cứng thiết bị LT-204 cần gọi đồng thời 2 tool tương ứng."
+      }
+    },
+    {
+      "id": "G02_ambiguous_env_wifi",
+      "phase": "B",
+      "suite": "group",
+      "query": "Hệ thống Wi-Fi ở môi trường test nội bộ hiện có bị chập chờn không?",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "choice",
+              "options": [
+                "production",
+                "staging"
+              ]
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "clarify_environment",
+        "difficulty": "medium",
+        "what_it_tests": "Môi trường test không nằm trong enum hợp lệ, bắt buộc clarify chọn production hoặc staging."
+      }
+    },
+    {
+      "id": "G03_out_of_scope_weather",
+      "phase": "B",
+      "suite": "group",
+      "query": "Dự báo thời tiết Hà Nội hôm nay trời có mưa không bạn?",
+      "failure_type": "out_of_scope",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "metadata": {
+        "skill": "out_of_scope",
+        "difficulty": "easy",
+        "what_it_tests": "Câu hỏi thời tiết nằm ngoài phạm vi IT service desk, từ chối và không được gọi tool."
+      }
+    },
+    {
+      "id": "G04_policy_access_control",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tìm quy định và chính sách về kiểm soát truy cập đối với tài khoản nhân viên mới.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "policy",
+            "args": {
+              "policy_area": "access_control"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "policy_lookup",
+        "difficulty": "medium",
+        "what_it_tests": "Câu hỏi về chính sách kiểm soát truy cập phải gọi policy với policy_area=access_control."
+      }
+    },
+    {
+      "id": "G05_search_device_specs_public",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tra cứu thông số kỹ thuật công khai của dòng laptop Dell Latitude 5420.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_device_info",
+            "args": {
+              "manufacturer": "Dell",
+              "model": "Latitude 5420",
+              "query_type": "specs"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "public_device_search",
+        "difficulty": "medium",
+        "what_it_tests": "Tra cứu thông số công khai chỉ dùng manufacturer và model, query_type=specs, không kèm thông tin nội bộ."
+      }
+    },
+    {
+      "id": "G06_multiturn_correct_check_type",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra phần cứng máy LT-204."
+        },
+        {
+          "role": "user",
+          "content": "Thôi không cần kiểm tra phần cứng, máy bị lỗi không vào được mạng."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ kiểm tra network trên LT-204 thôi nhé."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-204",
+              "check": "network"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_correction",
+        "difficulty": "hard",
+        "what_it_tests": "Thông tin sửa đổi ở lượt sau phải thay thế thông tin cũ, kiểm tra máy LT-204 với check=network."
+      }
+    },
+    {
+      "id": "G07_multiturn_cancel_action",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tạo ticket sự cố màn hình máy LT-318 mức high."
+        },
+        {
+          "role": "user",
+          "content": "Khoan đã, IT vừa đem màn hình mới qua thay rồi."
+        },
+        {
+          "role": "user",
+          "content": "Hủy yêu cầu, không cần tạo ticket hay hỏi xác nhận nữa."
+        }
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "metadata": {
+        "skill": "multiturn_cancel_ticket",
+        "difficulty": "hard",
+        "what_it_tests": "Khi user hủy yêu cầu tạo ticket, agent không được gọi create_ticket hay clarify."
+      }
+    },
+    {
+      "id": "G08_multiturn_clarify_missing_asset_then_inspect",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Laptop của tôi đang bị lỗi màn hình xanh liên tục."
+        },
+        {
+          "role": "user",
+          "content": "Mã tem tài sản dán trên máy là LT-240."
+        },
+        {
+          "role": "user",
+          "content": "Kiểm tra toàn diện máy đó giúp tôi."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-240",
+              "check": "all"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_fill_asset",
+        "difficulty": "hard",
+        "what_it_tests": "Bổ sung asset ID ở lượt sau và thực hiện kiểm tra toàn diện máy LT-240."
+      }
+    },
+    {
+      "id": "G09_multiturn_switch_status_to_kb",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra dịch vụ email production có bị nghẽn không."
+        },
+        {
+          "role": "user",
+          "content": "Dịch vụ vẫn bình thường à? Vậy chắc do cấu hình máy tôi."
+        },
+        {
+          "role": "user",
+          "content": "Tìm giúp hướng dẫn cài đặt và đồng bộ hộp thư Outlook trên máy tính."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_kb",
+            "args": {
+              "category": "email"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_switch_tool",
+        "difficulty": "hard",
+        "what_it_tests": "Thay đổi ý định ở lượt sau, chuyển từ kiểm tra status sang tra cứu Knowledge Base về email."
+      }
+    },
+    {
+      "id": "G10_multiturn_ticket_confirmation_boundary",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tạo ticket báo lỗi mạng Wi-Fi tầng 3 trên thiết bị DT-087 mức medium."
+        },
+        {
+          "role": "user",
+          "content": "Đổi mức ưu tiên lên critical vì đang họp ban giám đốc."
+        },
+        {
+          "role": "user",
+          "content": "Hãy tạo ticket với các thông tin đã cập nhật đó."
+        }
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_confirmation",
+        "difficulty": "hard",
+        "what_it_tests": "Sau khi thay đổi mức ưu tiên, agent vẫn phải dừng lại ở ranh giới hỏi xác nhận yes_no trước khi tạo ticket."
+      }
+    }
+  ]
 }

@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 import os
+import json
+from pathlib import Path
 import re
 from typing import Any
 from urllib.parse import urlparse
 
 import requests
 
-from tools._shared import TIMEOUT, err
+from tools._shared import split_reference_text, TIMEOUT, err
 
 
 VENDOR_DOMAINS = {
@@ -15,6 +17,8 @@ VENDOR_DOMAINS = {
     "dell": ["dell.com"],
     "hp": ["support.hp.com"],
     "hewlett-packard": ["support.hp.com"],
+    "apple": ["support.apple.com", "apple.com"],
+    "logitech": ["logitech.com", "logitech.com.cn"],
 }
 QUERY_LABELS = {
     "specs": "technical specifications",
@@ -30,15 +34,7 @@ def _domain(url: str) -> str:
 
 
 def _safe_external_text(value: str) -> tuple[str, list[str]]:
-    safe_lines: list[str] = []
-    suspicious_lines: list[str] = []
-    markers = ("system:", "assistant:", "developer:", "ignore previous", "ignore all", "tool_calls_json")
-    for line in (value or "").splitlines():
-        if any(marker in line.casefold() for marker in markers):
-            suspicious_lines.append(line.strip())
-        else:
-            safe_lines.append(line)
-    return "\n".join(safe_lines).strip(), suspicious_lines
+    return split_reference_text(value)
 
 
 def _allowed_official_domain(result_domain: str, official_domains: list[str]) -> bool:
@@ -68,6 +64,15 @@ def search_device_info(
             "error": "restricted_internal_identifier",
             "message": "Remove asset and employee identifiers before external search.",
         }
+    # Exact reviewed public identities prevent arbitrary private text in free-form fields.
+    catalog = json.loads(Path(__file__).with_name("public_products.json").read_text(encoding="utf-8"))
+    normalize = lambda value: " ".join(value.casefold().split())
+    approved = {(normalize(item["manufacturer"]), normalize(item["model"])): item for item in catalog}
+    product = approved.get((normalize(manufacturer_value), normalize(model_value)))
+    if product is None:
+        return {"tool": "search_device_info", "error": "unapproved_public_product_identity",
+                "message": "Use a reviewed public manufacturer/model pair without internal data."}
+    manufacturer_value, model_value = product["manufacturer"], product["model"]
     if query_type_value not in QUERY_LABELS:
         return {"tool": "search_device_info", "error": "invalid_query_type", "query_type": query_type_value}
 
