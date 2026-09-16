@@ -1,7 +1,286 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
-  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "description": "Original team IT helpdesk evaluation suite: exactly 5 single-turn query cases and 5 multi-turn turns cases.",
+  "allowed_failure_types": [
+    "wrong_tool",
+    "wrong_arg_value",
+    "wrong_boundary",
+    "unnecessary_tool",
+    "out_of_scope",
+    "missing_info"
+  ],
+  "cases": [
+    {
+      "id": "G01_meeting_room_kb",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tìm hướng dẫn kết nối máy tính với màn hình TV trong phòng họp lớn.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_kb",
+            "args": {
+              "category": "meeting_room"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "meeting_room_kb",
+        "difficulty": "easy",
+        "what_it_tests": "Tra cứu hướng dẫn thiết bị phòng họp định tuyến đúng vào search_kb với category meeting_room."
+      }
+    },
+    {
+      "id": "G02_invalid_environment_clarify",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra hệ thống SSO trên môi trường sandbox của team dev giúp tôi.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "choice",
+              "options": [
+                "production",
+                "staging"
+              ]
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "clarify_environment_enum",
+        "difficulty": "medium",
+        "what_it_tests": "Môi trường không thuộc enum [production, staging] bắt buộc phải hỏi lại bằng clarify dạng choice."
+      }
+    },
+    {
+      "id": "G03_external_device_specs",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tìm thông số kỹ thuật chính hãng trên web cho laptop Dell XPS 15 9530.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_device_info",
+            "args": {
+              "manufacturer": "Dell",
+              "model": "XPS 15 9530",
+              "query_type": "specs"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "external_device_search",
+        "difficulty": "medium",
+        "what_it_tests": "Tra cứu thông tin model phần cứng công khai phải dùng search_device_info với query_type specs."
+      }
+    },
+    {
+      "id": "G04_ticket_unconfirmed_boundary",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tạo ngay ticket mức high cho máy in PR-102 đang bị kẹt giấy liên tục.",
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "confirm_ticket_creation",
+        "difficulty": "medium",
+        "what_it_tests": "Tạo ticket là hành động thay đổi dữ liệu, phải dừng lại xin xác nhận yes/no trước khi tạo."
+      }
+    },
+    {
+      "id": "G05_out_of_scope_cooking",
+      "phase": "B",
+      "suite": "group",
+      "query": "Hướng dẫn tôi cách nấu món bò kho tiêu chuẩn cho bữa tối.",
+      "failure_type": "out_of_scope",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "metadata": {
+        "skill": "out_of_scope_refusal",
+        "difficulty": "easy",
+        "what_it_tests": "Yêu cầu nằm ngoài phạm vi IT Helpdesk phải từ chối lịch sự và không gọi bất kỳ tool nào."
+      }
+    },
+    {
+      "id": "G06_multiturn_clarify_asset_then_inspect",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Laptop của tôi bị lỗi card mạng không kết nối được internet, kiểm tra giúp tôi."
+        },
+        {
+          "role": "user",
+          "content": "Mã thiết bị của tôi là LT-512, kiểm tra riêng phần network nhé."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-512",
+              "check": "network"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_device_inspection",
+        "difficulty": "medium",
+        "what_it_tests": "Kế thừa ngữ cảnh nhiều lượt để trích xuất đúng asset_id và check=network."
+      }
+    },
+    {
+      "id": "G07_multiturn_confirmed_ticket",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Soạn giúp tôi ticket lỗi Wi-Fi cho máy DT-105 với priority medium."
+        },
+        {
+          "role": "user",
+          "content": "Đổi priority thành critical giúp tôi."
+        },
+        {
+          "role": "user",
+          "content": "Tôi đã xem lại và xác nhận tạo ticket với thông tin trên."
+        }
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "create_ticket",
+            "args": {
+              "asset_id": "DT-105",
+              "priority": "critical",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_confirmed_write",
+        "difficulty": "hard",
+        "what_it_tests": "Cập nhật thay đổi tham số qua các turn và thực thi tạo ticket sau khi người dùng xác nhận rõ ràng."
+      }
+    },
+    {
+      "id": "G08_multiturn_cancel_ticket",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tạo ticket sự cố lỗi đồng bộ email trên LT-204 mức high."
+        },
+        {
+          "role": "user",
+          "content": "Thôi dừng lại, tôi vừa sửa được rồi nên hủy yêu cầu, không tạo gì cả."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ cần xác nhận là bạn đã ghi nhận việc hủy yêu cầu này."
+        }
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "metadata": {
+        "skill": "multiturn_cancel_intent",
+        "difficulty": "hard",
+        "what_it_tests": "Người dùng hủy yêu cầu ở lượt mới nhất thì không được gọi tool tạo ticket hay clarify."
+      }
+    },
+    {
+      "id": "G09_multiturn_switch_status_to_policy",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra xem hệ thống email production có đang hoạt động bình thường không."
+        },
+        {
+          "role": "user",
+          "content": "Thôi không xem trạng thái nữa, cho tôi hỏi quy định về bảo mật dữ liệu và privacy của công ty như thế nào?"
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "policy",
+            "args": {
+              "policy_area": "data_privacy"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_switch_intent",
+        "difficulty": "hard",
+        "what_it_tests": "Chuyển hẳn sang intent mới về chính sách bảo mật, gọi policy tool thay vì status tool."
+      }
+    },
+    {
+      "id": "G10_multiturn_lookup_then_inspect",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tôi là nhân viên mới mã EMP-3021, tra cứu thông tin tài khoản của tôi."
+        },
+        {
+          "role": "user",
+          "content": "Kiểm tra tổng thể tình trạng máy tính LT-108 được cấp cho tôi xem có lỗi gì không."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-108",
+              "check": "all"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_asset_focus",
+        "difficulty": "medium",
+        "what_it_tests": "Lượt mới nhất yêu cầu kiểm tra thiết bị cụ thể phải định tuyến sang inspect_device(all)."
+      }
+    }
+  ]
 }
