@@ -20,7 +20,7 @@
 | Mai Hoàng Anh | 2A202602857 | Prompt + safety + group eval | Sửa `wrong_boundary` (xác nhận ticket, injection defense), viết 10 case `eval_group.json` |
 | Nguyễn Thành Vinh | 2A202602889 | Tool routing | Fix `wrong_tool` H03, H04, H17 (KB category, lookup_user không kèm inspect, triage 3 nguồn) |
 | Nguyễn Văn Diện | 2A202602615 | Tool routing | Fix `wrong_tool`, merge/xử lý xung đột `system_prompt.md` |
-| Lâm Quang Anh Quân | 2A202602467 | Missing information | Fix `missing_info` H10, H11, H19 (clarify asset ID, employee ID, environment) |
+| Lâm Quang Anh Quân | 2A202602467 | Missing info & UI/Logic | Fix `missing_info` H10, H11, H19 (clarify ID, env), fix parallel tool call, thêm Markdown & Copy UI |
 
 - Provider/model: **OpenRouter / `openai/gpt-4o-mini`** (nhóm đã thử Gemini nhưng run `v0_B_base_gemini_20260915T184035147572.json` có `provider_error_cases=26`, không dùng làm evidence)
 
@@ -237,7 +237,7 @@ Commit kỹ thuật đối chiếu (không thay cho INDIVIDUAL tự viết):
 | Mai Hoàng Anh | `e96515a` prompt wrong_boundary + eval_group 10 cases; `c824272` fix wrong_boundary |
 | Nguyễn Thành Vinh | `a172b7d` fix H04; `f8f6555` fix H03/H17; PR #5 |
 | Nguyễn Văn Diện | `c8a72f2` sửa wrong_tool; `e531022` merge conflict system_prompt.md |
-| Lâm Quang Anh Quân | `4bd38c7` missing_info H10/H11/H19; PR #4 |
+| Lâm Quang Anh Quân | `4bd38c7` missing_info H10/H11/H19; PR #4; `cd30f59` parallel tools; `2c2f713` Markdown/Copy UI |
 
 ## C3. Final checkout
 

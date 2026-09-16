@@ -59,6 +59,17 @@ function appendUser(text) {
   wrap.scrollIntoView({ behavior: "smooth", block: "end" });
 }
 
+function copyText(btn) {
+  const content = btn.getAttribute("data-raw");
+  navigator.clipboard.writeText(content).then(() => {
+    const original = btn.textContent;
+    btn.textContent = "Đã chép!";
+    setTimeout(() => { btn.textContent = original; }, 2000);
+  }).catch(() => {
+    btn.textContent = "Lỗi!";
+  });
+}
+
 function appendAssistant(turn) {
   const wrap = document.createElement("article");
   wrap.className = "msg assistant";
@@ -77,13 +88,15 @@ function appendAssistant(turn) {
         <pre>${escapeHtml(pretty(event.result || event.error || {}))}</pre>
       </div>`;
   }).join("");
+  const content = turn.assistant_text || turn.error || "";
   wrap.innerHTML = `
     <div class="who">
       <span>Agent</span>
       <span class="status ${status}">${escapeHtml(turn.status_label || status)}</span>
     </div>
-    <div>${escapeHtml(turn.assistant_text || turn.error || "")}</div>
-    ${tools ? `<div class="tools">${tools}</div>` : ""}
+    <div class="markdown-body">${marked.parse(content)}</div>
+    <button type="button" class="btn-copy" onclick="copyText(this)" data-raw="${escapeHtml(content)}">Copy</button>
+    ${tools ? \`<div class="tools">\${tools}</div>\` : ""}
   `;
   logEl.appendChild(wrap);
   wrap.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -93,7 +106,9 @@ function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
 
 async function loadMeta() {
