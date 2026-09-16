@@ -84,13 +84,21 @@ def run_model_tool_loop(
     tools: list[dict[str, Any]],
     model: str | None,
     max_tool_rounds: int,
+    verbose: bool = True,
+    tool_choice: Any | None = None,
 ) -> dict[str, Any]:
     working_messages = list(messages)
     rounds: list[dict[str, Any]] = []
     all_tool_events: list[dict[str, Any]] = []
 
     for round_index in range(1, max_tool_rounds + 1):
-        response = provider.complete(working_messages, tools, model=model, temperature=0.0)
+        response = provider.complete(
+            working_messages,
+            tools,
+            model=model,
+            temperature=0.0,
+            tool_choice=tool_choice if round_index == 1 else None,
+        )
         calls = response.tool_calls
         round_record: dict[str, Any] = {
             "round": round_index,
@@ -110,9 +118,11 @@ def run_model_tool_loop(
 
         working_messages.append(assistant_tool_message(response.text, calls))
         non_clarification_events: list[dict[str, Any]] = []
+        awaiting_user_question = None
 
         for call in calls:
-            print(f"[tool] {call.name}({json.dumps(call.args, ensure_ascii=True, sort_keys=True)})")
+            if verbose:
+                print(f"[tool] {call.name}({json.dumps(call.args, ensure_ascii=True, sort_keys=True)})")
             event = execute_tool_call(call)
             round_record["tool_results"].append(event)
             all_tool_events.append(event)
@@ -121,16 +131,19 @@ def run_model_tool_loop(
             # not by a hard-coded tool name.
             result = event.get("result", {})
             if isinstance(result, dict) and result.get("awaiting_user"):
-                question = result.get("question") or call.args.get("question") or "Bạn bổ sung thêm thông tin nhé."
-                rounds.append(round_record)
-                return {
-                    "status": "waiting_for_user",
-                    "assistant_text": question,
-                    "rounds": rounds,
-                    "tool_events": all_tool_events,
-                }
+                if awaiting_user_question is None:
+                    awaiting_user_question = result.get("question") or call.args.get("question") or "Bạn bổ sung thêm thông tin nhé."
+            else:
+                non_clarification_events.append(event)
 
-            non_clarification_events.append(event)
+        if awaiting_user_question is not None:
+            rounds.append(round_record)
+            return {
+                "status": "waiting_for_user",
+                "assistant_text": awaiting_user_question,
+                "rounds": rounds,
+                "tool_events": all_tool_events,
+            }
 
         rounds.append(round_record)
         working_messages.append(tool_results_message(non_clarification_events))
