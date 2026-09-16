@@ -5,7 +5,7 @@ from typing import Any
 
 import yaml
 
-from tools._shared import ROOT, err, fold_text, terms
+from tools._shared import ROOT, err, split_reference_text, terms
 
 
 POLICY_DIR = ROOT / "company_policy"
@@ -38,23 +38,10 @@ def _sections(body: str) -> list[tuple[str, str]]:
     return [(title, "\n".join(lines).strip()) for title, lines in sections if "\n".join(lines).strip()]
 
 
-def _split_trusted_facts(section_text: str) -> tuple[str, list[str]]:
-    fact_lines: list[str] = []
-    untrusted_lines: list[str] = []
-    suspicious_markers = ("assistant:", "system:", "developer:", "ignore", "bo qua", "bỏ qua", "tro ly:", "trợ lý:")
-    for line in section_text.splitlines():
-        stripped = line.strip()
-        folded = fold_text(stripped)
-        if stripped.startswith(">") or any(marker in folded for marker in suspicious_markers):
-            if stripped:
-                untrusted_lines.append(stripped.lstrip("> ").strip())
-            continue
-        if stripped:
-            fact_lines.append(stripped)
-    facts = " ".join(fact_lines)
-    if len(facts) > 1000:
-        facts = facts[:997] + "..."
-    return facts, untrusted_lines
+def _split_trusted_facts(value: str) -> tuple[str, list[str]]:
+    safe, removed = split_reference_text(value)
+    facts = " ".join(line.strip() for line in safe.splitlines() if line.strip())
+    return (facts[:997] + "..." if len(facts) > 1000 else facts), removed
 
 
 def search_company_policy(query: str = "", policy_area: str = "all", top_k: int = 3) -> dict[str, Any]:

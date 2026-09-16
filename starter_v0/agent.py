@@ -5,6 +5,7 @@ from typing import Any
 
 from providers.base import Provider, ToolCall
 from tools import TOOL_FUNCTIONS
+from tools._shared import TicketConfirmation
 
 
 @dataclass
@@ -27,8 +28,11 @@ class HelpdeskAgent:
         self.system_prompt = system_prompt
         self.tools = tools or []
         self.model = model
+        self.confirmation = TicketConfirmation()
 
     def run(self, user_messages: list[dict[str, str]], *, tool_choice: Any | None = None) -> AgentRun:
+        latest_user = next((m["content"] for m in reversed(user_messages) if m["role"] == "user"), "")
+        self.confirmation.begin_turn(latest_user)
         messages = [{"role": "system", "content": self.system_prompt}, *user_messages]
         response = self.provider.complete(
             messages,
@@ -44,7 +48,12 @@ class HelpdeskAgent:
                 results.append({"tool": call.name, "error": "unknown_tool"})
                 continue
             try:
-                result = func(**call.args)
+                if call.name == "create_ticket":
+                    with self.confirmation.authorization():
+                        result = func(**call.args)
+                    self.confirmation.observe(result)
+                else:
+                    result = func(**call.args)
             except Exception as exc:  # keep eval robust; failures are evidence
                 result = {"error": type(exc).__name__, "message": str(exc)}
             results.append({"tool": call.name, "args": call.args, "result": result})
