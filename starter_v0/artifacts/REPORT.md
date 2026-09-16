@@ -1,39 +1,46 @@
 # Day 04 Lab v3 Report — Trợ lý AI của nhóm
 
-- Lĩnh vực tự chọn:
-- Nhiệm vụ và luồng cơ bản đã chốt trước v0:
-- Đường dẫn bộ 30 câu cơ bản và 12 câu an toàn; commit chốt bộ trước v0:
-- Chức năng mở rộng ngoài luồng cơ bản (nếu có; tối đa 10 trong tổng 100 điểm):
+- Lĩnh vực tự chọn: IT Helpdesk (trợ lý dịch vụ CNTT nội bộ cho công ty giả lập Northstar Labs).
+- Nhiệm vụ và luồng cơ bản đã chốt trước v0: Hỗ trợ nhân viên nội bộ xử lý sự cố CNTT — tra cứu người dùng (`lookup_user`), kiểm tra trạng thái dịch vụ (`check_service_status`), chẩn đoán thiết bị (`inspect_device`), tìm hướng dẫn/chính sách nội bộ (`search_kb`, `policy`), hỏi lại khi thiếu thông tin (`clarify`), và chỉ tạo ticket (`create_ticket`) sau khi người dùng đã xác nhận rõ ràng. Không tự đoán `asset_id`/`employee_id`, không đưa dữ liệu nội bộ ra ngoài khi dùng `search_device_info`.
+- Đường dẫn bộ 30 câu cơ bản và 12 câu an toàn; commit chốt bộ trước v0: Dùng nguyên bộ IT có sẵn — `starter_v0/data/eval_base.json` (30 câu cơ bản) và `starter_v0/data/eval_adversarial.json` (12 câu an toàn); không chỉnh sửa bộ case. Bộ do starter cung cấp tại commit `2c1a5ec` (Create Level 3B Day04 learner lab).
+- Chức năng mở rộng ngoài luồng cơ bản (nếu có; tối đa 10 trong tổng 100 điểm): Chưa xác định — cập nhật nếu nhóm triển khai bonus tool.
 
 ## Team
 
-- Team:
+- Team: Enigma
 - Thành viên và INDIVIDUAL: [TEAM.md](../../TEAM.md)
-- Members:
-- Provider/model:
+- Members: Nguyễn Anh Tuấn (teamlead, UI/transcript/report), Đặng Quang Hưng (baseline & eval infra, v0), Nguyễn Hoàng Anh (prompt & tool declaration, v1), Nguyễn Hữu Thành (lặp v2/v3), Hà Thị Mỹ Linh (bộ case nhóm & an toàn)
+- Provider/model: Cập nhật theo run thực tế của từng version (xem `version_log.csv`); v0 baseline chạy bằng `gemini` (`gemini-3.5-flash-lite`).
 
 # PHẦN A — Giới thiệu agent
 
 ## A1. Agent này làm được gì
 
-> Viết 1–2 câu mô tả capability và giới hạn của agent.
+Agent là trợ lý IT Helpdesk nội bộ cho Northstar Labs: tra cứu người dùng, kiểm tra trạng thái dịch vụ, chẩn đoán thiết bị, tìm hướng dẫn/chính sách nội bộ, hỏi lại khi thiếu thông tin và tạo ticket sau khi đã xác nhận. Giới hạn: không xử lý yêu cầu ngoài phạm vi IT Helpdesk, không tự đoán mã tài sản/nhân viên, không tra cứu web cho thông tin nội bộ (chỉ dùng `search_device_info` cho thông tin công khai của thiết bị).
 
 **Link dùng thử:**
 
-> URL:
+> URL: (điền sau khi UI hoàn thiện)
 
 ## A2. Tool agent có
 
 | Tool | Chức năng | Core / optional / team-built |
 |---|---|---|
 | clarify | Hỏi bổ sung hoặc xác nhận | core |
-|  |  |  |
+| search_kb | Tìm hướng dẫn hỗ trợ kỹ thuật nội bộ | core |
+| check_service_status | Kiểm tra trạng thái một dịch vụ (VPN, email, SSO, wifi, printing) | core |
+| inspect_device | Kiểm tra thông tin và chẩn đoán thiết bị theo asset_id | core |
+| lookup_user | Tra cứu người dùng trong danh bạ hỗ trợ theo employee_id | core |
+| format_incident_report | Trình bày các kết quả đã thu thập thành báo cáo sự cố | core |
+| search_device_info | Tìm thông tin công khai về model thiết bị trên web (không dùng dữ liệu nội bộ) | optional |
+| policy | Tìm trong chính sách IT nội bộ | optional |
+| create_ticket | Tạo ticket hỗ trợ, chỉ sau khi người dùng xác nhận | optional |
 
 ## A3. Câu hỏi mẫu
 
-1.
-2.
-3.
+1. VPN của tôi không kết nối được, kiểm tra giúp tôi với.
+2. Máy của tôi mã tài sản AST-1042 chạy chậm, bạn kiểm tra được không?
+3. Tạo giúp tôi một ticket báo lỗi máy in ở phòng họp tầng 3.
 
 ## A4. Kịch bản demo đã rehearse
 
