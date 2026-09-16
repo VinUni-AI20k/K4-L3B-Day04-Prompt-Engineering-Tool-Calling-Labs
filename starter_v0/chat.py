@@ -3,9 +3,15 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8")
 
 from env_loader import load_lab_env
 from providers import make_provider
@@ -112,10 +118,16 @@ def run_model_tool_loop(
         non_clarification_events: list[dict[str, Any]] = []
 
         for call in calls:
-            print(f"[tool] {call.name}({json.dumps(call.args, ensure_ascii=True, sort_keys=True)})")
+            print(f"[tool] {call.name}({json.dumps(call.args, ensure_ascii=False, sort_keys=True)})")
             event = execute_tool_call(call)
             round_record["tool_results"].append(event)
             all_tool_events.append(event)
+
+            result = event.get("result", {})
+            if isinstance(result, dict) and "error" in result:
+                print(f"[error] {result['error']}: {result.get('message', '')}")
+            else:
+                print(f"[result] {json_text(result, max_chars=300)}")
 
             # Detect the clarification/pause tool by its output flag (rename-proof),
             # not by a hard-coded tool name.

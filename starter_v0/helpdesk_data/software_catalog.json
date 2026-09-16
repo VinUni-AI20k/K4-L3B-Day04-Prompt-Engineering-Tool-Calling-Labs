@@ -1,0 +1,93 @@
+{
+  "updated_at": "2026-09-15T12:00:00Z",
+  "catalog": [
+    {
+      "name": "Visual Studio Code",
+      "aliases": ["vscode", "vs code", "visual studio code"],
+      "category": "development",
+      "approval_status": "approved",
+      "version": "1.93.0",
+      "license_required": false,
+      "license_type": "Free / Open-Source",
+      "install_method": "Self-service via Company Portal",
+      "notes": "Standard code editor for engineering and IT staff."
+    },
+    {
+      "name": "Docker Desktop",
+      "aliases": ["docker", "docker desktop"],
+      "category": "development",
+      "approval_status": "approved",
+      "version": "4.33.1",
+      "license_required": true,
+      "license_type": "Docker Business Subscription",
+      "install_method": "Request license via IT Ticket, then install via Company Portal",
+      "notes": "Requires manager approval for license cost allocation ($24/user/mo)."
+    },
+    {
+      "name": "Wireshark",
+      "aliases": ["wireshark", "packet capture"],
+      "category": "security",
+      "approval_status": "restricted",
+      "version": "4.2.6",
+      "license_required": false,
+      "license_type": "GPLv2",
+      "install_method": "IT Security clearance required",
+      "notes": "Packet sniffing tool. Strictly limited to NetOps and SecOps teams with written approval."
+    },
+    {
+      "name": "Slack",
+      "aliases": ["slack", "slack desktop"],
+      "category": "communication",
+      "approval_status": "approved",
+      "version": "4.39.95",
+      "license_required": false,
+      "license_type": "Enterprise Grid (Provisioned by SSO)",
+      "install_method": "Self-service via Company Portal",
+      "notes": "Standard corporate messaging tool."
+    },
+    {
+      "name": "Zoom",
+      "aliases": ["zoom", "zoom meetings"],
+      "category": "communication",
+      "approval_status": "approved",
+      "version": "6.1.10",
+      "license_required": false,
+      "license_type": "Enterprise (Provisioned by SSO)",
+      "install_method": "Self-service via Company Portal",
+      "notes": "Corporate video conferencing tool."
+    },
+    {
+      "name": "Postman",
+      "aliases": ["postman", "postman client"],
+      "category": "development",
+      "approval_status": "approved",
+      "version": "11.7.0",
+      "license_required": false,
+      "license_type": "Free tier / Enterprise team invites",
+      "install_method": "Self-service via Company Portal",
+      "notes": "API development tool. Do not store production secrets in public workspaces."
+    },
+    {
+      "name": "BitTorrent",
+      "aliases": ["bittorrent", "utorrent", "torrent"],
+      "category": "utilities",
+      "approval_status": "prohibited",
+      "version": "N/A",
+      "license_required": false,
+      "license_type": "Prohibited by IT Policy SEC-09",
+      "install_method": "Not allowed",
+      "notes": "P2P file sharing software is strictly prohibited on corporate devices due to malware and IP leak risks."
+    },
+    {
+      "name": "Notion",
+      "aliases": ["notion", "notion desktop"],
+      "category": "collaboration",
+      "approval_status": "approved",
+      "version": "3.12.1",
+      "license_required": false,
+      "license_type": "Enterprise Workspace (SSO)",
+      "install_method": "Web browser or Company Portal",
+      "notes": "Corporate knowledge management workspace."
+    }
+  ]
+}

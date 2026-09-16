@@ -1,7 +1,194 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
+  "description": "Original team eval cases for IT Helpdesk Agent: 5 single-turn and 5 multi-turn cases testing routing, parameters, boundaries, and cancellations.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_policy_password_lookup",
+      "phase": "B",
+      "suite": "group",
+      "query": "Quy định về thời hạn đổi mật khẩu tài khoản nội bộ công ty là bao lâu?",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {"name": "policy"}
+        ]
+      },
+      "metadata": {
+        "skill": "policy_routing",
+        "difficulty": "easy",
+        "what_it_tests": "Câu hỏi về chính sách mật khẩu phải dùng tool policy."
+      }
+    },
+    {
+      "id": "G02_missing_laptop_asset",
+      "phase": "B",
+      "suite": "group",
+      "query": "Màn hình laptop của mình bị chập chờn, kiểm tra giúp mình với.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {"name": "clarify", "args": {"response_type": "text"}}
+        ]
+      },
+      "metadata": {
+        "skill": "missing_asset_clarify",
+        "difficulty": "medium",
+        "what_it_tests": "Yêu cầu kiểm tra laptop khi thiếu asset_id phải hỏi lại bằng clarify text."
+      }
+    },
+    {
+      "id": "G03_hardware_check_desktop",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra phần cứng ổ đĩa và RAM của máy bàn DT-031.",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {"name": "inspect_device", "args": {"asset_id": "DT-031", "check": "hardware"}}
+        ]
+      },
+      "metadata": {
+        "skill": "device_hardware_check",
+        "difficulty": "easy",
+        "what_it_tests": "Truyền đúng asset_id DT-031 và check=hardware khi hỏi về ổ đĩa/RAM."
+      }
+    },
+    {
+      "id": "G04_sso_service_status",
+      "phase": "B",
+      "suite": "group",
+      "query": "Hệ thống đăng nhập tập trung SSO production hiện có hoạt động ổn định không?",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {"name": "check_service_status", "args": {"service": "sso", "environment": "production"}}
+        ]
+      },
+      "metadata": {
+        "skill": "sso_status_check",
+        "difficulty": "easy",
+        "what_it_tests": "Truy vấn trạng thái SSO toàn hệ thống phải dùng check_service_status."
+      }
+    },
+    {
+      "id": "G05_out_of_scope_weather",
+      "phase": "B",
+      "suite": "group",
+      "query": "Thời tiết Hà Nội hôm nay thế nào có mưa không?",
+      "failure_type": "out_of_scope",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "metadata": {
+        "skill": "out_of_scope_refusal",
+        "difficulty": "easy",
+        "what_it_tests": "Yêu cầu hỏi thời tiết nằm ngoài phạm vi IT Helpdesk, không gọi tool."
+      }
+    },
+    {
+      "id": "G06_clarify_then_inspect",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Laptop của mình không vào được mạng Wi-Fi công ty."},
+        {"role": "user", "content": "Mã máy của mình là LT-204."},
+        {"role": "user", "content": "Kiểm tra kết nối mạng cho máy đó giúp mình."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {"name": "inspect_device", "args": {"asset_id": "LT-204", "check": "network"}}
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_clarify_and_resolve",
+        "difficulty": "medium",
+        "what_it_tests": "Giữ mã máy đã cung cấp ở lượt sau và thực hiện inspect_device check=network."
+      }
+    },
+    {
+      "id": "G07_multiturn_ticket_confirm_cancel",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tạo ticket lỗi máy in PR-404 mức medium."},
+        {"role": "user", "content": "Khoan, máy vừa bật lại được rồi, hủy yêu cầu tạo ticket này đi."},
+        {"role": "user", "content": "Xác nhận không tạo gì nữa nhé."}
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "metadata": {
+        "skill": "multiturn_cancel_ticket",
+        "difficulty": "hard",
+        "what_it_tests": "Người dùng hủy tạo ticket ở lượt sau thì không được gọi create_ticket hay clarify."
+      }
+    },
+    {
+      "id": "G08_multiturn_priority_change_confirm",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tạo ticket hỏng màn hình máy DT-087 mức low."},
+        {"role": "user", "content": "Đổi mức ưu tiên lên critical vì đây là máy của giám đốc."},
+        {"role": "user", "content": "Cho mình kiểm tra lại và hỏi xác nhận trước."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {"name": "clarify", "args": {"response_type": "yes_no"}}
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_priority_confirmation",
+        "difficulty": "hard",
+        "what_it_tests": "Sau khi đổi priority lên critical và yêu cầu xác nhận, phải dừng ở clarify yes_no."
+      }
+    },
+    {
+      "id": "G09_multiturn_change_service_env",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra xem dịch vụ email có lỗi không."},
+        {"role": "user", "content": "À mình muốn kiểm tra trên môi trường staging của đội dev."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {"name": "check_service_status", "args": {"service": "email", "environment": "staging"}}
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_environment_switch",
+        "difficulty": "medium",
+        "what_it_tests": "Cập nhật đúng môi trường staging từ lượt trước sang lượt sau."
+      }
+    },
+    {
+      "id": "G10_multiturn_confirmed_ticket_creation",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tôi muốn tạo ticket lỗi VPN trên LT-204 mức medium."},
+        {"role": "user", "content": "Tôi đã xem lại và đồng ý xác nhận tạo ticket này với thông tin trên."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {"name": "create_ticket", "args": {"priority": "medium", "asset_id": "LT-204", "confirmed": true}}
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_confirmed_create",
+        "difficulty": "hard",
+        "what_it_tests": "Khi người dùng đã xác nhận đồng ý rõ ràng ở lượt 2, agent được phép gọi create_ticket confirmed=true."
+      }
+    }
+  ]
 }
