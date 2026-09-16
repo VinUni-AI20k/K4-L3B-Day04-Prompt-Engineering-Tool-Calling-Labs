@@ -1,13 +1,18 @@
 from __future__ import annotations
 
 import argparse
+import csv
+import hashlib
 import json
+import subprocess
 import threading
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
+
+import yaml
 
 from chat import (
     ARTIFACTS_DIR,
@@ -22,9 +27,70 @@ from chat import (
 from env_loader import load_lab_env
 from providers import make_provider
 from tools import load_tool_declarations, to_openai_tools
-from versioning import artifact_version_dict, build_artifact_version
+from versioning import ArtifactVersion, artifact_version_dict
 
 load_lab_env(ROOT)
+
+VERSION_FALLBACK_COMMITS = {
+    "v0": "e66856bb",
+    "v1": "f5e2fbc9",
+    "v2": "f5e2fbc9",
+    "v3": "f5e2fbc9",
+}
+
+
+def load_version_catalog() -> list[dict[str, str]]:
+    path = ARTIFACTS_DIR / "version_log.csv"
+    with path.open(encoding="utf-8", newline="") as handle:
+        return list(csv.DictReader(handle))
+
+
+def git_snapshot(version: str, relative_path: str, expected_hash: str, fallback: Path) -> tuple[str, str]:
+    """Load the artifact revision whose hash is recorded for this version."""
+    if expected_hash:
+        try:
+            commits = subprocess.check_output(
+                ["git", "log", "--all", "--format=%H", "--", f"starter_v0/{relative_path}"],
+                cwd=ROOT.parent,
+                text=True,
+                encoding="utf-8",
+            ).splitlines()
+            for commit in commits:
+                content = subprocess.check_output(
+                    ["git", "show", f"{commit}:starter_v0/{relative_path}"],
+                    cwd=ROOT.parent,
+                )
+                if hashlib.sha256(content).hexdigest() == expected_hash:
+                    return content.decode("utf-8"), commit
+        except (OSError, subprocess.CalledProcessError, UnicodeDecodeError):
+            pass
+    commit = VERSION_FALLBACK_COMMITS.get(version)
+    if commit:
+        try:
+            content = subprocess.check_output(
+                ["git", "show", f"{commit}:starter_v0/{relative_path}"],
+                cwd=ROOT.parent,
+            )
+            return content.decode("utf-8"), commit
+        except (OSError, subprocess.CalledProcessError, UnicodeDecodeError):
+            pass
+    return fallback.read_text(encoding="utf-8"), "working-tree"
+
+
+def version_artifacts(version: str, prompt_path: Path, tools_path: Path) -> tuple[str, str, str, dict[str, str]]:
+    row = next((item for item in load_version_catalog() if item.get("version") == version), None)
+    if row is None:
+        raise ValueError(f"Unknown version: {version}")
+    prompt, prompt_commit = git_snapshot(version, "artifacts/system_prompt.md", row.get("prompt_hash", ""), prompt_path)
+    tools, tools_commit = git_snapshot(version, "artifacts/tools.yaml", row.get("tools_hash", ""), tools_path)
+    commit = prompt_commit if prompt_commit != "working-tree" else tools_commit
+    return prompt, tools, commit, row
+
+
+def artifact_version_from_text(version: str, prompt: str, tools: str) -> ArtifactVersion:
+    prompt_hash = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+    tools_hash = hashlib.sha256(tools.encode("utf-8")).hexdigest()
+    return ArtifactVersion(version, f"{version}+p{prompt_hash[:12]}+t{tools_hash[:12]}", prompt_hash, tools_hash)
 
 
 HTML = r'''<!doctype html>
@@ -40,10 +106,13 @@ HTML = r'''<!doctype html>
     .shell { width:min(1420px, calc(100% - 40px)); margin:0 auto; padding:32px 0 42px; }
     header { display:flex; justify-content:space-between; align-items:center; gap:28px; border-bottom:1px solid var(--line); padding-bottom:24px; }
     .eyebrow { color:var(--accent-dark); font:700 clamp(22px,3vw,32px)/1.1 'Segoe UI', Arial, sans-serif; letter-spacing:.1px; }
-    .version { border:1px solid #efb19d; background:rgba(255,244,238,.86); padding:15px 17px; min-width:275px; box-shadow:8px 8px 0 rgba(229,107,69,.09); }
+    .version { border:1px solid #efb19d; background:rgba(255,244,238,.86); padding:15px 17px; min-width:340px; box-shadow:8px 8px 0 rgba(229,107,69,.09); }
     .version strong { display:flex; align-items:center; gap:8px; color:var(--accent-dark); font:700 12px 'Segoe UI', Arial, sans-serif; letter-spacing:.5px; text-transform:uppercase; }
     .version strong::before { content:''; width:8px; height:8px; border-radius:50%; background:#45a66f; box-shadow:0 0 0 4px rgba(69,166,111,.14); }
     .version code { display:block; margin-top:5px; overflow-wrap:anywhere; color:#713b2c; font:12px Consolas,monospace; }
+    .version-picker { display:flex; align-items:center; gap:8px; margin-top:12px; }
+    .version-picker label { color:var(--muted); font-size:12px; font-weight:700; }
+    select { border:1px solid #d9a18f; color:var(--ink); background:#fff; padding:7px 9px; font:700 13px 'Segoe UI', Arial, sans-serif; }
     .layout { display:grid; grid-template-columns:minmax(0,1.08fr) minmax(360px,.92fr); gap:22px; margin-top:26px; }
     .panel { background:rgba(255,255,255,.8); border:1px solid rgba(185,205,205,.72); box-shadow:0 18px 45px rgba(41,65,67,.09); backdrop-filter:blur(10px); }
     .chat-panel { display:flex; flex-direction:column; min-height:650px; border-top:4px solid var(--accent); }
@@ -79,7 +148,7 @@ HTML = r'''<!doctype html>
   <main class="shell">
     <header>
     <div><div class="eyebrow">Nova Laptop Agent</div></div>
-      <div class="version"><strong>Đang chạy</strong><code id="artifact">loading...</code><span id="provider"></span></div>
+    <div class="version"><strong>Đang chạy</strong><div class="version-picker"><label for="version-select">Version</label><select id="version-select" aria-label="Chọn version"></select></div><code id="artifact">loading...</code><span id="provider"></span></div>
     </header>
     <section class="layout">
     <div class="panel chat-panel"><div class="panel-head">Conversation <span id="turn-count">0 turns</span></div><div id="messages"><div class="empty">Nhập yêu cầu để bắt đầu cuộc trò chuyện</div></div><form id="composer"><textarea id="prompt" placeholder="Lọc laptop Acer dùng thiết kế, tối đa 26 triệu..." required></textarea><button id="send" type="submit">Gửi</button></form></div>
@@ -87,12 +156,15 @@ HTML = r'''<!doctype html>
     </section>
   </main>
 <script>
-const messages = document.querySelector('#messages'), trace = document.querySelector('#trace'), promptBox = document.querySelector('#prompt'), send = document.querySelector('#send');
+const messages = document.querySelector('#messages'), trace = document.querySelector('#trace'), promptBox = document.querySelector('#prompt'), send = document.querySelector('#send'), versionSelect = document.querySelector('#version-select');
 const pretty = value => JSON.stringify(value, null, 2);
+function resetPanel(panel, text) { panel.innerHTML='<div class="empty"></div>'; panel.querySelector('.empty').textContent=text; }
 function displayReply(text) { if (!text) return ''; try { const candidate=text.trim().replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,''); const payload=JSON.parse(candidate); return typeof payload.reply==='string' && payload.reply.trim() ? payload.reply.trim() : text; } catch(error) { return text; } }
 function addMessage(kind, text) { const wrap=document.createElement('div'); wrap.className='message '+kind; wrap.innerHTML='<div class="label">'+(kind==='user'?'You':'Agent')+'</div><div class="bubble"></div>'; wrap.querySelector('.bubble').textContent=text||'(no text)'; const empty=messages.querySelector('.empty'); if(empty) empty.remove(); messages.appendChild(wrap); messages.scrollTop=messages.scrollHeight; }
 function addTrace(turn) { const empty=trace.querySelector('.empty'); if(empty) empty.remove(); const box=document.createElement('section'); box.className='trace-turn'; const status=turn.status==='provider_error'?'bad':''; let html='<div class="trace-title"><span>TURN '+turn.turn_index+' · '+turn.status+'</span><span class="trace-status '+status+'">'+(turn.status==='answered'?'observed':'inspect')+'</span></div>'; if(turn.error) html+='<details open><summary>ERROR</summary><pre></pre></details>'; (turn.tool_events||[]).forEach((event,index)=>{ html+='<details open><summary>TOOL '+(index+1)+' · '+event.tool+'</summary><pre></pre><pre></pre></details>'; }); box.innerHTML=html; const pres=box.querySelectorAll('pre'); let i=0; if(turn.error) pres[i++].textContent=turn.error; (turn.tool_events||[]).forEach(event=>{pres[i++].textContent='INPUT\n'+pretty(event.args||{}); pres[i++].textContent='RESULT\n'+pretty(event.result);}); trace.prepend(box); }
-async function load() { const r=await fetch('/api/state'); const data=await r.json(); document.querySelector('#artifact').textContent=data.artifact_version; document.querySelector('#provider').textContent=data.provider+' / '+(data.model||'default'); }
+function renderState(data) { document.querySelector('#artifact').textContent=data.artifact_version; document.querySelector('#provider').textContent=data.provider+' / '+(data.model||'default'); versionSelect.value=data.version; versionSelect.disabled=false; }
+async function load() { const r=await fetch('/api/state'); const data=await r.json(); versionSelect.innerHTML=(data.versions||[]).map(item=>'<option value="'+item.version+'">'+item.version+' · '+(item.metric_after||'')+'</option>').join(''); renderState(data); }
+versionSelect.addEventListener('change', async () => { const selected=versionSelect.value; versionSelect.disabled=true; try { const r=await fetch('/api/version',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({version:selected})}); const data=await r.json(); if(!r.ok) throw new Error(data.error||'Version switch failed'); resetPanel(messages,'Version '+data.version+' đã sẵn sàng. Nhập yêu cầu để bắt đầu.'); resetPanel(trace,'Thông tin tool của '+data.version+' sẽ xuất hiện ở đây'); document.querySelector('#turn-count').textContent='0 turns'; renderState(data); } catch(error) { versionSelect.disabled=false; addMessage('assistant','Không thể chuyển version: '+error.message); } });
 document.querySelector('#composer').addEventListener('submit', async event => { event.preventDefault(); const text=promptBox.value.trim(); if(!text)return; addMessage('user',text); promptBox.value=''; send.disabled=true; send.textContent='...'; try { const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text})}); const data=await r.json(); if(!r.ok) throw new Error(data.error||'Request failed'); addMessage('assistant',displayReply(data.turn.assistant_text||data.turn.error)); addTrace(data.turn); document.querySelector('#turn-count').textContent=data.turn_count+' turns'; } catch(error) { addMessage('assistant','UI error: '+error.message); } finally { send.disabled=false; send.textContent='Gửi'; promptBox.focus(); } });
 load();
 </script>
@@ -102,26 +174,32 @@ load();
 class ChatSession:
     def __init__(self, args: argparse.Namespace) -> None:
         self.args = args
-        self.system_prompt = args.system_prompt.read_text(encoding="utf-8")
-        self.tool_declarations = load_tool_declarations(args.tools)
-        self.openai_tools = to_openai_tools(self.tool_declarations)
         self.provider = make_provider(args.provider)
         self.selected_model = args.model or getattr(self.provider, "default_model", None)
-        self.artifact_version = build_artifact_version(args.version, args.system_prompt, args.tools)
-        timestamp = datetime.now().strftime("%Y%m%dT%H%M%S%f")
-        self.transcript_id = "_".join([safe_slug(args.version), safe_slug(args.provider), "ui", timestamp])
-        self.transcript_path = args.transcripts_dir / f"{self.transcript_id}.transcript.json"
-        self.history: list[dict[str, str]] = []
         self.lock = threading.Lock()
-        self.transcript: dict[str, Any] = {
+        self._load_version(args.version)
+
+    def _load_version(self, version: str) -> None:
+        prompt, tools_text, commit, row = version_artifacts(version, self.args.system_prompt, self.args.tools)
+        self.system_prompt = prompt
+        self.tool_declarations = yaml.safe_load(tools_text)["tools"]
+        self.openai_tools = to_openai_tools(self.tool_declarations)
+        self.artifact_version = artifact_version_from_text(version, prompt, tools_text)
+        self.version_reason = row.get("reason", "")
+        self.version_commit = commit
+        timestamp = datetime.now().strftime("%Y%m%dT%H%M%S%f")
+        self.transcript_id = "_".join([safe_slug(version), safe_slug(self.args.provider), "ui", timestamp])
+        self.transcript_path = self.args.transcripts_dir / f"{self.transcript_id}.transcript.json"
+        self.history: list[dict[str, str]] = []
+        self.transcript = {
             "transcript_id": self.transcript_id,
             **artifact_version_dict(self.artifact_version),
-            "provider": args.provider,
+            "provider": self.args.provider,
             "model": self.selected_model,
-            "system_prompt": str(args.system_prompt),
-            "tools": str(args.tools),
-            "history_window": args.history_window,
-            "max_tool_rounds": args.max_tool_rounds,
+            "system_prompt": f"git:{commit}:starter_v0/artifacts/system_prompt.md",
+            "tools": f"git:{commit}:starter_v0/artifacts/tools.yaml",
+            "history_window": self.args.history_window,
+            "max_tool_rounds": self.args.max_tool_rounds,
             "created_at": now_iso(),
             "updated_at": now_iso(),
             "ui": True,
@@ -130,7 +208,12 @@ class ChatSession:
         write_transcript(self.transcript_path, self.transcript)
 
     def state(self) -> dict[str, Any]:
-        return {**artifact_version_dict(self.artifact_version), "provider": self.args.provider, "model": self.selected_model, "transcript": str(self.transcript_path), "turn_count": len(self.transcript["turns"])}
+        return {**artifact_version_dict(self.artifact_version), "provider": self.args.provider, "model": self.selected_model, "transcript": str(self.transcript_path), "turn_count": len(self.transcript["turns"]), "versions": load_version_catalog(), "version_reason": self.version_reason, "version_commit": self.version_commit}
+
+    def switch_version(self, version: str) -> dict[str, Any]:
+        with self.lock:
+            self._load_version(version)
+            return self.state()
 
     def chat(self, user_text: str) -> dict[str, Any]:
         with self.lock:
@@ -167,10 +250,14 @@ class Handler(BaseHTTPRequestHandler):
         else: self._send({"error": "not_found"}, 404)
 
     def do_POST(self) -> None:
-        if urlparse(self.path).path != "/api/chat": self._send({"error": "not_found"}, 404); return
+        path = urlparse(self.path).path
+        if path not in {"/api/chat", "/api/version"}: self._send({"error": "not_found"}, 404); return
         try:
             length = int(self.headers.get("Content-Length", "0"))
             body = json.loads(self.rfile.read(length))
+            if path == "/api/version":
+                self._send(self.session.switch_version(str(body.get("version", "")).strip()))
+                return
             message = str(body.get("message", "")).strip()
             if not message: raise ValueError("message is required")
             turn = self.session.chat(message)
