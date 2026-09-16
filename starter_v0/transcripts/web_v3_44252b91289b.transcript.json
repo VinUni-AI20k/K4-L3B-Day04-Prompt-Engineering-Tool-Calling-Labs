@@ -1,0 +1,34 @@
+{
+  "transcript_id": "web_v3_44252b91289b",
+  "version": "v3",
+  "artifact_version": "v3+pb34682cf27ec+t48fa70ec3caf",
+  "prompt_hash": "b34682cf27ec6faaec1a5963c899330ccc9af57ec36b85a9b7f5b633a6390ed8",
+  "tools_hash": "48fa70ec3caf973c1c338737795ffa2fd94fe26c3db714ec5117695d50ddb6e6",
+  "provider": "OpenRouterProvider",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "C:\\Users\\Admin\\Documents\\testvscode\\K4B-Day4-Vinno\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "C:\\Users\\Admin\\Documents\\testvscode\\K4B-Day4-Vinno\\starter_v0\\artifacts\\tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-09-15T23:25:40",
+  "updated_at": "2026-09-15T23:25:43",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-09-15T23:25:40",
+      "user": "Xin chào",
+      "status": "answered",
+      "assistant_text": "Chào bạn! Tôi có thể giúp gì cho bạn hôm nay?",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "Chào bạn! Tôi có thể giúp gì cho bạn hôm nay?",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "ended_at": "2026-09-15T23:25:43"
+    }
+  ]
+}
