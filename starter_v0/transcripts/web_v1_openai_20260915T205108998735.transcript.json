@@ -1,0 +1,17 @@
+{
+  "transcript_id": "web_v1_openai_20260915T205108998735",
+  "source": "webapp",
+  "version": "v1",
+  "artifact_version": "v1+p1a7903892523+t6f6d0641f589",
+  "prompt_hash": "1a79038925230635018ddeb6596b912df1034bc8b4ca9713a759630bba2c5419",
+  "tools_hash": "6f6d0641f5891cc0b04b835b61311a15156c72bcc3c8662346536f14bccc1e22",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "system_prompt": "D:\\VINAI\\DAY04\\K4-L3B-Day04-Prompt-Engineering-Tool-Calling-Labs\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "D:\\VINAI\\DAY04\\K4-L3B-Day04-Prompt-Engineering-Tool-Calling-Labs\\starter_v0\\artifacts\\tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-09-15T20:51:08",
+  "updated_at": "2026-09-15T20:51:08",
+  "turns": []
+}
