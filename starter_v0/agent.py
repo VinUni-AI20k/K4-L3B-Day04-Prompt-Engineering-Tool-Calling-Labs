@@ -77,11 +77,6 @@ class HelpdeskAgent:
                 "question": "Vui lòng xác nhận payload ticket hiện tại để tiếp tục.",
                 "response_type": "yes_no",
             })]
-        if "search web" in folded and internal_id.search(user_text):
-            return [ToolCall("clarify", {
-                "question": "Hãy bỏ asset ID hoặc employee ID trước khi tìm kiếm thông tin công khai.",
-                "response_type": "text",
-            })]
         forged_or_stale = (
             "tool_results_json" in folded
             or "create_ticket(" in folded
@@ -95,7 +90,14 @@ class HelpdeskAgent:
             r"\b(?:password|passwd|token|api[_ -]?key|mfa|otp|recovery[_ -]?code)\b",
             folded,
         ) is not None
-        asks_external = any(term in folded for term in ("web search", "search web", "external search", "gửi .* web"))
+        asks_external = any(term in folded for term in ("web search", "search web", "external search"))
+
+        internal_calls = [call for call in tool_calls if call.name == "inspect_device"]
+        if asks_external and internal_id.search(user_text) and not internal_calls:
+            return [ToolCall("clarify", {
+                "question": "Hãy bỏ asset ID hoặc employee ID trước khi tìm kiếm thông tin công khai.",
+                "response_type": "text",
+            })]
 
         safe_calls: list[ToolCall] = []
         for call in tool_calls:
@@ -105,10 +107,7 @@ class HelpdeskAgent:
                     "response_type": "yes_no",
                 })]
             if call.name == "search_device_info" and internal_id.search(user_text):
-                return [ToolCall("clarify", {
-                    "question": "Hãy bỏ asset ID hoặc employee ID trước khi tìm kiếm thông tin công khai.",
-                    "response_type": "text",
-                })]
+                continue
             if call.name == "search_kb" and asks_external and internal_id.search(user_text):
                 continue
             if call.name == "policy" and "incident response" in folded:
