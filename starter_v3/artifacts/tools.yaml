@@ -18,14 +18,14 @@ tools:
       required: [question, response_type]
 
   - name: search_kb
-    description: "Tìm bài hướng dẫn trong knowledge base. Luôn chọn category cụ thể khi chủ đề nhận diện được. Chỉ dùng all khi chủ đề thực sự không xác định."
+    description: "Tìm bài hướng dẫn trong knowledge base cho các câu hỏi cấu hình, sửa lỗi hoặc hướng dẫn thao tác. Khi người dùng hỏi hướng dẫn, ưu tiên category gần nhất với chủ đề; `query` chỉ là tùy chọn để lọc thêm và có thể bỏ trống khi category đã đủ rõ."
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Nội dung cần tìm"}
+        query: {type: string, default: "", description: "Nội dung cần tìm; có thể bỏ trống khi category đã đủ rõ"}
         category: {type: string, enum: [all, vpn, email, wifi, printing, account, security, hardware, software, meeting_room], default: "all", description: "Nhóm hướng dẫn"}
         top_k: {type: integer, default: 3, description: "Số kết quả"}
-      required: [query, category]
+      required: [category]
 
   - name: check_service_status
     description: "Kiểm tra trạng thái một dịch vụ."

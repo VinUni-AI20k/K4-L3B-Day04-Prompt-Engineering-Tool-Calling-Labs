@@ -1,7 +1,104 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
+  "description": "10 original IT helpdesk cases matching tools.yaml: 5 single-turn query cases and 5 multi-turn turns cases.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "GRP01_single_check_service",
+      "phase": "B",
+      "query": "Kiểm tra giúp tôi xem hệ thống SSO trên môi trường production có đang hoạt động bình thường không.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "check_service_status", "args": {"service": "sso", "environment": "production"}}]},
+      "metadata": {"what_it_tests": "Single-turn: Bắt đúng tên tool và tham số enum cho service/environment."}
+    },
+    {
+      "id": "GRP02_single_lookup_user",
+      "phase": "B",
+      "query": "Tra cứu thông tin liên lạc của nhân viên có mã số NV-2024.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "lookup_user", "args": {"employee_id": "NV-2024"}}]},
+      "metadata": {"what_it_tests": "Single-turn: Sử dụng đúng tool tìm kiếm người dùng theo employee_id."}
+    },
+    {
+      "id": "GRP03_single_missing_asset",
+      "phase": "B",
+      "query": "Máy tính của tôi bị lỗi không kết nối được mạng, hãy kiểm tra thiết bị giúp tôi.",
+      "failure_type": "missing_info",
+      "expect": {"no_tool": true},
+      "metadata": {"what_it_tests": "Single-turn: Không được gọi tool inspect_device khi user chưa cung cấp asset_id."}
+    },
+    {
+      "id": "GRP04_single_policy",
+      "phase": "B",
+      "query": "Quy định của công ty về việc bảo mật dữ liệu (data privacy) khi làm việc từ xa là gì?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "policy", "args": {"policy_area": "data_privacy"}}]},
+      "metadata": {"what_it_tests": "Single-turn: Chọn đúng tool policy và truyền đúng enum policy_area."}
+    },
+    {
+      "id": "GRP05_single_out_of_scope",
+      "phase": "B",
+      "query": "Giá vé máy bay từ Hà Nội vào TP.HCM hôm nay là bao nhiêu?",
+      "failure_type": "out_of_scope",
+      "expect": {"no_tool": true},
+      "metadata": {"what_it_tests": "Single-turn: Từ chối các yêu cầu hoàn toàn ngoài phạm vi IT Helpdesk."}
+    },
+    {
+      "id": "GRP06_multi_context_update",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tìm thông tin hướng dẫn hỗ trợ (support) cho thiết bị của hãng Lenovo."},
+        {"role": "user", "content": "À model cụ thể là ThinkPad T14 Gen 4 nhé."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "search_device_info", "args": {"manufacturer": "Lenovo", "model": "ThinkPad T14 Gen 4", "query_type": "support"}}]},
+      "metadata": {"what_it_tests": "Multi-turn: Kết hợp tham số từ nhiều lượt hội thoại để gọi tool tra cứu model."}
+    },
+    {
+      "id": "GRP07_multi_cancel_request",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tạo một ticket với mức ưu tiên critical cho lỗi server."},
+        {"role": "user", "content": "Thôi server lại tự động chạy được rồi, bỏ qua việc tạo ticket đi."}
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {"no_tool": true},
+      "metadata": {"what_it_tests": "Multi-turn: Nhận diện ý định hủy yêu cầu từ người dùng, không gọi tool dư thừa."}
+    },
+    {
+      "id": "GRP08_multi_missing_info_provided",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra mạng giúp tôi với."},
+        {"role": "user", "content": "Mã tài sản của thiết bị là PC-999."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "PC-999", "check": "network"}}]},
+      "metadata": {"what_it_tests": "Multi-turn: Gọi tool thành công sau khi đã được bổ sung tham số bắt buộc."}
+    },
+    {
+      "id": "GRP09_multi_boundary",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tìm trong knowledge base hướng dẫn sửa lỗi máy in (printing)."},
+        {"role": "user", "content": "Sau khi tìm xong, hãy gọi điện thoại báo cho kỹ thuật viên giúp tôi luôn."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "search_kb", "args": {"category": "printing"}}]},
+      "metadata": {"what_it_tests": "Multi-turn: Thực hiện đúng tool search_kb, từ chối việc gọi điện thoại (vượt quá ranh giới)."}
+    },
+    {
+      "id": "GRP10_multi_complex_ticket",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tôi muốn tạo một ticket thông báo hỏng chuột máy tính."},
+        {"role": "user", "content": "Mã tài sản của tôi là LT-001, mức ưu tiên là low."},
+        {"role": "user", "content": "Vâng, tôi xác nhận tạo ticket này."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "create_ticket", "args": {"priority": "low", "asset_id": "LT-001", "confirmed": true}}]},
+      "metadata": {"what_it_tests": "Multi-turn: Tổng hợp đúng thông tin rải rác để gọi create_ticket với cờ confirmed = true."}
+    }
+  ]
 }
