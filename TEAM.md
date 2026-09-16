@@ -44,18 +44,17 @@
 
 ### Tô Anh Đức — 2A202602639
 
-TỰ ĐIỀN NỐT HỘ C NHA MẤY BÉ
 
 - Phần việc và file/commit/PR: starter_v0/data/eval_base.json, runs/v1_base.json
-- Quyết định, khó khăn và cách xử lý:
-- Điều đã học: 
-- AI/công trợ đã dùng và cách kiểm tra: (ví dụ OpenAI/Claude + cách kiểm tra)
+- Quyết định, khó khăn và cách xử lý: Xây dựng bộ case cơ bản và kiểm tra các lỗi routing, thiếu thông tin, sai argument qua các run v0-v1; đối chiếu tool call với expected behavior để xác định phần cần cải thiện.
+- Điều đã học: Biết cách thiết kế eval case có expected tool/args rõ ràng và dùng transcript, tool result để phân biệt lỗi prompt với lỗi thực thi.
+- AI/công trợ đã dùng và cách kiểm tra: OpenAI provider; kiểm tra bằng cách chạy lại eval base, đọc JSON trong runs và đối chiếu metric cùng tool trace.
 - Thời điểm đã tự nộp URL repo chung trên VLearn: [15/9/2026 8:55pm]
 
 ### Vũ Bá Anh — 2A202602893
 
 - Phần việc và file/commit/PR: artifacts/tools.yaml, runs/v2_base.json
-- Quyết định, khó khăn và cách xử lý: 
-- Điều đã học: 
-- AI/công trợ đã dùng và cách kiểm tra: Claude
+- Quyết định, khó khăn và cách xử lý: Cải thiện mô tả và schema của tool, đặc biệt là clarify và các trường bắt buộc; phân tích lỗi trong runs để giảm gọi sai tool, thiếu argument và tạo đơn khi chưa đủ xác nhận.
+- Điều đã học: Hiểu cách mô tả boundary trong tool declaration và kết hợp schema với system prompt để kiểm soát hành vi agent qua nhiều lượt hội thoại.
+- AI/công trợ đã dùng và cách kiểm tra: Claude; kiểm tra bằng smoke test tool, chạy eval base và xem lại tool calls, arguments, tool results trong run v2.
 - Thời điểm đã tự nộp URL repo chung trên VLearn: [15/9/2026 8:55pm]
