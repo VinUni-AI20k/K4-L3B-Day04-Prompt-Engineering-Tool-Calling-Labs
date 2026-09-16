@@ -18,7 +18,7 @@
 | Mai Hoàng Anh | 2A202602857 | hoanganh3211 | Sửa wrong_boundary (ticket confirm, injection) + viết 10 case eval group | `e96515a`, `c824272`; `starter_v0/data/eval_group.json` |
 | Nguyễn Thành Vinh | 2A202602889 | v1rtuos024 | Fix wrong_tool H03, H04, H17 (KB, lookup_user, triage 3 nguồn) | `a172b7d`, `f8f6555`, PR #5 |
 | Nguyễn Văn Diện | 2A202602615 | diendls321 | Fix wrong_tool; xử lý conflict `system_prompt.md` | `c8a72f2`, `e531022` |
-| Lâm Quang Anh Quân | 2A202602467 | awun0105 | Fix missing_info H10, H11, H19 | `4bd38c7`, PR #4 |
+| Lâm Quang Anh Quân | 2A202602467 | awun0105 | Fix missing_info H10, H11, H19, fix parallel tool call, cải thiện UI | `4bd38c7`, PR #4, `cd30f59`, `2c2f713`, `de95476` |
 
 ## Nhận xét chung
 
@@ -65,8 +65,8 @@ Mỗi người tự viết và tự commit mục của mình. Không nhờ ngư�
 
 ### Lâm Quang Anh Quân — 2A202602467
 
-- Phần việc và file/commit/PR:
-- Quyết định, khó khăn và cách xử lý:
-- Điều đã học:
-- AI/công cụ đã dùng và cách kiểm tra:
-- Thời điểm đã tự nộp URL repo chung trên VLearn:
+- Phần việc và file/commit/PR: Fix missing_info H10, H11, H19 (`4bd38c7`, PR #4). Cải thiện UI (hiển thị Markdown, nút Copy) và fix lỗi parallel tool call trong `chat.py` (các commit `cd30f59`, `2c2f713`, `de95476`).
+- Quyết định, khó khăn và cách xử lý: Xử lý việc agent tự bịa dữ liệu bằng cách thêm luật chặt chẽ vào system prompt để bắt buộc gọi `clarify`. Fix vòng lặp tool bị ngắt sớm bằng cách chạy toàn bộ tool trong lượt trước khi check `awaiting_user`.
+- Điều đã học: Cách ép mô hình hỏi lại thay vì halucinate. Nắm được luồng xử lý tool events và cách render kết quả ra UI.
+- AI/công cụ đã dùng và cách kiểm tra: Dùng AI (Antigravity) để hỗ trợ fix logic code UI/tool. Kiểm tra lại bằng cách chạy local UI và transcript.
+- Thời điểm đã tự nộp URL repo chung trên VLearn: 09:56:45 16/9/2026.
