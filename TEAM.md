@@ -57,11 +57,32 @@ Mỗi người tự viết và tự commit mục của mình. Không nhờ ngư�
 
 ### Nguyễn Văn Diện — 2A202602615
 
-- Phần việc và file/commit/PR:
-- Quyết định, khó khăn và cách xử lý:
-- Điều đã học:
-- AI/công cụ đã dùng và cách kiểm tra:
-- Thời điểm đã tự nộp URL repo chung trên VLearn:
+- **Phần việc và file/commit/PR:**
+  - Vai trò: Sửa routing công cụ (wrong_tool) và quản lý xung đột trong artifact chung
+  - File chính trách: `starter_v0/artifacts/system_prompt.md` (từng lượt)
+  - Commit tiêu biểu: `c8a72f2` (sửa wrong_tool cases), `e531022` (giải quyết conflict merge system_prompt.md)
+  - Lỗi được gán sửa:
+    - **H03** (`search_kb` sai category): mô tả rõ ràng cách map topic → category enum trong prompt
+    - **H17** (`triage_with_three_sources`): bổ sung rule gọi song song 3 tool khi request cần device + status + KB đồng thời, không gộp chung
+
+- **Quyết định, khó khăn và cách xử lý:**
+  - Khó khăn lớn nhất: xác định ranh giới giữa sửa `system_prompt.md` (routing logic) vs sửa `tools.yaml` (schema/mô tả tool). Lúc đầu định sửa description trong tools.yaml, nhưng team quyết định giữ tool definition cố định và chỉ điều chỉnh prompt logic.
+  - Conflict trong git khi many branch cùng sửa `system_prompt.md`: đã học cách merge thủ công và kiểm tra lại prompt integrity sau khi resolve. Sử dụng `git diff` để xem rõ thay đổi từng lạn.
+  - Xác nhận rằng sửa prompt không làm thay đổi base case behavior của các lỗi khác (ví dụ H10, H11 về missing_info) — yêu cầu rerun version log để đối chiếu.
+
+- **Điều đã học:**
+  - Prompt engineering không phải chỉ viết hướng dẫn, mà phải suy luận về cách LLM sẽ parse input, map logic, và quyết định tool. Một câu if-then nhỏ trong prompt có thể ảnh hưởng lớn tới routing của nhiều case.
+  - Routing lỗi lặp (H03, H17) thường bắt nguồn từ description công cụ chung chung hoặc logic decision chưa rõ ràng. Cần liệt kê từng trường hợp cụ thể thay vì để LLM tự đoán.
+  - Làm nhóm về shared artifact: collaboration qua git commit tốt hơn gửi file zipped. Tuy nhiên cần quy tắc merge rõ ràng (ai sửa gì, rebase hay merge, lúc nào push).
+
+- **AI/công cụ đã dùng và cách kiểm tra:**
+  - ChatGPT / Claude: giải thích lý do tại sao `search_kb` với query "Outlook setup" nên dùng `category="email"` thay vì `category="office_tools"`. Kết quả giúp viết prompt rõ ràng hơn.
+  - Copilot trong VSCode: autocomplete khi sửa markdown bullet point trong system_prompt.md (không dùng để viết logic).
+  - GitHub Desktop + VSCode merge tool: xử lý conflict khi merge branch của Thành viên 2 vào develop. Kiểm tra bằng cách re-run H03/H17 trên v1 sau khi resolve.
+  - Công cụ kiểm tra: chạy `python run_eval.py --version v1 --suite base` để kiểm tra H03/H17 PASS sau sửa, và đối chiếu run file trong `runs/v1_B_base_*.json`.
+
+- **Thời điểm đã tự nộp URL repo chung trên VLearn:**
+  - Chưa tự nộp (do là team member, không phải group leader). Sẽ nộp cùng lúc với nhóm trưởng Lê Văn Việt trước deadline 23:59 ngày học.
 
 ### Lâm Quang Anh Quân — 2A202602467
 
