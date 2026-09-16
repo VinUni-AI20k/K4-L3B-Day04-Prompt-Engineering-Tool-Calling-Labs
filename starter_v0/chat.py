@@ -118,6 +118,7 @@ def run_model_tool_loop(
 
         working_messages.append(assistant_tool_message(response.text, calls))
         non_clarification_events: list[dict[str, Any]] = []
+        awaiting_user_question = None
 
         for call in calls:
             if verbose:
@@ -130,16 +131,19 @@ def run_model_tool_loop(
             # not by a hard-coded tool name.
             result = event.get("result", {})
             if isinstance(result, dict) and result.get("awaiting_user"):
-                question = result.get("question") or call.args.get("question") or "Bạn bổ sung thêm thông tin nhé."
-                rounds.append(round_record)
-                return {
-                    "status": "waiting_for_user",
-                    "assistant_text": question,
-                    "rounds": rounds,
-                    "tool_events": all_tool_events,
-                }
+                if awaiting_user_question is None:
+                    awaiting_user_question = result.get("question") or call.args.get("question") or "Bạn bổ sung thêm thông tin nhé."
+            else:
+                non_clarification_events.append(event)
 
-            non_clarification_events.append(event)
+        if awaiting_user_question is not None:
+            rounds.append(round_record)
+            return {
+                "status": "waiting_for_user",
+                "assistant_text": awaiting_user_question,
+                "rounds": rounds,
+                "tool_events": all_tool_events,
+            }
 
         rounds.append(round_record)
         working_messages.append(tool_results_message(non_clarification_events))
