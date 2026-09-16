@@ -1,0 +1,91 @@
+{
+  "transcript_id": "webui_f27a4fcc-dc9e-4348-b5bd-c0a94dcc96da",
+  "created_at": "2026-09-15T23:39:00",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-09-15T23:39:00",
+      "version_key": "v0",
+      "artifact_version": "v0+p7942217159d6+t2b007eb943c5",
+      "provider": "openai",
+      "model": "gpt-5.5",
+      "user": "Tạo ticket cho lỗi hủy phòng BK-1005.",
+      "status": "answered",
+      "assistant_text": "{\n  \"intent\": \"create_support_ticket\",\n  \"action\": \"answer_requires_next_step\",\n  \"reply\": \"Booking BK-1005 đang ở trạng thái đã hủy, đã thanh toán, số tiền hoàn dự kiến 11.250.000 VND. Tôi chưa có kết quả xác nhận ticket đã được tạo, nên bước an toàn tiếp theo là tạo ticket hỗ trợ về lỗi hủy phòng cho booking này với mức ưu tiên phù hợp.\",\n  \"evidence_ids\": [\n    \"check_booking_status:BK-1005\"\n  ]\n}",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "check_booking_status",
+              "args": {
+                "booking_id": "BK-1005"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "check_booking_status",
+              "args": {
+                "booking_id": "BK-1005"
+              },
+              "result": {
+                "tool": "check_booking_status",
+                "booking": {
+                  "booking_id": "BK-1005",
+                  "customer_id": "CUST-301",
+                  "hotel_id": "HTL-SG2",
+                  "check_in": "2026-11-12",
+                  "check_out": "2026-11-15",
+                  "status": "cancelled",
+                  "total_amount_vnd": 12500000,
+                  "paid": true,
+                  "refund_amount_vnd": 11250000,
+                  "rooms": 1,
+                  "guests": 2,
+                  "package": "Saigon Sky - Premium King"
+                },
+                "snapshot_at": "2026-09-15T10:00:00+07:00"
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "{\n  \"intent\": \"create_support_ticket\",\n  \"action\": \"answer_requires_next_step\",\n  \"reply\": \"Booking BK-1005 đang ở trạng thái đã hủy, đã thanh toán, số tiền hoàn dự kiến 11.250.000 VND. Tôi chưa có kết quả xác nhận ticket đã được tạo, nên bước an toàn tiếp theo là tạo ticket hỗ trợ về lỗi hủy phòng cho booking này với mức ưu tiên phù hợp.\",\n  \"evidence_ids\": [\n    \"check_booking_status:BK-1005\"\n  ]\n}",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "check_booking_status",
+          "args": {
+            "booking_id": "BK-1005"
+          },
+          "result": {
+            "tool": "check_booking_status",
+            "booking": {
+              "booking_id": "BK-1005",
+              "customer_id": "CUST-301",
+              "hotel_id": "HTL-SG2",
+              "check_in": "2026-11-12",
+              "check_out": "2026-11-15",
+              "status": "cancelled",
+              "total_amount_vnd": 12500000,
+              "paid": true,
+              "refund_amount_vnd": 11250000,
+              "rooms": 1,
+              "guests": 2,
+              "package": "Saigon Sky - Premium King"
+            },
+            "snapshot_at": "2026-09-15T10:00:00+07:00"
+          }
+        }
+      ],
+      "ended_at": "2026-09-15T23:39:00"
+    }
+  ],
+  "updated_at": "2026-09-15T23:39:00"
+}

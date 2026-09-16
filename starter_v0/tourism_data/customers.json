@@ -1,0 +1,53 @@
+{
+  "snapshot_at": "2026-09-15T10:00:00+07:00",
+  "customers": [
+    {
+      "customer_id": "CUST-042",
+      "name": "Nguyen Van An",
+      "loyalty_tier": "gold",
+      "active_booking_ids": ["BK-1001", "BK-1006"],
+      "phone_masked": "+84-9xx-xxx-142",
+      "email_masked": "a***@gmail.com"
+    },
+    {
+      "customer_id": "CUST-077",
+      "name": "Tran Thi Bich",
+      "loyalty_tier": "platinum",
+      "active_booking_ids": ["BK-1004"],
+      "phone_masked": "+84-9xx-xxx-077",
+      "email_masked": "b***@gmail.com"
+    },
+    {
+      "customer_id": "CUST-099",
+      "name": "Le Minh Khoa",
+      "loyalty_tier": "silver",
+      "active_booking_ids": ["BK-1007"],
+      "phone_masked": "+84-9xx-xxx-099",
+      "email_masked": "k***@gmail.com"
+    },
+    {
+      "customer_id": "CUST-118",
+      "name": "Pham Thi Dung",
+      "loyalty_tier": "gold",
+      "active_booking_ids": ["BK-1002"],
+      "phone_masked": "+84-9xx-xxx-118",
+      "email_masked": "d***@gmail.com"
+    },
+    {
+      "customer_id": "CUST-205",
+      "name": "Hoang Quang Huy",
+      "loyalty_tier": "silver",
+      "active_booking_ids": ["BK-1003"],
+      "phone_masked": "+84-9xx-xxx-205",
+      "email_masked": "h***@gmail.com"
+    },
+    {
+      "customer_id": "CUST-301",
+      "name": "Vu Thi Lan",
+      "loyalty_tier": "gold",
+      "active_booking_ids": [],
+      "phone_masked": "+84-9xx-xxx-301",
+      "email_masked": "l***@gmail.com"
+    }
+  ]
+}

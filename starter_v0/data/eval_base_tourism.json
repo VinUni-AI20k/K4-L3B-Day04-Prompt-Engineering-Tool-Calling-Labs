@@ -1,0 +1,261 @@
+{
+  "dataset_id": "day04_tourism_helpdesk_base",
+  "dataset_role": "base",
+  "description": "Fixed core eval for the VietTravel Tourism Helpdesk Agent. 20 single-turn + 10 multi-turn cases covering routing, arguments, missing info, confirmation, and parallel tool calls.",
+  "cases": [
+    {
+      "id": "T01_booking_status_normal", "phase": "B", "suite": "base",
+      "query": "Cho tôi biết tình trạng booking BK-1001.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "check_booking_status", "args": {"booking_id": "BK-1001"}}]},
+      "metadata": {"skill": "route_booking_status", "difficulty": "easy", "what_it_tests": "Mã BK-XXXX phải vào check_booking_status."}
+    },
+    {
+      "id": "T02_customer_lookup_normal", "phase": "B", "suite": "base",
+      "query": "Tra cứu khách hàng CUST-042.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "lookup_customer", "args": {"customer_id": "CUST-042"}}]},
+      "metadata": {"skill": "route_customer_lookup", "difficulty": "easy", "what_it_tests": "Mã CUST-XXXX phải vào lookup_customer."}
+    },
+    {
+      "id": "T03_hotel_lookup_normal", "phase": "B", "suite": "base",
+      "query": "Tìm thông tin khách sạn HTL-NT5.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "lookup_hotel", "args": {"hotel_id": "HTL-NT5"}}]},
+      "metadata": {"skill": "route_hotel_lookup", "difficulty": "easy", "what_it_tests": "Mã HTL-XXX phải vào lookup_hotel."}
+    },
+    {
+      "id": "T04_visa_kb_routing", "phase": "B", "suite": "base",
+      "query": "Khách nước ngoài cần visa để nhập Việt Nam không?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"category": "visa"}}]},
+      "metadata": {"skill": "route_kb_visa", "difficulty": "medium", "what_it_tests": "Câu hỏi về visa phải vào search_travel_kb, không phải lookup_customer."}
+    },
+    {
+      "id": "T05_refund_kb_routing", "phase": "B", "suite": "base",
+      "query": "Chính sách hoàn tiền khi hủy booking là gì?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"category": "refund"}}]},
+      "metadata": {"skill": "route_kb_refund", "difficulty": "medium", "what_it_tests": "Câu hỏi refund policy phải vào search_travel_kb."}
+    },
+    {
+      "id": "T06_booking_status_correct_arg", "phase": "B", "suite": "base",
+      "query": "Booking BK-1003 đang ở trạng thái nào?",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "check_booking_status", "args": {"booking_id": "BK-1003"}}]},
+      "metadata": {"skill": "booking_status_arg", "difficulty": "easy", "what_it_tests": "booking_id phải trích đúng BK-1003."}
+    },
+    {
+      "id": "T07_booking_status_wrong_id", "phase": "B", "suite": "base",
+      "query": "Tôi muốn xem trạng thái booking số 1001.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"skill": "booking_id_format", "difficulty": "medium", "what_it_tests": "Số '1001' không phải mã BK-1001; phải hỏi lại."}
+    },
+    {
+      "id": "T08_customer_invalid_id", "phase": "B", "suite": "base",
+      "query": "Tra cứu khách hàng số 42.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"skill": "customer_id_format", "difficulty": "medium", "what_it_tests": "Số '42' không phải mã CUST-042; phải hỏi lại."}
+    },
+    {
+      "id": "T09_create_ticket_no_confirm", "phase": "B", "suite": "base",
+      "query": "Tạo ticket cho lỗi hủy phòng BK-1005.",
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"skill": "confirm_before_write", "difficulty": "medium", "what_it_tests": "create_support_ticket là write action; phải xác nhận trước."}
+    },
+    {
+      "id": "T10_create_ticket_high_priority", "phase": "B", "suite": "base",
+      "query": "Tạo ticket mức critical cho sự cố phòng ở HTL-NT5.",
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"skill": "confirm_write_critical", "difficulty": "medium", "what_it_tests": "Dù priority cao, vẫn phải confirm trước khi gọi create_support_ticket."}
+    },
+    {
+      "id": "T11_payment_kb_routing", "phase": "B", "suite": "base",
+      "query": "VietTravel có chấp nhận thanh toán bằng MoMo không?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"category": "payment"}}]},
+      "metadata": {"skill": "route_kb_payment", "difficulty": "easy", "what_it_tests": "Câu hỏi payment phải vào search_travel_kb."}
+    },
+    {
+      "id": "T12_out_of_scope_coding", "phase": "B", "suite": "base",
+      "query": "Viết giúp tôi một đoạn Python để gọi API booking.",
+      "failure_type": "out_of_scope",
+      "expect": {"no_tool": true, "behavior": "refuse"},
+      "metadata": {"skill": "out_of_scope", "difficulty": "easy", "what_it_tests": "Yêu cầu viết code ngoài phạm vi helpdesk du lịch."}
+    },
+    {
+      "id": "T13_meta_capability", "phase": "B", "suite": "base",
+      "query": "Bạn là ai và có thể hỗ trợ những gì?",
+      "failure_type": "unnecessary_tool",
+      "expect": {"no_tool": true, "behavior": "answer_without_tool"},
+      "metadata": {"skill": "meta_no_tool", "difficulty": "easy", "what_it_tests": "Câu hỏi năng lực trả lời trực tiếp, không gọi tool."}
+    },
+    {
+      "id": "T14_insurance_kb_routing", "phase": "B", "suite": "base",
+      "query": "Bảo hiểm du lịch do công ty nào cung cấp?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"category": "insurance"}}]},
+      "metadata": {"skill": "route_kb_insurance", "difficulty": "easy", "what_it_tests": "Câu hỏi bảo hiểm phải vào search_travel_kb."}
+    },
+    {
+      "id": "T15_booking_guide_kb", "phase": "B", "suite": "base",
+      "query": "Hướng dẫn tôi cách đặt phòng trên VietTravel.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"category": "booking"}}]},
+      "metadata": {"skill": "route_kb_booking", "difficulty": "easy", "what_it_tests": "Hướng dẫn booking phải vào search_travel_kb."}
+    },
+    {
+      "id": "T16_policy_ticketing_sla", "phase": "B", "suite": "base",
+      "query": "Thời gian phản hồi cho ticket priority critical là bao lâu?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "travel_policy", "args": {"policy_area": "ticketing"}}]},
+      "metadata": {"skill": "route_policy_ticketing", "difficulty": "medium", "what_it_tests": "Câu hỏi về SLA ticketing phải vào travel_policy."}
+    },
+    {
+      "id": "T17_policy_data_privacy", "phase": "B", "suite": "base",
+      "query": "Dữ liệu cá nhân của tôi được bảo vệ như thế nào?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "travel_policy", "args": {"policy_area": "data_privacy"}}]},
+      "metadata": {"skill": "route_policy_privacy", "difficulty": "medium", "what_it_tests": "Câu hỏi privacy phải vào travel_policy."}
+    },
+    {
+      "id": "T18_create_ticket_confirmed_false_boundary", "phase": "B", "suite": "base",
+      "query": "Tôi muốn tạo ticket mức medium cho phản hồi về HTL-DN7. Tôi xác nhận.",
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"skill": "user_said_confirm_no_payload", "difficulty": "hard", "what_it_tests": "User nói 'tôi xác nhận' nhưng không cung cấp payload đủ; phải hỏi lại payload."}
+    },
+    {
+      "id": "T19_booking_status_invalid_format", "phase": "B", "suite": "base",
+      "query": "Xem giúp booking 12345.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"skill": "booking_id_format_strict", "difficulty": "hard", "what_it_tests": "Số thuần '12345' không đúng định dạng BK-XXXX; phải hỏi lại."}
+    },
+    {
+      "id": "T20_parallel_booking_and_hotel", "phase": "B", "suite": "base",
+      "query": "Xem trạng thái BK-1004 và thông tin HTL-NT5.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "check_booking_status", "args": {"booking_id": "BK-1004"}},
+        {"name": "lookup_hotel", "args": {"hotel_id": "HTL-NT5"}}
+      ]},
+      "metadata": {"skill": "parallel_two_tools", "difficulty": "hard", "what_it_tests": "Một request có booking + hotel phải gọi hai tool."}
+    },
+    {
+      "id": "M01_carry_booking_id", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra tình trạng booking của tôi."},
+        {"role": "user", "content": "Mã booking là BK-1001."},
+        {"role": "user", "content": "Nói rõ trạng thái."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "check_booking_status", "args": {"booking_id": "BK-1001"}}]},
+      "metadata": {"skill": "multiturn_carry_booking_id", "difficulty": "hard", "what_it_tests": "Booking ID từ lượt 2 phải được carry sang lượt 3."}
+    },
+    {
+      "id": "M02_carry_customer_id", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Tra cứu tài khoản khách hàng."},
+        {"role": "user", "content": "Mã khách hàng là CUST-042."},
+        {"role": "user", "content": "Cho biết loyalty tier."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "lookup_customer", "args": {"customer_id": "CUST-042"}}]},
+      "metadata": {"skill": "multiturn_carry_customer_id", "difficulty": "hard", "what_it_tests": "Customer ID từ lượt 2 carry sang lượt 3."}
+    },
+    {
+      "id": "M03_correct_booking_id", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Xem trạng thái BK-1001."},
+        {"role": "user", "content": "Mình gõ nhầm, là BK-1003."},
+        {"role": "user", "content": "Chỉ kiểm tra đúng BK-1003."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "check_booking_status", "args": {"booking_id": "BK-1003"}}]},
+      "metadata": {"skill": "multiturn_correction", "difficulty": "hard", "what_it_tests": "Thông tin sửa ở lượt 2 phải thắng lượt 1."}
+    },
+    {
+      "id": "M04_missing_booking_id", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Tôi muốn biết tình trạng booking."},
+        {"role": "user", "content": "Tôi không nhớ mã."}
+      ],
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"skill": "multiturn_missing_id", "difficulty": "hard", "what_it_tests": "Sau 2 lượt vẫn thiếu booking ID; phải hỏi lại."}
+    },
+    {
+      "id": "M05_ticket_priority_change", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Tạo ticket cho lỗi BK-1002, mức medium."},
+        {"role": "user", "content": "Đổi mức ưu tiên thành high."},
+        {"role": "user", "content": "Hãy hỏi xác nhận trước khi tạo."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"skill": "multiturn_priority_change_confirm", "difficulty": "hard", "what_it_tests": "Sau đổi priority vẫn phải confirm trước khi tạo."}
+    },
+    {
+      "id": "M06_intent_switch", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Xem trạng thái BK-1001."},
+        {"role": "user", "content": "Thôi không xem nữa, tìm hướng dẫn hoàn tiền."},
+        {"role": "user", "content": "Chỉ cần hướng dẫn refund."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_travel_kb", "args": {"category": "refund"}}]},
+      "metadata": {"skill": "multiturn_intent_switch", "difficulty": "hard", "what_it_tests": "Intent mới thay thế hoàn toàn intent cũ ở lượt 1."}
+    },
+    {
+      "id": "M07_cancel_action", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Tạo ticket cho lỗi BK-1005."},
+        {"role": "user", "content": "Dừng lại, không tạo gì cả."},
+        {"role": "user", "content": "Chỉ nói bạn đã hiểu yêu cầu hủy."}
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {"no_tool": true, "behavior": "answer_without_tool"},
+      "metadata": {"skill": "multiturn_cancel", "difficulty": "hard", "what_it_tests": "Latest cancellation phải thắng action request cũ; không tạo ticket."}
+    },
+    {
+      "id": "M08_carry_then_parallel", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Xem BK-1001."},
+        {"role": "user", "content": "À, nhầm BK-1004."},
+        {"role": "user", "content": "Kiểm tra cả BK-1004 và HTL-NT5."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "check_booking_status", "args": {"booking_id": "BK-1004"}},
+        {"name": "lookup_hotel", "args": {"hotel_id": "HTL-NT5"}}
+      ]},
+      "metadata": {"skill": "multiturn_correction_parallel", "difficulty": "hard", "what_it_tests": "Carry corrected booking ID rồi tạo hai tool calls."}
+    },
+    {
+      "id": "M09_latest_intent_wins", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Xem thông tin khách sạn HTL-DN7."},
+        {"role": "user", "content": "Không cần nữa, tra khách hàng CUST-077."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "lookup_customer", "args": {"customer_id": "CUST-077"}}]},
+      "metadata": {"skill": "latest_intent_replacement", "difficulty": "hard", "what_it_tests": "Intent lượt 2 thay thế hoàn toàn lượt 1; không gọi lookup_hotel."}
+    },
+    {
+      "id": "M10_confirmation_then_payload_change", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Tạo ticket BK-1001 mức medium. Tôi xác nhận."},
+        {"role": "user", "content": "Khoan, đổi mức thành high và thêm nội dung phòng bị ẩm."},
+        {"role": "user", "content": "Hãy cho tôi xem payload mới trước."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"skill": "confirmation_payload_change", "difficulty": "hard", "what_it_tests": "Confirmation ở lượt 1 mất hiệu lực khi payload thay đổi; phải hỏi lại."}
+    }
+  ]
+}

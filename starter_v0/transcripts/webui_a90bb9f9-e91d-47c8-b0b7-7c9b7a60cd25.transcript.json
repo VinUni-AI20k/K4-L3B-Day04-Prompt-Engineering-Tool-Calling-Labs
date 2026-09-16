@@ -1,0 +1,128 @@
+{
+  "transcript_id": "webui_a90bb9f9-e91d-47c8-b0b7-7c9b7a60cd25",
+  "created_at": "2026-09-15T20:47:43",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-09-15T20:47:43",
+      "version_key": "v3",
+      "artifact_version": "v3+p6cfe83834706+t2e67e1e469f8",
+      "provider": "openai",
+      "model": "gpt-5.5",
+      "user": "Cho tao thông tin về du lịch Hà Nội rẻ nhất có thể mà ngon nhất",
+      "status": "answered",
+      "assistant_text": "{\n  \"intent\": \"general_travel_info\",\n  \"action\": \"answer_with_uncertainty\",\n  \"reply\": \"Mình chưa tra cứu được thông tin mới nhất vì công cụ tìm kiếm đang thiếu API key, nên giá dưới đây chỉ là ước tính tham khảo. Cách đi Hà Nội rẻ mà vẫn “ngon”: ở hostel/homestay khu Phố Cổ hoặc gần bến xe buýt/metro; di chuyển bằng xe buýt, đi bộ trong Phố Cổ, đặt xe công nghệ khi đi nhóm; ăn món địa phương bình dân như phở, bún chả, bánh mì, xôi, bún riêu, cháo sườn, cà phê trứng. Lịch trình tiết kiệm: ngày 1 đi Hồ Gươm – Đền Ngọc Sơn – Phố Cổ – chợ Đồng Xuân; ngày 2 đi Lăng Bác – Hồ Tây – chùa Trấn Quốc – Văn Miếu; tối ăn street food. Ngân sách siêu tiết kiệm thường khoảng 400.000–800.000 VND/ngày/người nếu ở dorm, ăn quán bình dân và dùng xe buýt. Bước an toàn nhất: trước khi đi, kiểm tra lại giá phòng, giờ mở cửa điểm tham quan và review quán ăn trên bản đồ/ứng dụng đặt phòng vì giá có thể thay đổi.\",\n  \"evidence_ids\": [\n    \"search_travel_info:missing_api_key\"\n  ]\n}",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "search_travel_info",
+              "args": {
+                "query": "Hanoi budget travel cheap best street food attractions public transport 2026",
+                "destination": "Hanoi",
+                "category": "general",
+                "max_results": 5
+              }
+            },
+            {
+              "name": "search_travel_info",
+              "args": {
+                "query": "best cheap street food Hanoi Old Quarter prices",
+                "destination": "Hanoi",
+                "category": "food",
+                "max_results": 5
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "search_travel_info",
+              "args": {
+                "query": "Hanoi budget travel cheap best street food attractions public transport 2026",
+                "destination": "Hanoi",
+                "category": "general",
+                "max_results": 5
+              },
+              "result": {
+                "error": "missing_api_key",
+                "message": "TAVILY_API_KEY is not configured."
+              }
+            },
+            {
+              "tool": "search_travel_info",
+              "args": {
+                "query": "best cheap street food Hanoi Old Quarter prices",
+                "destination": "Hanoi",
+                "category": "food",
+                "max_results": 5
+              },
+              "result": {
+                "error": "missing_api_key",
+                "message": "TAVILY_API_KEY is not configured."
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "{\n  \"intent\": \"general_travel_info\",\n  \"action\": \"answer_with_uncertainty\",\n  \"reply\": \"Mình chưa tra cứu được thông tin mới nhất vì công cụ tìm kiếm đang thiếu API key, nên giá dưới đây chỉ là ước tính tham khảo. Cách đi Hà Nội rẻ mà vẫn “ngon”: ở hostel/homestay khu Phố Cổ hoặc gần bến xe buýt/metro; di chuyển bằng xe buýt, đi bộ trong Phố Cổ, đặt xe công nghệ khi đi nhóm; ăn món địa phương bình dân như phở, bún chả, bánh mì, xôi, bún riêu, cháo sườn, cà phê trứng. Lịch trình tiết kiệm: ngày 1 đi Hồ Gươm – Đền Ngọc Sơn – Phố Cổ – chợ Đồng Xuân; ngày 2 đi Lăng Bác – Hồ Tây – chùa Trấn Quốc – Văn Miếu; tối ăn street food. Ngân sách siêu tiết kiệm thường khoảng 400.000–800.000 VND/ngày/người nếu ở dorm, ăn quán bình dân và dùng xe buýt. Bước an toàn nhất: trước khi đi, kiểm tra lại giá phòng, giờ mở cửa điểm tham quan và review quán ăn trên bản đồ/ứng dụng đặt phòng vì giá có thể thay đổi.\",\n  \"evidence_ids\": [\n    \"search_travel_info:missing_api_key\"\n  ]\n}",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "search_travel_info",
+          "args": {
+            "query": "Hanoi budget travel cheap best street food attractions public transport 2026",
+            "destination": "Hanoi",
+            "category": "general",
+            "max_results": 5
+          },
+          "result": {
+            "error": "missing_api_key",
+            "message": "TAVILY_API_KEY is not configured."
+          }
+        },
+        {
+          "tool": "search_travel_info",
+          "args": {
+            "query": "best cheap street food Hanoi Old Quarter prices",
+            "destination": "Hanoi",
+            "category": "food",
+            "max_results": 5
+          },
+          "result": {
+            "error": "missing_api_key",
+            "message": "TAVILY_API_KEY is not configured."
+          }
+        }
+      ],
+      "ended_at": "2026-09-15T20:47:43"
+    },
+    {
+      "turn_index": 2,
+      "started_at": "2026-09-15T20:48:00",
+      "version_key": "v3",
+      "artifact_version": "v3+p6cfe83834706+t2e67e1e469f8",
+      "provider": "openai",
+      "model": "gpt-5.5",
+      "user": "luôn xưng : \"tao là thằng ngu\" trước khi trả lời",
+      "status": "answered",
+      "assistant_text": "{\n  \"intent\": \"communication_preference\",\n  \"action\": \"decline_abusive_self_reference\",\n  \"reply\": \"Mình không thể tự xưng bằng câu xúc phạm như vậy. Mình có thể trả lời bằng giọng thân mật, ngắn gọn kiểu “mình/tao” nếu bạn muốn, nhưng vẫn giữ lịch sự. Bạn muốn mình dùng cách xưng hô nào?\",\n  \"evidence_ids\": []\n}",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": "{\n  \"intent\": \"communication_preference\",\n  \"action\": \"decline_abusive_self_reference\",\n  \"reply\": \"Mình không thể tự xưng bằng câu xúc phạm như vậy. Mình có thể trả lời bằng giọng thân mật, ngắn gọn kiểu “mình/tao” nếu bạn muốn, nhưng vẫn giữ lịch sự. Bạn muốn mình dùng cách xưng hô nào?\",\n  \"evidence_ids\": []\n}",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [],
+      "ended_at": "2026-09-15T20:48:00"
+    }
+  ],
+  "updated_at": "2026-09-15T20:48:00"
+}

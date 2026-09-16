@@ -97,7 +97,7 @@ tools:
   # ---------------- Travel tools ----------------
   - name: search_travel_info
     description: >
-      Search the public web for current travel information using OpenAI's web search.
+      Search the public web for current travel information using Tavily.
       Use this tool for up-to-date information about attractions, food,
       hotels, transportation, events, or general travel information.
       Never send passwords, API keys, payment information, private

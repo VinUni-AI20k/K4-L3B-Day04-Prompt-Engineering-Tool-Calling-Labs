@@ -1,0 +1,95 @@
+{
+  "transcript_id": "webui_3129f1fb-589e-424d-a50e-b6c781dba0f8",
+  "created_at": "2026-09-15T23:38:34",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-09-15T23:38:34",
+      "version_key": "final",
+      "artifact_version": "final+p6cfe83834706+t2b007eb943c5",
+      "provider": "openai",
+      "model": "gpt-5.5",
+      "user": "Thời gian phản hồi cho ticket priority critical là bao lâu?",
+      "status": "answered",
+      "assistant_text": "{\n  \"intent\": \"ticketing_policy_inquiry\",\n  \"action\": \"answer_with_policy\",\n  \"reply\": \"Ticket priority **critical** có SLA: phản hồi đầu tiên trong **30 phút** và mục tiêu xử lý trong **4 giờ**.\",\n  \"evidence_ids\": [\"pol-ticketing\"]\n}",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "travel_policy",
+              "args": {
+                "policy_area": "ticketing",
+                "query": "critical priority ticket response-time SLA",
+                "top_k": 3
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "travel_policy",
+              "args": {
+                "policy_area": "ticketing",
+                "query": "critical priority ticket response-time SLA",
+                "top_k": 3
+              },
+              "result": {
+                "tool": "travel_policy",
+                "query": "critical priority ticket response-time SLA",
+                "policy_area": "ticketing",
+                "results": [
+                  {
+                    "policy_id": "pol-ticketing",
+                    "title": "Ticketing SLA and priorities",
+                    "policy_area": "ticketing",
+                    "excerpt": "# Ticketing policy\n\n## Priority levels\n\n| Priority | First response | Resolution target |\n| --- | --- | --- |\n| critical | 30 minutes | 4 hours |\n| high | 2 hours | 1 business day |\n| medium | 8 hours | 3 business days |\n| low | 1 business day | 7 business days |\n\n## When to create a ticket\n\n- Booking or payment issue that cannot be resolved in chat.\n- Refund request exceeding the auto-approval threshold (5 million VND).\n- Complaints about hotel service quality.\n\n## Sensitive data in tickets\n\n- Never include passwords, OTPs, MFA codes, full credit card numbers.\n- Mask customer phone numbers and emails before forwarding to hotels.",
+                    "source": "VietTravel Policy Library",
+                    "updated_at": "2026-07-01",
+                    "score": 6
+                  }
+                ],
+                "freshness": "static_lab_data"
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": "{\n  \"intent\": \"ticketing_policy_inquiry\",\n  \"action\": \"answer_with_policy\",\n  \"reply\": \"Ticket priority **critical** có SLA: phản hồi đầu tiên trong **30 phút** và mục tiêu xử lý trong **4 giờ**.\",\n  \"evidence_ids\": [\"pol-ticketing\"]\n}",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "travel_policy",
+          "args": {
+            "policy_area": "ticketing",
+            "query": "critical priority ticket response-time SLA",
+            "top_k": 3
+          },
+          "result": {
+            "tool": "travel_policy",
+            "query": "critical priority ticket response-time SLA",
+            "policy_area": "ticketing",
+            "results": [
+              {
+                "policy_id": "pol-ticketing",
+                "title": "Ticketing SLA and priorities",
+                "policy_area": "ticketing",
+                "excerpt": "# Ticketing policy\n\n## Priority levels\n\n| Priority | First response | Resolution target |\n| --- | --- | --- |\n| critical | 30 minutes | 4 hours |\n| high | 2 hours | 1 business day |\n| medium | 8 hours | 3 business days |\n| low | 1 business day | 7 business days |\n\n## When to create a ticket\n\n- Booking or payment issue that cannot be resolved in chat.\n- Refund request exceeding the auto-approval threshold (5 million VND).\n- Complaints about hotel service quality.\n\n## Sensitive data in tickets\n\n- Never include passwords, OTPs, MFA codes, full credit card numbers.\n- Mask customer phone numbers and emails before forwarding to hotels.",
+                "source": "VietTravel Policy Library",
+                "updated_at": "2026-07-01",
+                "score": 6
+              }
+            ],
+            "freshness": "static_lab_data"
+          }
+        }
+      ],
+      "ended_at": "2026-09-15T23:38:34"
+    }
+  ],
+  "updated_at": "2026-09-15T23:38:34"
+}
