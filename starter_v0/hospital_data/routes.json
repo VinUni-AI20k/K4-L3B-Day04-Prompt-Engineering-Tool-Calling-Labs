@@ -1,0 +1,35 @@
+{
+  "snapshot_at": "2026-09-15T18:00:00+07:00",
+  "bidirectional": true,
+  "elevators": [
+    {"elevator_id": "A", "floors": ["B1", "1", "2", "3", "4"], "status": "available", "notes": "Thang dịch vụ chung."},
+    {"elevator_id": "B", "floors": ["1", "2", "3", "4"], "status": "available", "notes": "Thang khu lâm sàng, dùng cho tuyến lên tầng 4."},
+    {"elevator_id": "C", "floors": ["B1", "1", "2", "3"], "status": "maintenance", "notes": "Bảo trì đến 2026-09-16; không tuyến nào dùng."}
+  ],
+  "blocked_segments": [
+    {"segment_id": "3A-EAST", "description": "Hành lang 3A-Đông đang vệ sinh sàn đến 19:00", "until": "2026-09-15T19:00:00+07:00"}
+  ],
+  "routes": [
+    {"from": "ER", "to": "PHARMACY", "distance_m": 120, "eta_min": 2, "elevator": null, "blocked_segments": []},
+    {"from": "ER", "to": "LAB_B", "distance_m": 210, "eta_min": 6, "elevator": "A", "blocked_segments": []},
+    {"from": "ER", "to": "WARD_3A", "distance_m": 290, "eta_min": 8, "elevator": "A", "blocked_segments": ["3A-EAST"]},
+    {"from": "ER", "to": "ICU", "distance_m": 230, "eta_min": 6, "elevator": "B", "blocked_segments": []},
+    {"from": "ER", "to": "OR_1", "distance_m": 250, "eta_min": 7, "elevator": "B", "blocked_segments": []},
+    {"from": "ER", "to": "DOCK_1", "distance_m": 160, "eta_min": 5, "elevator": "A", "blocked_segments": []},
+    {"from": "PHARMACY", "to": "LAB_B", "distance_m": 180, "eta_min": 6, "elevator": "A", "blocked_segments": []},
+    {"from": "PHARMACY", "to": "WARD_3A", "distance_m": 260, "eta_min": 8, "elevator": "A", "blocked_segments": ["3A-EAST"]},
+    {"from": "PHARMACY", "to": "ICU", "distance_m": 260, "eta_min": 7, "elevator": "B", "blocked_segments": []},
+    {"from": "PHARMACY", "to": "OR_1", "distance_m": 280, "eta_min": 8, "elevator": "B", "blocked_segments": []},
+    {"from": "PHARMACY", "to": "DOCK_1", "distance_m": 140, "eta_min": 4, "elevator": "A", "blocked_segments": []},
+    {"from": "LAB_B", "to": "WARD_3A", "distance_m": 150, "eta_min": 3, "elevator": null, "blocked_segments": ["3A-EAST"]},
+    {"from": "LAB_B", "to": "ICU", "distance_m": 170, "eta_min": 5, "elevator": "B", "blocked_segments": []},
+    {"from": "LAB_B", "to": "OR_1", "distance_m": 190, "eta_min": 5, "elevator": "B", "blocked_segments": []},
+    {"from": "LAB_B", "to": "DOCK_1", "distance_m": 230, "eta_min": 7, "elevator": "A", "blocked_segments": []},
+    {"from": "WARD_3A", "to": "ICU", "distance_m": 200, "eta_min": 6, "elevator": "B", "blocked_segments": ["3A-EAST"]},
+    {"from": "WARD_3A", "to": "OR_1", "distance_m": 220, "eta_min": 6, "elevator": "B", "blocked_segments": ["3A-EAST"]},
+    {"from": "WARD_3A", "to": "DOCK_1", "distance_m": 260, "eta_min": 8, "elevator": "A", "blocked_segments": ["3A-EAST"]},
+    {"from": "ICU", "to": "OR_1", "distance_m": 90, "eta_min": 2, "elevator": null, "blocked_segments": []},
+    {"from": "ICU", "to": "DOCK_1", "distance_m": 250, "eta_min": 8, "elevator": "A", "blocked_segments": []},
+    {"from": "OR_1", "to": "DOCK_1", "distance_m": 270, "eta_min": 8, "elevator": "A", "blocked_segments": []}
+  ]
+}

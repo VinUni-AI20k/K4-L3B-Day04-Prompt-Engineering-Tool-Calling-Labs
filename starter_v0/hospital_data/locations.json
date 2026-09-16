@@ -1,0 +1,75 @@
+{
+  "snapshot_at": "2026-09-15T18:00:00+07:00",
+  "locations": [
+    {
+      "location_id": "LAB_B",
+      "name": "Phòng xét nghiệm B",
+      "floor": "3",
+      "zone": "diagnostics",
+      "restricted": false,
+      "amr_access": "open",
+      "aliases": ["Lab B", "phòng lab B", "xét nghiệm B"],
+      "notes": "Điểm nhận mẫu xét nghiệm ở cửa phía Tây."
+    },
+    {
+      "location_id": "PHARMACY",
+      "name": "Khoa Dược",
+      "floor": "1",
+      "zone": "support",
+      "restricted": false,
+      "amr_access": "open",
+      "aliases": ["kho dược", "khoa dược", "nhà thuốc"],
+      "notes": "Quầy giao nhận thuốc cho AMR ở cửa sau."
+    },
+    {
+      "location_id": "ER",
+      "name": "Cấp cứu",
+      "floor": "1",
+      "zone": "clinical",
+      "restricted": false,
+      "amr_access": "open",
+      "aliases": ["cấp cứu", "phòng cấp cứu", "ER"],
+      "notes": "AMR chỉ dừng ở khu tiếp nhận vật tư, không vào khu điều trị."
+    },
+    {
+      "location_id": "WARD_3A",
+      "name": "Khoa nội trú 3A",
+      "floor": "3",
+      "zone": "clinical",
+      "restricted": false,
+      "amr_access": "open",
+      "aliases": ["khoa 3A", "buồng bệnh 3A"],
+      "notes": "Hành lang 3A-Đông đang vệ sinh sàn đến 19:00; AMR đi đường vòng."
+    },
+    {
+      "location_id": "ICU",
+      "name": "Hồi sức tích cực",
+      "floor": "4",
+      "zone": "clinical",
+      "restricted": true,
+      "amr_access": "authorized_staff_only",
+      "aliases": ["ICU", "hồi sức", "hồi sức tích cực"],
+      "notes": "Khu hạn chế; trợ lý không được tạo mission đến đây."
+    },
+    {
+      "location_id": "OR_1",
+      "name": "Phòng mổ 1",
+      "floor": "4",
+      "zone": "surgical",
+      "restricted": true,
+      "amr_access": "authorized_staff_only",
+      "aliases": ["phòng mổ 1", "OR 1"],
+      "notes": "Khu vô trùng; trợ lý không được tạo mission đến đây."
+    },
+    {
+      "location_id": "DOCK_1",
+      "name": "Trạm sạc tầng hầm",
+      "floor": "B1",
+      "zone": "robot_base",
+      "restricted": false,
+      "amr_access": "open",
+      "aliases": ["trạm sạc", "dock", "về sạc"],
+      "notes": "Điểm đích duy nhất của mission return_to_base."
+    }
+  ]
+}
