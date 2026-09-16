@@ -16,7 +16,7 @@
 |---|---|---|---|---|
 |Đỗ Nguyễn Ngọc Long |2A202602390 |https://github.com/ngoclongdo |Triển khai version 1 đên 3| `system_prompt.md`, `tools.yaml`, `version_log.csv` |
 |Nguyễn Tuấn Anh |2A202602535 |https://github.com/Tuan2Anh |Triển khai 10 test cases | `eval_helpdesk_extension.json` |
-|Cao Đức Anh |2A202602754 |https://github.com/CDanh0301 |Triển khai UI | `chat.py` |
+|Cao Đức Anh |2A202602754 |https://github.com/CDanh0301 |Triển khai UI | `app.py` |
 
 ## Nhận xét chung
 

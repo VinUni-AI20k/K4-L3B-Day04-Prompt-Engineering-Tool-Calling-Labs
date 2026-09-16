@@ -42,7 +42,7 @@ tools:
       type: object
       properties:
         asset_id: {type: string, description: "Mã tài sản. Không tự đoán bừa, phải gọi clarify nếu thiếu hoặc không rõ ràng."}
-        check: {type: string, enum: [all, network, vpn, security, hardware, software], default: "all", description: "Nhóm kiểm tra"}
+        check: {type: string, enum: [all, network, wifi, vpn, security, hardware, software], default: "all", description: "Nhóm kiểm tra. Dùng network cho WiFi; wifi là alias tương thích."}
       required: [asset_id]
 
   - name: lookup_user

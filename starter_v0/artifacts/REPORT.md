@@ -40,7 +40,7 @@ Trợ lý ảo đóng vai trò nhân viên IT Service Desk nội bộ, hỗ tr�
 
 ## A3. Câu hỏi mẫu
 
-1. "Laptop của tôi không vào được WiFi, mã tài sản là LNV-123. Bạn kiểm tra giúp xem máy đang bị gì?"
+1. "Laptop của tôi không vào được WiFi, mã tài sản là LT-318. Bạn kiểm tra giúp xem máy đang bị gì?"
 2. "Hệ thống VPN nội bộ của công ty trên môi trường production đang bị sập phải không?"
 3. "Mình muốn tạo một ticket mức độ high về việc không thể đăng nhập vào cổng SSO, báo lỗi cho mình nhé."
 
@@ -95,7 +95,10 @@ Liệt kê đúng 10 case tự viết: 5 single-turn và 5 multi-turn. File dữ
 
 | Scenario/turn | Version | Tool calls + args | Transcript/run | Outcome |
 |---|---|---|---|---|
-|  |  |  |  |  |
+| Hỏi tình trạng laptop do không kết nốt được wifi, turn 1 | v3 | "tool": "inspect_device", "args": {"asset_id": "LT-318","check": "network"}, "tool": "search_kb", "args": {"category": "wifi","query": "MacBook Pro WiFi not connecting troubleshooting","top_k": 3} | tudaibotuc-transcript.json | Báo cáo trạng thái mạng bình thường với độ trễ 38ms và DNS bình thường |
+| Hỏi hệ thống VPN có đang bị sập không, turn 2 | v3 | "tool": "check_service_status", "args": {"environment": "production","service": "vpn"} | tudaibotuc-transcript.json | Báo cáo theo kết quả của check service status, VPN chưa sập hoàn toàn là đang trong trạng thái degraded |
+| Muốn tạo ticket với mức độ high do không đăng nhập được vào cổng SSO, turn 3 | v3 | "tool": "clarify", "args": { "question": "Bạn có muốn tạo ticket mức độ high với mô tả 'Không thể đăng nhập vào cổng SSO' không?", "response_type": "yes_no" } | tudaibotuc-transcript.json | Phản hồi xác nhận muốn tạo ticket không |
+| Xác nhận muốn tạo ticket, turn 4 | v3 | "tool": "create_ticket", "args": { "confirmed": true, "priority": "high", "summary": "Không thể đăng nhập vào cổng SSO" } | tudaibotuc-transcript.json | Tạo ticket cho người dùng và đưa mã ticket và nội dung ra cho người dùng |
 
 ## B4a. Adversarial evidence
 

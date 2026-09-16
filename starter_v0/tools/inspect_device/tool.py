@@ -14,6 +14,8 @@ def inspect_device(asset_id: str = "", check: str = "all") -> dict[str, Any]:
         data = json.loads(ASSET_FILE.read_text(encoding="utf-8"))
         wanted_id = (asset_id or "").strip().upper()
         wanted_check = (check or "all").strip().lower()
+        if wanted_check == "wifi":
+            wanted_check = "network"
         device = next((item for item in data["assets"] if item["asset_id"] == wanted_id), None)
         if device is None:
             return {"tool": "inspect_device", "asset_id": wanted_id, "error": "asset_not_found"}
