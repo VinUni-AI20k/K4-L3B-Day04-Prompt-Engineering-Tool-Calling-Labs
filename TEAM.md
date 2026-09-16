@@ -44,3 +44,11 @@ Sao chép mục này cho từng thành viên.
 - Điều đã học: Nắm bắt cách quản lý message history đa lượt (multi-turn), cách bóc tách tool calls JSON và thiết kế cơ chế lưu trữ transcript để truy vết lỗi dễ dàng.
 - AI/công cụ đã dùng và cách kiểm tra: Dùng AI hỗ trợ viết hàm phân tích JSON và quản lý file. Kiểm thử trực tiếp trên terminal với lệnh `python chat.py`.
 - Thời điểm đã tự nộp URL repo chung trên VLearn: Hôm nay.
+
+### Nguyễn Tuấn Anh — 2A202602535
+
+- Phần việc và file/commit/PR: Thiết kế và hoàn thiện 10 test cases nhóm (5 single-turn, 5 multi-turn) trong `starter_v0/data/eval_group.json`. Thực hiện chạy đánh giá v3 trên 3 bộ dataset (`eval_group.json`, `eval_helpdesk_extension.json`, `eval_adversarial.json`) với provider OpenRouter (`openai/gpt-oss-120b`), lưu trữ bằng chứng runs JSON. Hoàn thành toàn bộ nội dung phân tích test cases, adversarial safety review và technical reflection trong `starter_v0/artifacts/REPORT.md`.
+- Quyết định, khó khăn và cách xử lý: Khó khăn trong việc thiết kế các ca kiểm thử đa lượt (multi-turn) thể hiện đúng ranh giới an toàn (như hủy yêu cầu tạo ticket, hoặc kiểm tra ranh giới xác nhận khi thay đổi payload). Đã xử lý bằng cách chuẩn hóa theo đúng cấu trúc của `run_eval.py` và kiểm thử xác thực thực tế.
+- Điều đã học: Hiểu sâu về cách đánh giá định lượng năng lực tool-calling của LLM, sự khác biệt giữa điểm số tự động (automatic score) và an toàn thực tế (khi model chủ động từ chối bằng văn bản), và tầm quan trọng của việc kiểm soát ranh giới dữ liệu nhạy cảm.
+- AI/công cụ đã dùng và cách kiểm tra: Sử dụng AI Agent hỗ trợ viết test cases và phân tích log. Kiểm tra kết quả trực tiếp bằng lệnh `python run_eval.py`.
+- Thời điểm đã tự nộp URL repo chung trên VLearn: Hôm nay.
