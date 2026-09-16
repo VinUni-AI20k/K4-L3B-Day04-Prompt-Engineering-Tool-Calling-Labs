@@ -66,16 +66,17 @@ py -3 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
 Copy-Item .env.example .env
+.\scripts\set_gemini_key.ps1
 ```
 
-Điền **một** key provider vào `.env`, sau đó chạy bản gốc trước khi sửa artifact:
+Lệnh `.\scripts\set_gemini_key.ps1` sẽ hỏi key và tự điền `GEMINI_API_KEY` vào `.env`. Nếu muốn tự sửa tay, chỉ điền **một** key provider vào `.env`, sau đó chạy bản gốc trước khi sửa artifact:
 
 ```powershell
-python scripts/preflight_provider.py --provider openrouter
-python run_eval.py --provider openrouter --version v0 --suite base --eval-cases data/eval_base.json
+python scripts/preflight_provider.py --provider gemini
+python run_eval.py --provider gemini --version v0 --suite base --eval-cases data/eval_base.json
 ```
 
-Thay `openrouter` bằng `openai`, `anthropic` hoặc `gemini` khi dùng provider khác. Không commit `.env`.
+Thay `gemini` bằng `openrouter`, `openai` hoặc `anthropic` khi dùng provider khác. Không commit `.env`.
 
 ## Tài liệu cần đọc
 
