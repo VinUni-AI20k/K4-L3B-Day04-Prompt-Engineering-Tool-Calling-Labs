@@ -30,30 +30,32 @@
 
 - Phần việc và file/commit/PR: Hỗ trợ sản phẩm, tài liệu nhóm, chuẩn hóa TEAM.md, REPORT.md, check các files đúng với yêu cầu và ghi chú tiến độ
 - Quyết định, khó khăn và cách xử lý: Điêuf hướng để team không đi chệch khỏi mục tiêu 
-- Điều đã học: Build 1 agent làm đúng phần việc, kiểm tra và cải tiến từng phiên bản, update tool hay features nếu thiếu hoặc chưa hoàn chỉnh
+- Điều đã học: Build 1 agent làm đúng phần việc, kiểm tra và cải tiến từng phiên bản
 - AI/công trợ đã dùng và cách kiểm tra: Claude
-- Thời điểm đã tự nộp URL repo chung trên VLearn: 16/9/2026 10:00am
+- Thời điểm đã tự nộp URL repo chung trên VLearn: [15/9/2026 8:55pm]
 
 ### Phạm Anh Minh — 2A202603009
 
 - Phần việc và file/commit/PR: Tối ưu prompt/tool, UX/UI design. Các file chính: system_prompt.md, tools.yaml, version_log.csv
 - Quyết định, khó khăn và cách xử lý: Khó khăn chính: cân bằng giữa hỏi lại (clarify) và trải nghiệm người dùng; giải pháp: thêm ví dụ minh họa và rule trong system_prompt.md để buộc hỏi trường cần thiết
-- Điều đã học: Kinh nghiệm thực tế về prompt engineering cho tool-calling, thiết kế schema tool hợp lý, và quy trình ghi evidence version_log
+- Điều đã học: Kinh nghiệm thực tế về prompt engineering cho tool-calling, thiết kế schema tool hợp lý, và quy trình ghi evidence (runs/transcripts/version_log).
 - AI/công trợ đã dùng và cách kiểm tra: Dùng provider để chạy eval openrouter
-- Thời điểm đã tự nộp URL repo chung trên VLearn: 15/9/2026 8:55pm
+- Thời điểm đã tự nộp URL repo chung trên VLearn: [15/9/2026 8:55pm]
 
 ### Tô Anh Đức — 2A202602639
 
-- Phần việc và file/commit/PR: Thiết kế baseline ban đầu, so sánh phiên bản v0-v3; file chính: eval_base.json, v1_base.json, các run JSON và cập nhật trong __init__.py, systemprompt.md
-- Quyết định, khó khăn và cách xử lý: Chọn baseline để làm điểm so sánh rõ ràng cho các cải tiến sau; khó khăn là xác định đúng lỗi/tool routing ở giai đoạn đầu, nên tôi chạy và đối chiếu nhiều run, đánh giá lỗi và cấu trúc đầu vào để điều chỉnh hướng phát triển
-- Điều đã học: Cách tổ chức baseline và benchmark thật sự, cũng như cách đọc run log để biết agent đang sai ở đâu và cải thiện theo hướng đúng
-- AI/công trợ đã dùng và cách kiểm tra: Claude; kiểm tra bằng cách chạy eval và xem output/tool call trong JSON run để đối chiếu với baseline trước/sau
-- Thời điểm đã tự nộp URL repo chung trên VLearn: 15/9/2026 8:55pm
+TỰ ĐIỀN NỐT HỘ C NHA MẤY BÉ
+
+- Phần việc và file/commit/PR: starter_v0/data/eval_base.json, runs/v1_base.json
+- Quyết định, khó khăn và cách xử lý:
+- Điều đã học: 
+- AI/công trợ đã dùng và cách kiểm tra: (ví dụ OpenAI/Claude + cách kiểm tra)
+- Thời điểm đã tự nộp URL repo chung trên VLearn: [15/9/2026 8:55pm]
 
 ### Vũ Bá Anh — 2A202602893
 
-- Phần việc và file/commit/PR: Chỉnh sửa model behavior qua các phiên bản, đánh giá lỗi từ run; file chính: artifacts/tools.yaml, runs/v2_base.json, systemprompt.md
-- Quyết định, khó khăn và cách xử lý: Tập trung cải thiện phản hồi của agent khi cần thông tin còn thiếu hoặc tool chọn sai; khó khăn là model dễ bỏ qua trường bắt buộc hoặc hỏi quá ít, nên tôi chỉnh lại mô tả tool và quy tắc trong prompt, rồi kiểm tra lại qua các run cụ thể để xác nhận hiệu quả
-- Điều đã học: Prompt/tool description phải cụ thể và có ví dụ để agent hiểu rõ khi nào cần hỏi lại, tránh lỗi nhập liệu và giảm sai lệch trong hội thoại nhiều bước
-- AI/công trợ đã dùng và cách kiểm tra: OpenAI, Gemini; kiểm tra bằng cách chạy lại nhiều run và đối chiếu lỗi, tool call và kết quả cuối cùng giữa phiên bản trước/sau
-- Thời điểm đã tự nộp URL repo chung trên VLearn: 15/9/2026 8:55pm
+- Phần việc và file/commit/PR: artifacts/tools.yaml, runs/v2_base.json
+- Quyết định, khó khăn và cách xử lý: 
+- Điều đã học: 
+- AI/công trợ đã dùng và cách kiểm tra: Claude
+- Thời điểm đã tự nộp URL repo chung trên VLearn: [15/9/2026 8:55pm]
